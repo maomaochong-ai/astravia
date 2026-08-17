@@ -1,0 +1,70 @@
+{
+	"subtitle": "Install and enable the capabilities you need to give Astravia more expertise",
+	"search": {
+		"placeholder": "Search {{noun}}..."
+	},
+	"actions": {
+		"install": "Install",
+		"use": "Use",
+		"update": "Update",
+		"uninstall": "Uninstall"
+	},
+	"loading": "Loading...",
+	"card": {
+		"noDescription": "No description",
+		"custom": "Custom",
+		"general": "General",
+		"readonly": "Read-only",
+		"updatable": "Update available"
+	},
+	"group": {
+		"agentSkill": "General Agent Skill",
+		"custom": "Custom",
+		"uncategorized": "Uncategorized",
+		"enabledCount": "{{n}} enabled"
+	},
+	"empty": {
+		"noMatch": "No matching results",
+		"noMatchHint": "Try a different keyword",
+		"none": "No {{noun}} available",
+		"noneHint": "Check back later"
+	},
+	"error": {
+		"loadFailed": "Failed to load",
+		"partialFallback": "{{error}}. Showing only installed {{noun}}"
+	},
+	"import": {
+		"failed": "Import failed: {{error}}",
+		"unknownError": "Unknown error"
+	},
+	"tour": {
+		"capabilities": {
+			"banner": {
+				"title": "Extend with capabilities",
+				"description": "This page lists skills and connectors. Pick what you want to accomplish and add it in one click to use it in chat."
+			},
+			"searchAdd": {
+				"title": "Search and add",
+				"description": "Search to find a capability quickly, or use Add to import a local Skill / plugin or configure an MCP connector."
+			},
+			"scope": {
+				"title": "Discover / Mine",
+				"description": "Discover browses capabilities you can add. Mine manages what you already installed — enable, configure, or remove."
+			},
+			"list": {
+				"title": "Capability cards",
+				"description": "Each card is one capability. View details, add or enable it; you will be prompted when credentials are required."
+			}
+		}
+	},
+	"builtin": {
+		"create-skill": {
+			"name": "Create Skill",
+			"description": "Create or update an Agent Skill that follows the Astravia spec: place the files, register it in skills-manifest.json, or update the plugin config."
+		},
+		"publish-ability": {
+			"name": "Publish Ability",
+			"description": "Submit a skill, scene, MCP server, plugin, or ability bundle to the Astravia marketplace, covering required fields, localization, and the review flow."
+		}
+	}
+}

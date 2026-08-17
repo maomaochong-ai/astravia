@@ -1,0 +1,51 @@
+import assert from "node:assert/strict";
+import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import test from "node:test";
+import { writeAppUpdateConfig, writeInnoVerificationManifest } from "./build-inno-installer.mjs";
+
+test("writes updater config into the version directory installed by Inno", async () => {
+	const sourceDir = await mkdtemp(join(tmpdir(), "astravia-inno-test-"));
+	const version = "0.5.42";
+	const resourcesDir = join(sourceDir, "versions", version, "resources");
+	await mkdir(resourcesDir, { recursive: true });
+
+	try {
+		await writeAppUpdateConfig(sourceDir, version, {
+			provider: "generic",
+			url: "https://example.com/astravia/desktop/test",
+		});
+
+		const config = await readFile(join(resourcesDir, "app-update.yml"), "utf8");
+		assert.match(config, /provider: generic/);
+		assert.match(config, /url: https:\/\/releases\.openastravia\.com\/desktop\/test/);
+		assert.match(config, /updaterCacheDirName: astravia-updater/);
+	} finally {
+		await rm(sourceDir, { recursive: true, force: true });
+	}
+});
+
+test("writes a stable versioned file manifest for pre-publish verification", async () => {
+	const sourceDir = await mkdtemp(join(tmpdir(), "astravia-inno-test-"));
+	const manifestPath = join(sourceDir, "installer.files.json");
+	const versionDir = join(sourceDir, "version");
+	await mkdir(join(versionDir, "resources"), { recursive: true });
+	await Promise.all([
+		writeFile(join(versionDir, "Astravia.exe"), "exe"),
+		writeFile(join(versionDir, "resources", "app.asar"), "asar"),
+	]);
+
+	try {
+		await writeInnoVerificationManifest(versionDir, manifestPath, "1.2.3");
+		assert.deepEqual(JSON.parse(await readFile(manifestPath, "utf8")), {
+			version: "1.2.3",
+			files: [
+				{ path: "resources/app.asar", size: 4 },
+				{ path: "Astravia.exe", size: 3 },
+			],
+		});
+	} finally {
+		await rm(sourceDir, { recursive: true, force: true });
+	}
+});

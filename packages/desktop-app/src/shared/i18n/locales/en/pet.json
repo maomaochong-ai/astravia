@@ -1,0 +1,93 @@
+{
+	"settings": {
+		"pageTitle": "Astravia Vivi",
+		"showPet": "Show Pet",
+		"showPetDesc": "When off, the pet window is hidden and stays hidden on next launch.",
+		"alwaysOnTop": "Always on Top",
+		"alwaysOnTopDesc": "When on, the pet floats above other windows; when off, it can be covered like a normal window.",
+		"developerDesc": "Used to distinguish the pet window bounds from the actual video display area.",
+		"debugFrame": "Debug Frame",
+		"debugFrameDesc": "Show the window bounds and video area bounds, and display the live window and video sizes inside the pet window.",
+		"decoration": {
+			"sectionDescription": "Currently only shows available decoration materials; actual decoration logic can be connected later.",
+			"materialMissing": "Material missing",
+			"available": "Available",
+			"missing": "Missing",
+			"items": {
+				"monitor": "Monitor",
+				"santa": "Santa outfit",
+				"business": "Business outfit",
+				"office": "Office prayer",
+				"peekingMonitor": "Peeking from monitor",
+				"dragonBoat": "Dragon Boat decoration"
+			}
+		},
+		"bubble": {
+			"sectionDescription": "Choose the desktop pet speech bubble style. Each style can define its own background, dimensions, and decoration placement.",
+			"styleTitle": "Bubble style",
+			"styleDescription": "The selected style is applied to the pet window immediately.",
+			"styles": {
+				"plain": {
+					"label": "Plain bubble",
+					"description": "Basic bubble that follows the app theme."
+				},
+				"springFestival": {
+					"label": "Spring Festival bubble",
+					"description": "Warm red background with Spring Festival corner decorations."
+				},
+				"dragonBoat": {
+					"label": "Dragon Boat bubble",
+					"description": "Green background with Dragon Boat Festival corner decorations."
+				},
+				"midAutumn": {
+					"label": "Mid-Autumn bubble",
+					"description": "Moonlit yellow background with Mid-Autumn corner decorations."
+				},
+				"qingming": {
+					"label": "Qingming bubble",
+					"description": "Light green background with Qingming corner decorations."
+				},
+				"winterSolstice": {
+					"label": "Winter Solstice bubble",
+					"description": "Ice blue background with Winter Solstice corner decorations."
+				},
+				"aprilFools": {
+					"label": "April Fools' bubble",
+					"description": "Light purple background with April Fools' corner decorations."
+				},
+				"childrenDay": {
+					"label": "Children's Day bubble",
+					"description": "Bright yellow background with Children's Day corner decorations."
+				},
+				"christmas": {
+					"label": "Christmas bubble",
+					"description": "Light green background with Christmas corner decorations."
+				},
+				"halloween": {
+					"label": "Halloween bubble",
+					"description": "Warm orange background with Halloween corner decorations."
+				},
+				"laborDay": {
+					"label": "Labor Day bubble",
+					"description": "Warm orange background with Labor Day corner decorations."
+				},
+				"nationalDay": {
+					"label": "National Day bubble",
+					"description": "Warm red background with National Day corner decorations."
+				},
+				"songkran": {
+					"label": "Songkran bubble",
+					"description": "Light blue background with Songkran corner decorations."
+				},
+				"valentineDay": {
+					"label": "Valentine's Day bubble",
+					"description": "Light pink background with Valentine's Day corner decorations."
+				}
+			}
+		}
+	},
+	"video": {
+		"missingTitle": "Pet video",
+		"missingSubtitle": "Not provided"
+	}
+}

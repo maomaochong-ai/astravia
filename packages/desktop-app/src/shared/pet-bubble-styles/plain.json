@@ -1,0 +1,9 @@
+{
+	"id": "plain",
+	"labelKey": "settings.bubble.styles.plain.label",
+	"descriptionKey": "settings.bubble.styles.plain.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border border-border/60 bg-popover/90 px-12 py-3 text-center text-[12px] font-medium leading-5 text-popover-foreground shadow-lg backdrop-blur-sm",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden"
+	}
+}

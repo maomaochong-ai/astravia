@@ -1,0 +1,27 @@
+{
+	"name": "@astravia/cli-app",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"bin": {
+		"astravia": "dist/cli.js",
+		"astravia-cli-app": "dist/cli.js"
+	},
+	"files": ["dist"],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json"
+	},
+	"dependencies": {
+		"@astravia/action-rpc": "workspace:*",
+		"@astravia/coding-agent": "workspace:*",
+		"@astravia/runtime-core": "workspace:*",
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.2",
+		"@types/node": "^22.10.5"
+	}
+}

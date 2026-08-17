@@ -1,0 +1,10 @@
+@import "tailwindcss/utilities.css";
+
+/* 设备 frame（mockup container 的第一个子元素）补与边框同色的黑底：
+   transform scale 合成时 border 与内容分层光栅化，圆角裁切边缘会出现
+   亚像素接缝，无背景时透出面板底色形成一圈灰缝；补黑后缝隙与边框融合。
+   frame 自带圆角 + overflow:hidden，背景不会溢出到边框外。 */
+/* 结构：.muip-mockup（wrapper）> container > frame（首个子元素）。 */
+.muip-mockup > div > div:first-child {
+	background-color: #000;
+}

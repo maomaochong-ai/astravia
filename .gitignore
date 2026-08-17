@@ -1,0 +1,82 @@
+node_modules/
+dist/
+.next/
+.vercel/
+*.log
+.DS_Store
+*.tsbuildinfo
+# packages/*/node_modules/
+packages/*/dist/
+packages/*/dist-chrome/
+packages/*/dist-firefox/
+
+# Environment
+.env
+.env.*
+!.env.example
+!.env.*.example
+
+# Deploy-time config (contains secrets, must not be committed)
+deploy/config.*.yaml
+!deploy/config.*.example.yaml
+# TLS 私钥（Cloudflare Origin Certificate）与本地生成的 htpasswd
+deploy/certs/
+# 部署实例文件：由 example 复制而来，随机器不同，且 upgrade.sh 会 git pull
+deploy/docker-compose.yml
+deploy/data/
+deploy/logs/
+*.pem
+*.key
+
+# Editor files
+.vscode/
+.zed/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local runtime SQLite (accidental empty DBs at repo root)
+/applog.db
+/hr-applog.db
+
+# Package specific
+.npm/
+coverage/
+.nyc_output/
+.pi_config/
+tui-debug.log
+compaction-results/
+.opencode/
+syntax.jsonl
+out.jsonl
+pi-*.html
+out.html
+packages/coding-agent/binaries/
+routeTree.gen.ts
+*.bun-build
+packages/desktop-app/release/
+packages/desktop-app/.desktop-dev/
+packages/desktop-app/build/pet/*.compressed.webm
+# PP-OCRv5 ONNX models are fetched on demand into resources/ocr-models/
+# at build time (see scripts/fetch-ocr-models.js); not checked in.
+packages/desktop-app/resources/ocr-models/
+/releases/
+todo.md
+
+settings.local.json
+
+# 本机 AI 工具配置（每个开发者各自维护）
+.claude/
+.codex/
+prompt/
+spec/
+requirement/
+.agents/
+skills-lock.json
+
+terminals
+mcps
+agent-tools
+.playwright-cli
+.tmp*

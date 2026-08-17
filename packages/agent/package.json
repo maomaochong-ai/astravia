@@ -1,0 +1,45 @@
+{
+	"name": "@astravia/agent-core",
+	"version": "0.0.1",
+	"description": "General-purpose agent with transport abstraction, state management, and attachment support",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json",
+		"dev": "tsgo -p tsconfig.build.json --watch --preserveWatchOutput",
+		"test": "vitest --run",
+		"prepublishOnly": "bun run clean && bun run build"
+	},
+	"dependencies": {
+		"@astravia/ai": "workspace:*",
+		"@sinclair/typebox": "^0.34.41",
+		"@astravia/runtime-telemetry": "workspace:*"
+	},
+	"keywords": [
+		"ai",
+		"agent",
+		"llm",
+		"transport",
+		"state-management"
+	],
+	"author": "Mario Zechner",
+	"license": "Apache-2.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/badlogic/pi-mono.git",
+		"directory": "packages/agent"
+	},
+	"engines": {
+		"node": ">=20.0.0"
+	},
+	"devDependencies": {
+		"@types/node": "^24.3.0",
+		"typescript": "^5.7.3"
+	}
+}

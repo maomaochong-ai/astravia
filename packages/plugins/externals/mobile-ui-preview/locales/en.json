@@ -1,0 +1,22 @@
+{
+	"plugin.name": "Mobile UI Preview",
+	"plugin.description": "Preview the current scope's HTML pages inside simulated mobile device frames (iPhone / Android / iPad, with status bar and portrait/landscape).",
+	"tab.label": "Mobile Preview",
+	"panel.previewTitle": "Mobile UI Preview",
+	"panel.selectHtmlPlaceholder": "Select HTML…",
+	"panel.selectHtmlTitle": "Select HTML file",
+	"panel.selectDeviceTitle": "Select device model",
+	"panel.toLandscape": "Switch to landscape",
+	"panel.toPortrait": "Switch to portrait",
+	"panel.refresh": "Refresh",
+	"panel.export": "Export",
+	"panel.exportPng": "Export PNG render",
+	"panel.exportPrompt": "Generate engineering prompt",
+	"panel.emptyHint": "Select an HTML file to start previewing",
+	"panel.noHtml": "No html/htm files in the current scope",
+	"panel.noScope": "No available scope",
+	"group.iphone": "iPhone",
+	"group.android": "Android",
+	"group.tablet": "Tablet",
+	"device.androidTab": "Android Tablet"
+}

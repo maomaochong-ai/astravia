@@ -1,0 +1,26 @@
+.setting-section-breathe {
+	position: relative;
+	border-radius: 0.75rem;
+}
+
+.setting-section-breathe::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	pointer-events: none;
+	border: 1px solid var(--primary);
+	border-radius: inherit;
+	opacity: 0;
+	animation: setting-section-border-breathe 900ms ease-in-out 3;
+	will-change: opacity;
+}
+
+@keyframes setting-section-border-breathe {
+	0%,
+	100% {
+		opacity: 0.12;
+	}
+	50% {
+		opacity: 0.8;
+	}
+}

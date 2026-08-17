@@ -1,0 +1,41 @@
+{
+	"name": "@astravia-org/plugin-vite",
+	"version": "0.0.4",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./pack": {
+			"types": "./dist/pack.d.ts",
+			"import": "./dist/pack.js"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json"
+	},
+	"dependencies": {
+		"@module-federation/vite": "^1.16.6",
+		"postcss": "^8.5.15",
+		"postcss-selector-parser": "^7.1.4"
+	},
+	"peerDependencies": {
+		"vite": "^7.0.0"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.2",
+		"vite": "^7.1.7"
+	},
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	}
+}

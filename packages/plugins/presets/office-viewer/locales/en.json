@@ -1,0 +1,16 @@
+{
+	"plugin.name": "Office Viewer",
+	"plugin.description": "Offline preview for PDF, DOCX, PPTX and spreadsheet files.",
+	"error.unsupportedFormat": "This Office file format is not supported yet",
+	"docx.error": "Failed to render the DOCX file",
+	"pdf.error": "Failed to render the PDF file",
+	"pdf.pageLabel": "{{name}} page {{page}}",
+	"pptx.error": "Failed to preview this PPTX file",
+	"pptx.slideLabel": "Slide {{page}}",
+	"pptx.thumbPrev": "Previous thumbnails",
+	"pptx.thumbNext": "Next thumbnails",
+	"spreadsheet.error": "Failed to read the spreadsheet file",
+	"toolbar.fitWidth": "Fit width",
+	"state.loading": "Loading…",
+	"state.errorHint": "The file may be corrupted, password-protected, or contain unsupported content"
+}

@@ -1,0 +1,11 @@
+/* 导入 theme 层 + utilities 层（不要 preflight，避免 reset 污染宿主全局）。
+   只 @import utilities 会漏掉依赖 theme 变量的工具类（spacing/radius：h-7 / gap-1.5 /
+   rounded-lg …生成不出来），故 theme 层必须一并导入。 */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/* diff 行等宽字体回退 */
+.git-mono {
+	font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+}

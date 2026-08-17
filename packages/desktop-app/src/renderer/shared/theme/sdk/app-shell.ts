@@ -1,0 +1,53 @@
+import type {
+	PageHeaderContentProps,
+	PageHeaderSidebarTrigger,
+	PageHeaderTitle,
+	PageHeaderWindowActions,
+	WindowControlButton,
+	WindowControlsComponentProps,
+} from "@astravia/theme-ui/app-shell";
+import type { ComponentType } from "react";
+
+export { usePageHeaderModel, useWindowControlsModel } from "@astravia/theme-sdk/app-shell";
+export type {
+	DefaultPageHeaderProps,
+	PageHeaderActionGroupProps,
+	PageHeaderClassNames,
+	PageHeaderContentProps,
+	PageHeaderFrameProps,
+	PageHeaderModel,
+	PageHeaderProps,
+	PageHeaderRegionProps,
+	PageHeaderSidebarTriggerProps,
+	PageHeaderTitleKey,
+	PageHeaderTitleProps,
+	PageHeaderWindowActionsProps,
+	WindowControlButtonProps,
+	WindowControlItem,
+	WindowControlKind,
+	WindowControlsComponentProps,
+	WindowControlsModel,
+	WindowControlsProps,
+} from "@astravia/theme-ui/app-shell";
+export {
+	DefaultPageHeader,
+	DefaultWindowControls,
+	PageHeaderActionGroup,
+	PageHeaderContent,
+	PageHeaderFrame,
+	PageHeaderSidebarTrigger,
+	PageHeaderTitle,
+	PageHeaderWindowActions,
+	WindowControlButton,
+} from "@astravia/theme-ui/app-shell";
+
+declare module "@astravia/theme-sdk" {
+	interface ThemeComponentRegistry {
+		readonly "app.pageHeaderContent"?: ComponentType<PageHeaderContentProps>;
+		readonly "app.pageHeaderSidebarTrigger"?: typeof PageHeaderSidebarTrigger;
+		readonly "app.pageHeaderTitle"?: typeof PageHeaderTitle;
+		readonly "app.pageHeaderWindowActions"?: typeof PageHeaderWindowActions;
+		readonly "app.windowControls"?: ComponentType<WindowControlsComponentProps>;
+		readonly "app.windowControlButton"?: typeof WindowControlButton;
+	}
+}

@@ -1,0 +1,42 @@
+const SUPPORTED_PROVIDERS = new Set(["none", "generic", "github"]);
+
+function requireValue(env, key, provider) {
+	const value = env[key]?.trim();
+	if (!value) {
+		throw new Error(`[update-publish] ${key} is required when ASTRAVIA_UPDATE_PROVIDER=${provider}`);
+	}
+	return value;
+}
+
+function normalizeHttpUrl(rawUrl) {
+	const url = new URL(rawUrl);
+	if (url.protocol !== "https:" && url.protocol !== "http:") {
+		throw new Error("[update-publish] ASTRAVIA_UPDATE_URL must use http or https");
+	}
+	return url.toString().replace(/\/+$/, "");
+}
+
+export function resolveUpdatePublishConfig(env = process.env) {
+	const provider = (env.ASTRAVIA_UPDATE_PROVIDER ?? "none").trim().toLowerCase();
+	if (!SUPPORTED_PROVIDERS.has(provider)) {
+		throw new Error(
+			`[update-publish] unsupported ASTRAVIA_UPDATE_PROVIDER=${provider}; expected none, generic, or github`,
+		);
+	}
+	if (provider === "none") return null;
+
+	if (provider === "generic") {
+		return {
+			provider: "generic",
+			url: normalizeHttpUrl(requireValue(env, "ASTRAVIA_UPDATE_URL", provider)),
+			useMultipleRangeRequest: false,
+		};
+	}
+
+	return {
+		provider: "github",
+		owner: requireValue(env, "ASTRAVIA_UPDATE_GITHUB_OWNER", provider),
+		repo: requireValue(env, "ASTRAVIA_UPDATE_GITHUB_REPO", provider),
+		releaseType: "release",
+	};
+}

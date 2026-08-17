@@ -1,0 +1,139 @@
+{
+	"page": {
+		"title": "批量任务",
+		"subtitle": "一次配置，让 AI 自动处理多个文件夹",
+		"newProject": "新建项目"
+	},
+	"stats": {
+		"total": "总数",
+		"running": "运行中",
+		"completed": "已完成",
+		"failed": "失败"
+	},
+	"empty": {
+		"title": "暂无批量任务",
+		"desc": "创建批量任务，让 AI 自动处理多个文件夹",
+		"action": "创建第一个项目"
+	},
+	"time": {
+		"justNow": "刚刚",
+		"minutes": "{{n}} 分钟",
+		"hours": "{{n}} 小时",
+		"days": "{{n}} 天",
+		"weeks": "{{n}} 周"
+	},
+	"group": {
+		"badge": "批量"
+	},
+	"dialog": {
+		"editTitle": "编辑项目",
+		"newTitle": "新建批量项目",
+		"namePlaceholderEdit": "项目名称",
+		"namePlaceholderNew": "新建批量项目",
+		"cancel": "取消",
+		"save": "保存",
+		"create": "创建"
+	},
+	"form": {
+		"namePlaceholder": "项目名称",
+		"promptPlaceholder": "输入提示词...使用 / 唤出技能",
+		"model": "模型",
+		"modelEmpty": "暂无可用模型",
+		"modelSelect": "选择模型",
+		"defaultTag": "默认",
+		"concurrency": "并发数",
+		"timeout": "超时（分钟）",
+		"timeoutHint": "子任务单次运行的硬超时。暂停后恢复会重新计时。",
+		"sandbox": "沙盒状态",
+		"sandboxInherit": "跟随全局默认（{{mode}}）",
+		"fullAccess": "完全访问",
+		"useSandbox": "使用沙盒",
+		"sandboxUnavailable": "{{platform}} 沙盒不可用：{{reason}}",
+		"notifyTitle": "启用消息推送",
+		"notifyDesc": "每个子任务完成后向已配置的 Webhook 推送一次，并在项目全部完成时推送汇总（可在 设置 → 消息推送 管理 Webhook）。",
+		"artifact": "产物校验",
+		"optional": "可选",
+		"artifactPlaceholder": "每行一个文件名或通配符；为空则跳过校验",
+		"artifactHint": "子任务目录顶层必须全部匹配才算成功。支持 glob：* 匹配任意字符、? 匹配单个字符。",
+		"folderLabel": "文件夹列表",
+		"folderEmpty": "暂无文件夹",
+		"folderModePicker": "选择添加",
+		"folderModeText": "文本添加",
+		"selectFolder": "选择文件夹",
+		"folderTextHint": "Linux 目录多选不稳定时，可直接粘贴路径，每行一个文件夹。"
+	},
+	"status": {
+		"waiting": "等待中",
+		"notRun": "未执行",
+		"running": "运行中",
+		"completed": "已完成",
+		"failed": "失败",
+		"paused": "已暂停"
+	},
+	"list": {
+		"matchCount": "{{filtered}}/{{total}} 匹配",
+		"taskCount": "{{n}} 个任务",
+		"completedOf": "{{completed}}/{{total}} 已完成",
+		"runningSuffix": " · {{n}} 运行中",
+		"pausedSuffix": " · {{n}} 暂停",
+		"failedReset": "{{n}} 失败 · 重置",
+		"resetFailedHint": "点击重置 {{n}} 个失败任务",
+		"searchPlaceholder": "搜索任务标题…",
+		"clear": "清除",
+		"noMatch": "没有匹配「{{query}}」的任务",
+		"noTasks": "暂无任务",
+		"expandMore": "展开更多（{{n}}）",
+		"collapse": "折叠任务"
+	},
+	"actions": {
+		"stop": "停止",
+		"start": "开始",
+		"reset": "重置",
+		"editProject": "编辑项目",
+		"deleteProject": "删除项目",
+		"goToSession": "跳转到会话",
+		"cancelWait": "取消等待",
+		"run": "执行",
+		"resume": "继续",
+		"retry": "重试",
+		"rerun": "重新运行",
+		"delete": "删除",
+		"allDoneOrFailed": "所有任务已完成或失败，点击「{{n}} 失败 · 重置」徽章可重置后重试",
+		"allDone": "所有任务已完成"
+	},
+	"confirm": {
+		"cannotDeleteTitle": "无法删除项目",
+		"cannotDeleteMsg": "请先点停止。",
+		"ok": "确定",
+		"cancel": "取消",
+		"delete": "删除",
+		"deleteProjectTitle": "确认删除项目「{{name}}」",
+		"deleteProjectMsg": "删除后无法撤回，请确认是否继续。",
+		"startTitle": "确认开始执行",
+		"startMsg": "将按并发数依次执行 {{parts}} 任务（其余状态不受影响），是否继续？",
+		"start": "开始",
+		"partNeverExecuted": "{{n}} 个「未执行」",
+		"partPaused": "{{n}} 个「已暂停」",
+		"partJoin": " 和 ",
+		"stopTitle": "确认停止",
+		"stopMsg": "将中断所有运行中的任务（{{running}} 个），并清空除「已完成」之外的所有任务（{{target}} 个）的会话、产物和状态，重置为「未执行」。\n\n保留：已完成任务的会话、产物和状态。\n已完成任务保留，此操作不可撤回。",
+		"stop": "停止",
+		"resetFailedTitle": "确认重置失败任务",
+		"resetFailedQueueActive": "将清空 {{n}} 个失败任务的会话、产物和状态，并加入队尾继续执行。此操作不可撤回，是否继续？",
+		"resetFailedIdle": "将清空 {{n}} 个失败任务的会话、产物和状态，重置为「未执行」。可随后点击「开始」继续。此操作不可撤回，是否继续？",
+		"reset": "重置",
+		"resetTitle": "确认重置",
+		"resetMsg": "将删除所有任务的会话和文件（包含已完成），然后重新执行全部 {{n}} 个任务。此操作不可撤回，是否继续？",
+		"rerunTitle": "确认重新运行任务「{{name}}」",
+		"retryTitle": "确认重试任务「{{name}}」",
+		"rerunMsg": "将删除该任务现有的会话和产物，并重新执行。此操作不可撤回，是否继续？",
+		"retryMsg": "将删除该任务的会话和文件，然后重新执行。此操作不可撤回，是否继续？",
+		"rerun": "重新运行",
+		"retry": "重试",
+		"deleteTaskTitle": "确认删除任务",
+		"deleteTaskMsg": "删除后无法撤回，请确认是否继续。"
+	},
+	"error": {
+		"stopFirst": "请先点停止"
+	}
+}

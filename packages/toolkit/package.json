@@ -1,0 +1,40 @@
+{
+	"name": "@astravia/toolkit",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"description": "Shared Node utilities for the Astravia monorepo (config, fs helpers, …).",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./atomic-write": {
+			"types": "./dist/atomic-write.d.ts",
+			"import": "./dist/atomic-write.js"
+		},
+		"./versioned-config": {
+			"types": "./dist/versioned-config.d.ts",
+			"import": "./dist/versioned-config.js"
+		},
+		"./config-store": {
+			"types": "./dist/config-store.d.ts",
+			"import": "./dist/config-store.js"
+		},
+		"./file-migrations": {
+			"types": "./dist/file-migrations.d.ts",
+			"import": "./dist/file-migrations.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"typescript": "^5.9.2"
+	}
+}

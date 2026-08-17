@@ -1,0 +1,984 @@
+{
+	"appName": "Astravia",
+	"actions": {
+		"cancel": "取消",
+		"confirm": "确认",
+		"save": "保存",
+		"delete": "删除",
+		"close": "关闭",
+		"apply": "应用",
+		"back": "返回"
+	},
+	"tour": {
+		"next": "下一步",
+		"prev": "上一步",
+		"done": "完成",
+		"progress": "{{current}} / {{total}}"
+	},
+	"appearance": {
+		"languageTitle": "语言",
+		"languageHint": "默认跟随系统语言；可随时手动切换"
+	},
+	"updateRestart": {
+		"title": "更新已就绪",
+		"message": "新版本 {{latestVersion}} 已下载完成（当前 {{currentVersion}}）。立即重启 Astravia 以应用更新，或选择\"稍后\"，下次启动会再次提示。",
+		"later": "稍后",
+		"install": "立即重启"
+	},
+	"filePreview": {
+		"showInFolder": "在文件夹中显示",
+		"download": "下载",
+		"close": "关闭 (Esc)"
+	},
+	"actionApproval": {
+		"reject": "拒绝",
+		"confirm": "确认执行",
+		"processing": "处理中...",
+		"permission": "权限：{{permission}}",
+		"permissionPrefix": "权限：",
+		"whyConfirm": "AI 请求执行此操作，需你确认后才会生效。",
+		"genericTitle": "操作确认",
+		"genericSummary": "请确认是否允许执行该操作。",
+		"genericImpact": "确认后才会执行；拒绝则取消本次请求，不会改动你的数据。",
+		"showTechnicalDetails": "查看技术详情",
+		"hideTechnicalDetails": "收起技术详情",
+		"unreadableRequest": "无法完整解析请求内容。若你不确定，建议拒绝后让 AI 重新说明要做什么。",
+		"fields": {
+			"request": "请求",
+			"operation": "操作类型",
+			"arrayCount": "{{count}} 项",
+			"objectSummary": "{{count}} 个字段"
+		}
+	},
+	"manageApproval": {
+		"fallbackTitle": "操作确认",
+		"fallbackConfirm": "确认执行",
+		"fallbackBadge": "操作",
+		"rawInput": "请求内容",
+		"yes": "是",
+		"no": "否",
+		"on": "开启",
+		"off": "关闭",
+		"toggle": {
+			"willBecome": "将改为",
+			"stateOnHint": "开启后即可使用相关能力；不会删除已有配置。",
+			"stateOffHint": "关闭后将暂停使用；配置仍会保留，可随时再开。",
+			"editableHint": "可改开/关后再确认"
+		},
+		"toggleCopy": {
+			"mcp": {
+				"enableTitle": "开启 MCP 服务",
+				"disableTitle": "关闭 MCP 服务",
+				"enableSummary": "开启后，对话里的 AI 可以使用该 MCP 提供的能力（例如浏览网页、调用外部工具）。",
+				"disableSummary": "关闭后，该 MCP 将暂停，对话中暂时用不了它的能力。配置不会删除。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "该 MCP 会立即变为可用，AI 可在后续对话中使用它。",
+				"disableImpact": "该 MCP 会立即暂停；已有配置保留，不会卸载。"
+			},
+			"skills": {
+				"enableTitle": "开启技能",
+				"disableTitle": "关闭技能",
+				"enableSummary": "开启后，AI 在对话中可以按需使用该技能。",
+				"disableSummary": "关闭后，该技能暂时不会被调用。不会卸载或删除文件。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "技能将出现在可用列表中，可在对话中被使用。",
+				"disableImpact": "技能将从可用列表中暂停，配置与文件仍保留。"
+			},
+			"plugins": {
+				"enableTitle": "开启插件",
+				"disableTitle": "关闭插件",
+				"enableSummary": "开启后，该插件提供的界面与能力会重新生效。",
+				"disableSummary": "关闭后，该插件的能力会暂停，不会卸载插件本身。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "插件功能将立即对应用生效。",
+				"disableImpact": "插件功能将立即暂停，安装包与配置仍保留。"
+			},
+			"im": {
+				"enableTitle": "开启 Claw（IM 旁路）",
+				"disableTitle": "关闭 Claw（IM 旁路）",
+				"enableSummary": "开启后，可通过飞书/微信等外部渠道与 AI 对话。",
+				"disableSummary": "关闭后，外部 IM 渠道将无法再接入本机 AI。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "IM 旁路网关将按配置运行，外部消息可进入对话。",
+				"disableImpact": "IM 旁路将停止接入新消息；已有会话记录保留。"
+			},
+			"webhook": {
+				"enableTitle": "开启消息推送",
+				"disableTitle": "关闭消息推送",
+				"enableSummary": "开启后，可向该 Webhook（如钉钉/飞书机器人）发送通知。",
+				"disableSummary": "关闭后，将不再向该地址推送消息。地址与密钥仍会保留。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "该推送渠道将可接收通知与测试消息。",
+				"disableImpact": "该推送渠道将暂停，不会删除配置。"
+			},
+			"general.notifications": {
+				"enableTitle": "开启系统通知",
+				"disableTitle": "关闭系统通知",
+				"enableSummary": "开启后，任务完成、更新等事件可通过系统通知提醒你。",
+				"disableSummary": "关闭后，应用将不再弹出系统通知。",
+				"enableConfirm": "确认开启",
+				"disableConfirm": "确认关闭",
+				"enableImpact": "符合条件的事件将显示系统通知。",
+				"disableImpact": "系统通知将停止；应用内状态仍可查看。"
+			}
+		},
+		"fieldWithKey": "{{prefix}}.{{key}}",
+		"fields": {
+			"modelKey": "模型",
+			"reasoningLevel": "推理档位",
+			"provider": "服务商",
+			"config": "配置",
+			"serverName": "MCP 服务",
+			"enabled": "启用",
+			"skillName": "技能名称",
+			"resourceType": "类型",
+			"name": "名称",
+			"newName": "新名称",
+			"path": "路径",
+			"paths": "文件路径",
+			"language": "语言",
+			"executionMode": "执行模式",
+			"experimental": "实验功能",
+			"knowledgeBase": "知识库设置",
+			"kbId": "知识库 ID",
+			"relPath": "相对路径",
+			"move": "移动文件",
+			"pluginId": "插件 ID",
+			"url": "安装地址",
+			"kind": "平台",
+			"webhookUrl": "Webhook URL",
+			"signSecret": "签名密钥",
+			"id": "ID",
+			"title": "标题",
+			"level": "级别",
+			"text": "消息内容",
+			"displayName": "显示名称",
+			"baseUrl": "Base URL",
+			"api": "API 类型",
+			"apiKey": "API Key",
+			"models": "模型列表",
+			"command": "命令",
+			"args": "参数",
+			"cwd": "工作目录",
+			"headers": "请求头",
+			"shortcutActionId": "快捷键动作",
+			"shortcutCombo": "组合键",
+			"quickpanelTrigger": "呼出触发",
+			"quickpanelBehavior": "发送后行为"
+		},
+		"shortcuts": {
+			"ops": {
+				"set-binding": {
+					"title": "修改快捷键",
+					"summary": "选择要改的功能，再点按键区域录制新的组合键。确认后立刻可用。",
+					"confirm": "保存快捷键",
+					"badge": "快捷键",
+					"impact": "之后用新的组合键就能触发该功能；若与其它功能冲突，保存会失败。"
+				},
+				"reset-binding": {
+					"title": "恢复默认快捷键",
+					"summary": "把这个功能的快捷键改回系统默认。",
+					"confirm": "恢复默认",
+					"badge": "恢复",
+					"impact": "该功能将重新使用默认组合键。"
+				},
+				"reset-all-bindings": {
+					"title": "全部恢复默认快捷键",
+					"summary": "把下列功能的自定义快捷键全部清掉，改回默认。",
+					"confirm": "全部恢复默认",
+					"badge": "重置",
+					"impact": "全局功能快捷键会恢复默认；快捷面板怎么呼出、发送后怎么做不会变。",
+					"warningTitle": "仅影响全局功能键",
+					"warning": "不会改快捷面板的呼出方式，也不会改发送后是打开主窗口还是后台运行。"
+				},
+				"set-quick-panel-trigger": {
+					"title": "修改快捷面板呼出方式",
+					"summary": "选择双击哪个键打开快捷面板。选「不启用」后只能从主窗口使用。",
+					"confirm": "保存呼出方式",
+					"badge": "快捷键",
+					"impact": "马上生效，可随时再改。"
+				},
+				"set-quick-panel-behavior": {
+					"title": "修改发送后行为",
+					"summary": "在快捷面板发出消息后，是打开主窗口跟进，还是只在后台继续跑。",
+					"confirm": "保存发送后行为",
+					"badge": "快捷键",
+					"impact": "只影响之后从快捷面板发出的对话。"
+				}
+			},
+			"bindingSectionTitle": "功能快捷键",
+			"bindingSectionDescription": "与设置 → 快捷键中的全局快捷键相同，可先选功能再录制按键。",
+			"actionField": "功能",
+			"comboField": "组合键",
+			"comboFieldHint": "点击后按下新的组合键即可录制",
+			"resetToDefault": "将恢复为 {{shortcut}}",
+			"quickPanelTriggerSectionTitle": "快捷面板呼出",
+			"quickPanelTriggerSectionDescription": "与设置页里的快捷面板触发方式相同。",
+			"quickPanelBehaviorSectionTitle": "发送后怎么做",
+			"quickPanelBehaviorSectionDescription": "与设置页里的「发送后行为」相同。",
+			"quickPanelTriggers": {
+				"none": "不启用",
+				"mod": "双击 ⌘ / Ctrl",
+				"alt": "双击 ⌥ / Alt",
+				"shift": "双击 ⇧"
+			},
+			"quickPanelTriggerHints": {
+				"none": "关闭双击呼出，需要时从主窗口操作",
+				"mod": "在任意处双击 ⌘（Mac）或 Ctrl（Windows）打开面板",
+				"alt": "在任意处双击 ⌥ / Alt 打开面板",
+				"shift": "在任意处双击 ⇧ 打开面板"
+			},
+			"quickPanelBehaviors": {
+				"foreground": "打开主窗口",
+				"background": "后台运行"
+			},
+			"quickPanelBehaviorHints": {
+				"foreground": "发送后打开主窗口并定位到新对话",
+				"background": "发送后只关闭面板，对话在后台继续"
+			}
+		},
+		"models": {
+			"ops": {
+				"set-default": {
+					"title": "设置默认对话模型",
+					"summary": "选择新建对话时默认使用的模型。可在下方改选后再确认。",
+					"confirm": "设为默认模型",
+					"badge": "默认模型",
+					"impact": "之后新建的对话会优先使用该模型；已有对话不会自动改模型。"
+				},
+				"upsert-provider": {
+					"title": "创建或更新模型服务商确认",
+					"summary": "请确认服务商配置。密钥字段已脱敏显示，确认后按提交的配置写入。",
+					"confirm": "确认保存服务商",
+					"badge": "服务商",
+					"impact": "服务商配置将写入本地 models.json，并影响可用模型列表。"
+				},
+				"remove-provider": {
+					"title": "删除模型服务商确认",
+					"summary": "删除后该服务商下的模型将不可用，关联的默认模型引用会被清除。",
+					"confirm": "确认删除服务商",
+					"badge": "删除",
+					"impact": "该服务商及其模型将从本地配置中删除。",
+					"warning": "删除服务商会同时清除依赖它的默认模型引用。"
+				}
+			},
+			"createProviderHint": "新建",
+			"updateProviderHint": "更新已有",
+			"modelsCount": "{{count}} 个模型",
+			"defaultSectionTitle": "默认模型",
+			"defaultSectionDescription": "与设置 → 模型配置中的默认模型相同，确认后立即生效。",
+			"defaultModelHint": "从已配置的模型中选择"
+		},
+		"mcp": {
+			"ops": {
+				"upsert": {
+					"title": "创建或更新 MCP 服务确认",
+					"summary": "请确认 MCP 服务配置。密钥类请求头会脱敏显示。",
+					"confirm": "确认保存 MCP 服务",
+					"badge": "MCP",
+					"impact": "MCP 服务配置将写入本地 mcp.json，并可能影响 Agent 可用工具。"
+				},
+				"set-enabled": {
+					"title": "启用/停用 MCP 服务确认",
+					"summary": "确认后将更改该 MCP 服务的启用状态。",
+					"confirm": "确认更改状态",
+					"badge": "启用状态",
+					"impact": "该 MCP 服务的启用状态将立即更新。"
+				},
+				"remove": {
+					"title": "删除 MCP 服务确认",
+					"summary": "删除后该 MCP 服务配置将从本地移除。",
+					"confirm": "确认删除",
+					"badge": "删除",
+					"impact": "该 MCP 服务配置将从本地移除。",
+					"warning": "删除后需重新配置才能恢复该 MCP 服务。"
+				}
+			},
+			"headersConfigured": "已包含自定义 headers（密钥已脱敏）"
+		},
+		"skills": {
+			"ops": {
+				"set-enabled": {
+					"title": "启用/停用技能确认",
+					"summary": "确认后将更改该技能的启用状态。",
+					"confirm": "确认更改状态",
+					"badge": "技能",
+					"impact": "技能启用状态将立即生效。"
+				},
+				"uninstall": {
+					"title": "卸载技能确认",
+					"summary": "卸载后本地技能文件会被移除，此操作无法撤销。",
+					"confirm": "确认卸载",
+					"badge": "卸载",
+					"impact": "本地技能文件将被卸载，无法直接恢复。",
+					"warning": "卸载后技能文件会被移除，此操作无法撤销。"
+				}
+			}
+		},
+		"projects": {
+			"ops": {
+				"create": {
+					"title": "创建项目确认",
+					"summary": "确认后将创建新项目并加入侧边栏。",
+					"confirm": "确认创建项目",
+					"badge": "创建",
+					"impact": "将在侧边栏创建新项目，并确保目录存在。"
+				},
+				"open": {
+					"title": "打开项目确认",
+					"summary": "确认后将打开指定路径的项目。",
+					"confirm": "确认打开",
+					"badge": "打开",
+					"impact": "将打开该路径项目并加入活跃列表。"
+				},
+				"rename": {
+					"title": "重命名项目确认",
+					"summary": "确认后将更新项目显示名称。",
+					"confirm": "确认重命名",
+					"badge": "重命名",
+					"impact": "仅更新侧边栏显示名称，不会移动磁盘目录。"
+				},
+				"archive": {
+					"title": "归档项目确认",
+					"summary": "确认后项目将移入归档列表，历史会话会保留。",
+					"confirm": "确认归档",
+					"badge": "归档",
+					"impact": "项目移入归档列表，历史会话保留。"
+				},
+				"unarchive": {
+					"title": "取消归档项目确认",
+					"summary": "确认后项目将恢复到活跃列表。",
+					"confirm": "确认取消归档",
+					"badge": "取消归档",
+					"impact": "项目恢复到活跃列表。"
+				},
+				"remove": {
+					"title": "移除项目确认",
+					"summary": "确认后项目将从列表移除（不会删除磁盘上的工程文件）。",
+					"confirm": "确认移除",
+					"badge": "移除",
+					"impact": "从侧边栏移除项目记录，不会删除磁盘上的工程文件。",
+					"warning": "仅移除侧边栏记录，磁盘上的工程目录不会被删除。"
+				}
+			},
+			"pathOptional": "可选；省略则在工作区下按名称创建"
+		},
+		"general": {
+			"ops": {
+				"set-notifications": {
+					"title": "修改通知设置",
+					"summary": "确认是否允许系统通知提醒。",
+					"confirm": "保存通知设置",
+					"badge": "通知",
+					"impact": "任务完成、更新等提醒会按新开关显示或隐藏。"
+				},
+				"set-execution-mode": {
+					"title": "修改默认执行权限",
+					"summary": "选择新建对话时 AI 默认的操作权限。你可在下方改选。",
+					"confirm": "保存执行权限",
+					"badge": "执行权限",
+					"impact": "之后新建的对话会使用该权限；已有对话不会自动改变。"
+				},
+				"set-workspace": {
+					"title": "修改默认工作区",
+					"summary": "确认后，新建项目会默认落在该目录。",
+					"confirm": "保存工作区",
+					"badge": "工作区",
+					"impact": "默认工作区路径会更新；已有项目位置不变。"
+				}
+			},
+			"notificationsOn": "开启通知",
+			"notificationsOff": "关闭通知",
+			"notificationsTarget": "系统通知",
+			"notificationsTargetHint": "任务完成、更新等提醒",
+			"executionModeSandbox": "安全模式（沙盒）",
+			"executionModeFullAccess": "完整权限",
+			"executionModeSandboxHint": "限制可改文件范围，更安全，适合日常使用。",
+			"executionModeFullAccessHint": "允许更广的文件与系统操作，能力更强但风险更高。"
+		},
+		"agent": {
+			"ops": {
+				"set-experimental": {
+					"title": "修改实验功能",
+					"summary": "以下实验功能可在确认前调整开关。",
+					"confirm": "保存实验功能",
+					"badge": "实验",
+					"impact": "对应能力会开启或关闭；不稳定功能可能影响体验。"
+				}
+			},
+			"experimentalSectionTitle": "实验功能",
+			"experimentalSectionDescription": "以下开关与设置 → Agent 配置中的实验项一致，可在确认前调整。",
+			"experimentalFields": {
+				"astraviaCli": "命令行工具 Astravia CLI",
+				"astraviaCliDesc": "允许在终端通过 Astravia CLI 调用本机能力",
+				"promptPrediction": "输入预测",
+				"promptPredictionDesc": "输入时预估可能的后续内容，可能消耗少量额度",
+				"agentSkills": "Agent 技能扩展",
+				"agentSkillsDesc": "允许 Agent 使用扩展技能能力"
+			}
+		},
+		"knowledge": {
+			"ops": {
+				"create": {
+					"title": "创建知识库确认",
+					"summary": "确认后将创建新的知识库。",
+					"confirm": "确认创建",
+					"badge": "创建",
+					"impact": "将创建新的知识库。"
+				},
+				"rename": {
+					"title": "重命名知识库确认",
+					"summary": "确认后将更新知识库名称。",
+					"confirm": "确认重命名",
+					"badge": "重命名",
+					"impact": "知识库显示名称将更新。"
+				},
+				"delete": {
+					"title": "删除知识库确认",
+					"summary": "删除后知识库及其加工数据将被移除，此操作无法撤销。",
+					"confirm": "确认删除",
+					"badge": "删除",
+					"impact": "知识库及其加工数据将被删除。",
+					"warning": "删除知识库将同时移除加工产物，此操作无法撤销。"
+				},
+				"add-files": {
+					"title": "向知识库添加文件确认",
+					"summary": "确认后将把所选文件加入知识库并进入加工流程。",
+					"confirm": "确认添加文件",
+					"badge": "添加文件",
+					"impact": "所选文件将加入知识库并进入加工流程。"
+				},
+				"delete-entry": {
+					"title": "删除知识库条目确认",
+					"summary": "确认后将删除该知识库中的指定条目。",
+					"confirm": "确认删除条目",
+					"badge": "删除条目",
+					"impact": "该知识库条目将被删除。",
+					"warning": "条目删除后无法从应用内恢复。"
+				},
+				"scan-now": {
+					"title": "立即整理知识库确认",
+					"summary": "确认后将立即触发一轮知识库扫描与加工。",
+					"confirm": "确认立即整理",
+					"badge": "整理",
+					"impact": "将立即触发一轮知识库扫描与加工。"
+				},
+				"retry-failed": {
+					"title": "重试失败知识库任务确认",
+					"summary": "确认后将清除失败/隔离记录并重新加工。",
+					"confirm": "确认重试失败",
+					"badge": "重试",
+					"impact": "将清除失败/隔离记录并重新加工。"
+				},
+				"set-processing": {
+					"title": "修改知识库加工设置",
+					"summary": "以下知识库整理相关选项可在确认前修改。",
+					"confirm": "保存知识库设置",
+					"badge": "知识库",
+					"impact": "知识库自动整理与加工将按新配置运行。"
+				}
+			},
+			"globalAction": "知识库全局操作",
+			"processingSectionTitle": "知识库整理",
+			"processingSectionDescription": "与设置 → 知识库中的选项一致；只展示本次将修改的项。",
+			"processingFields": {
+				"enabled": "启用知识库整理",
+				"enabledDesc": "关闭后暂停自动整理，不会删除已有知识",
+				"pollIntervalMinutes": "自动整理间隔",
+				"pollIntervalDesc": "隔多久检查一次待整理文件",
+				"processingModelKey": "整理用模型",
+				"processingModelDesc": "用于阅读与整理文档的模型",
+				"processingModelReasoningLevel": "推理档位",
+				"agentConcurrency": "同时整理任务数",
+				"agentConcurrencyDesc": "并行处理越多越快，也更吃资源",
+				"ocrConcurrency": "同时识图任务数",
+				"ocrConcurrencyDesc": "图片文字识别的并行数量",
+				"pollMinutes": "每 {{count}} 分钟"
+			}
+		},
+		"appearance": {
+			"ops": {
+				"set-language": {
+					"title": "切换界面语言",
+					"summary": "确认后，界面文案将切换到所选语言。",
+					"confirm": "切换语言",
+					"badge": "语言",
+					"impact": "菜单、设置和按钮文案会立即切换；对话内容不受影响。"
+				}
+			},
+			"languageZh": "中文",
+			"languageEn": "English"
+		},
+		"plugins": {
+			"ops": {
+				"set-enabled": {
+					"title": "启用/停用插件确认",
+					"summary": "确认后将更改该插件的启用状态。",
+					"confirm": "确认更改状态",
+					"badge": "插件",
+					"impact": "插件启用状态将立即更新。"
+				},
+				"install-from-url": {
+					"title": "从 URL 安装插件确认",
+					"summary": "确认后将从指定地址下载并安装插件。",
+					"confirm": "确认安装",
+					"badge": "安装",
+					"impact": "将从 URL 下载并安装插件。"
+				},
+				"install-from-path": {
+					"title": "从本地安装插件确认",
+					"summary": "确认后将安装本地 zip，并按插件声明一次授予权限后启用。",
+					"confirm": "确认安装并授权",
+					"badge": "安装",
+					"impact": "将安装本地插件包，授予其声明的权限并启用。"
+				},
+				"uninstall": {
+					"title": "卸载插件确认",
+					"summary": "卸载后插件及其本地数据将按策略移除。",
+					"confirm": "确认卸载",
+					"badge": "卸载",
+					"impact": "插件将按策略卸载。",
+					"warning": "卸载后插件及其本地数据可能按策略清除。"
+				},
+				"reload": {
+					"title": "重载插件确认",
+					"summary": "确认后将重新加载该插件。",
+					"confirm": "确认重载",
+					"badge": "重载",
+					"impact": "插件将重新加载。"
+				}
+			}
+		},
+		"im": {
+			"ops": {
+				"set-enabled": {
+					"title": "启用/停用 IM 旁路确认",
+					"summary": "确认后将更改 IM 旁路网关的启用状态。",
+					"confirm": "确认更改状态",
+					"badge": "IM",
+					"impact": "IM 旁路网关启用状态将更新。"
+				},
+				"restart": {
+					"title": "重启 IM 旁路确认",
+					"summary": "确认后将重启本地 IM 旁路进程。",
+					"confirm": "确认重启",
+					"badge": "重启",
+					"impact": "本地 IM 旁路进程将重启。"
+				},
+				"set-agent-model": {
+					"title": "设置 Claw 使用的模型",
+					"summary": "选择外部 IM（Claw）对话使用的模型。可与设置页相同方式挑选。",
+					"confirm": "保存模型",
+					"badge": "Claw 模型",
+					"impact": "之后来自飞书/微信等渠道的对话将使用该模型；可留空表示跟随默认。"
+				}
+			},
+			"enableTitle": "启用 IM 旁路",
+			"disableTitle": "停用 IM 旁路",
+			"restartTarget": "本地 IM 旁路进程",
+			"channelName": "Claw（IM 旁路）",
+			"channelHint": "连接飞书、微信等外部对话渠道",
+			"modelKeyPlaceholder": "选择模型，可清空",
+			"modelSectionTitle": "Claw 模型",
+			"modelSectionDescription": "与设置 → Claw 中的模型选择一致，支持改模型与推理档位。",
+			"modelKeyHint": "留空则清除专用模型，改回默认策略"
+		},
+		"webhook": {
+			"ops": {
+				"create": {
+					"title": "创建 Webhook 确认",
+					"summary": "请确认 Webhook 配置。签名密钥会脱敏显示。",
+					"confirm": "确认创建",
+					"badge": "创建",
+					"impact": "将保存新的 Webhook 端点配置。"
+				},
+				"update": {
+					"title": "更新 Webhook 确认",
+					"summary": "请确认即将写入的 Webhook 变更字段。",
+					"confirm": "确认更新",
+					"badge": "更新",
+					"impact": "将按提交字段更新 Webhook 配置。"
+				},
+				"set-enabled": {
+					"title": "启用/停用 Webhook 确认",
+					"summary": "确认后将更改该 Webhook 的启用状态。",
+					"confirm": "确认更改状态",
+					"badge": "启用状态",
+					"impact": "Webhook 启用状态将更新。"
+				},
+				"delete": {
+					"title": "删除 Webhook 确认",
+					"summary": "删除后该 Webhook 配置将不可恢复。",
+					"confirm": "确认删除",
+					"badge": "删除",
+					"impact": "Webhook 配置将被永久删除。",
+					"warning": "删除后该 Webhook 配置不可恢复。"
+				},
+				"test": {
+					"title": "测试 Webhook 确认",
+					"summary": "确认后将向该 Webhook 发送一条测试消息。",
+					"confirm": "确认测试",
+					"badge": "测试",
+					"impact": "将向该 Webhook 发送测试消息。"
+				},
+				"send": {
+					"title": "发送 Webhook 消息确认",
+					"summary": "请确认即将通过 Webhook 发出的消息内容。",
+					"confirm": "确认发送",
+					"badge": "发送",
+					"impact": "将发送自定义消息到该 Webhook。"
+				}
+			},
+			"notFound": "未找到该 Webhook 端点",
+			"loadFailed": "加载 Webhook 列表失败",
+			"feishu": "飞书",
+			"dingtalk": "钉钉",
+			"botSuffix": "机器人"
+		},
+		"downloads": {
+			"ops": {
+				"cancel": {
+					"title": "取消下载",
+					"summary": "确认后会停止该文件的下载。",
+					"confirm": "取消下载",
+					"badge": "下载",
+					"impact": "下载会立即停止；已下载部分是否保留取决于系统下载状态。",
+					"warning": "取消后如需完整文件，需要重新下载。"
+				}
+			},
+			"status": "状态",
+			"statuses": {
+				"queued": "排队中",
+				"downloading": "下载中",
+				"paused": "已暂停",
+				"completed": "已完成",
+				"failed": "失败",
+				"canceled": "已取消"
+			}
+		},
+		"updater": {
+			"ops": {
+				"check": {
+					"title": "检查更新确认",
+					"summary": "确认后将检查是否有可用的应用更新。",
+					"confirm": "确认检查更新",
+					"badge": "检查",
+					"impact": "将检查是否存在可用更新。"
+				},
+				"download": {
+					"title": "下载更新确认",
+					"summary": "确认后将开始下载可用更新包。",
+					"confirm": "确认下载",
+					"badge": "下载",
+					"impact": "将开始下载更新包。"
+				},
+				"install": {
+					"title": "安装更新确认",
+					"summary": "确认后将安装已下载的更新，应用可能需要重启。",
+					"confirm": "确认安装并重启",
+					"badge": "安装",
+					"impact": "将安装更新并可能重启应用。",
+					"warning": "安装更新通常需要重启应用，请确保已保存工作。"
+				},
+				"dismiss": {
+					"title": "忽略更新提示确认",
+					"summary": "确认后将暂时忽略当前更新提示。",
+					"confirm": "确认忽略",
+					"badge": "忽略",
+					"impact": "将暂时忽略当前更新提示。"
+				},
+				"cancel": {
+					"title": "取消更新下载确认",
+					"summary": "确认后将取消进行中的更新下载。",
+					"confirm": "确认取消下载",
+					"badge": "取消",
+					"impact": "将取消进行中的更新下载。"
+				}
+			},
+			"target": "应用更新"
+		},
+		"afterActionTitle": "执行后会发生什么",
+		"unknown": "未知",
+		"clearValue": "清除",
+		"secretPlaceholder": "留空则保持原密钥/不修改"
+	},
+	"navigationApproval": {
+		"title": "打开页面",
+		"summary": "AI 想打开以下页面，确认后会切换到该界面。",
+		"target": "页面",
+		"tab": "设置分区",
+		"section": "具体位置",
+		"confirm": "打开",
+		"responding": "打开中...",
+		"impact": "应用会切换到该页面，不会修改你的数据。",
+		"targets": {
+			"chat": "对话",
+			"automation": "自动化",
+			"batch-tasks": "批量任务",
+			"skills": "能力",
+			"plugins": "插件",
+			"connectors": "连接器",
+			"settings": "设置"
+		}
+	},
+	"appearanceApproval": {
+		"pickerTitle": "选择外观",
+		"themeChangeTitle": "编辑外观变更",
+		"apply": "应用外观",
+		"confirmChange": "确认变更",
+		"submitting": "提交中..."
+	},
+	"schedulerApproval": {
+		"createTitle": "创建定时任务确认",
+		"createDescription": "请确认即将创建的定时任务配置。确认后任务会保存，并按启用状态参与调度。",
+		"updateTitle": "编辑定时任务变更",
+		"loadingCurrentTask": "正在加载当前任务配置...",
+		"updateNotFound": "未找到当前定时任务，无法加载完整配置。",
+		"updateLoadFailed": "加载当前定时任务配置失败。",
+		"taskId": "任务 ID",
+		"taskNamePlaceholder": "任务名称",
+		"confirmCreate": "确认创建",
+		"creating": "创建中...",
+		"confirmUpdate": "确认更新",
+		"updating": "更新中...",
+		"deleteTitle": "删除定时任务确认",
+		"deleteLabel": "删除任务",
+		"deleteTargetTask": "待删除任务",
+		"deleteDescriptionTitle": "删除影响",
+		"deleteDescription": "删除定时任务将同时删除该任务的所有执行记录，此操作无法撤销。",
+		"deleteWarning": "如果任务正在运行，请先中止任务后再删除。",
+		"confirmDelete": "确认删除",
+		"deleting": "删除中...",
+		"toggleTitle": "定时任务状态变更确认",
+		"enableTitle": "启用定时任务确认",
+		"disableTitle": "停用定时任务确认",
+		"enableLabel": "启用任务",
+		"disableLabel": "停用任务",
+		"enableDescription": "启用后，定时任务将按照 Cron 表达式设定的时间自动执行。",
+		"disableDescription": "停用后，定时任务将不再自动执行，但任务配置和历史记录会保留。",
+		"executionTitle": "定时任务执行确认",
+		"runNowTitle": "立即执行定时任务确认",
+		"abortTitle": "中止定时任务确认",
+		"runNowLabel": "立即执行",
+		"abortLabel": "中止运行",
+		"runNowDescription": "立即触发一次定时任务的执行，无需等待下一个调度时间。任务将使用当前配置的提示词和参数运行。",
+		"abortDescription": "中止当前正在运行的定时任务 Agent。任务执行会被中断，已产生的输出会保留。",
+		"abortWarning": "中止操作会立即终止 Agent 运行，当前执行状态可能不完整。",
+		"operationDescription": "操作说明",
+		"executionDescriptionTitle": "执行后会发生什么",
+		"targetTask": "目标任务",
+		"rawInput": "原始请求",
+		"fallbackAction": "操作",
+		"confirmAction": "确认{{action}}"
+	},
+	"batchTasksApproval": {
+		"confirmAction": "确认{{action}}",
+		"fallbackAction": "操作",
+		"unknown": "未知",
+		"unknownShort": "?",
+		"notFound": "未找到",
+		"count": "{{count}} 个",
+		"yes": "有",
+		"no": "无",
+		"afterActionTitle": "执行后会发生什么",
+		"projectLoading": "正在加载当前项目配置...",
+		"projectLoadNotFound": "未找到当前批量项目，无法加载完整配置。",
+		"projectLoadFailed": "加载当前批量项目配置失败。",
+		"projectFallbackTitle": "批量项目操作确认",
+		"projectCreateLabel": "创建项目",
+		"projectUpdateLabel": "更新项目",
+		"projectDeleteLabel": "删除项目",
+		"projectCreateTitle": "创建批量项目确认",
+		"projectUpdateTitle": "更新批量项目确认",
+		"projectDeleteTitle": "删除批量项目确认",
+		"projectCreateSummary": "请确认即将创建的批量项目配置。确认后会为每个源文件夹生成一个子任务。",
+		"projectUpdateSummary": "请确认即将写入的批量项目变更。确认界面已合并当前配置，并只会追加新的源文件夹。",
+		"projectDeleteSummary": "请确认是否删除该批量项目、全部子任务、会话状态和任务产物。此操作无法撤销。",
+		"projectFullAccessWarning": "任务将以完全访问模式运行，可读取和修改文件夹内外的文件。请确认提示词和目录来源可信。",
+		"newProjectNamePlaceholder": "新建批量项目",
+		"projectNamePlaceholder": "项目名称",
+		"sourceFolders": "源文件夹",
+		"folderList": "文件夹列表",
+		"targetProject": "目标项目",
+		"projectPath": "项目路径",
+		"existingTasks": "现有任务",
+		"includedTasks": "包含任务",
+		"notFoundInCurrentList": "未在当前列表中找到",
+		"projectNotFoundInCurrentList": "未在当前列表中找到该项目",
+		"taskNotFoundInCurrentList": "未在当前列表中找到该任务",
+		"projectDeleteWarning": "该操作会永久删除项目目录、全部任务记录、会话状态和任务产物，无法撤销。存在运行中或排队任务时操作会被拒绝。",
+		"taskFallbackTitle": "批量子任务操作确认",
+		"taskId": "任务 ID",
+		"sourceFolder": "源文件夹",
+		"relatedSession": "关联会话",
+		"resumeDefaultText": "继续",
+		"resumeTextLabel": "发送给原会话的补充说明",
+		"lastError": "最近一次错误",
+		"status": {
+			"pending": "待执行",
+			"running": "运行中",
+			"completed": "已完成",
+			"failed": "失败",
+			"paused": "已暂停"
+		},
+		"taskRunLabel": "执行任务",
+		"taskRunTitle": "执行批量子任务确认",
+		"taskRunSummary": "请确认是否为该待执行子任务创建会话并开始运行。",
+		"taskRunDescription": "为这个待执行任务创建会话并开始运行。",
+		"taskRetryLabel": "从头重试",
+		"taskRetryTitle": "重试批量子任务确认",
+		"taskRetrySummary": "请确认是否清理该子任务的旧结果，并从头重新执行。",
+		"taskRetryDescription": "清理旧结果后，从头重新执行这个任务。",
+		"taskRetryWarning": "旧会话、状态和任务目录中的已有产物会被删除，无法恢复。",
+		"taskStopLabel": "停止并清理",
+		"taskStopTitle": "停止批量子任务确认",
+		"taskStopSummary": "请确认是否中止或移出该子任务，并清理会话、状态和产物。",
+		"taskStopDescription": "中止运行中或排队中的任务，并将状态重置为待执行。",
+		"taskStopWarning": "当前会话、运行状态和任务目录中的已有产物会被删除。",
+		"taskDeleteLabel": "删除任务",
+		"taskDeleteTitle": "删除批量子任务确认",
+		"taskDeleteSummary": "请确认是否从项目中永久删除该子任务及其关联数据。",
+		"taskDeleteDescription": "从项目中永久移除这个任务。",
+		"taskDeleteWarning": "任务记录、项目子目录、会话状态及产物会被永久删除，无法撤销。",
+		"taskResumeLabel": "继续任务",
+		"taskResumeTitle": "继续批量子任务确认",
+		"taskResumeSummary": "请确认是否向暂停的原会话发送“继续”，并保留已有上下文继续执行。",
+		"taskResumeDescription": "向暂停的原会话发送“继续”，保留已有上下文和产物。",
+		"taskResumeWithTextLabel": "带说明继续",
+		"taskResumeWithTextTitle": "带说明继续批量子任务确认",
+		"taskResumeWithTextSummary": "请确认发送给暂停会话的补充说明。确认后会保留已有上下文继续执行。",
+		"taskResumeWithTextDescription": "将补充说明发送给暂停的原会话，然后继续执行。",
+		"taskDeleteSessionLabel": "删除任务会话",
+		"taskDeleteSessionTitle": "删除批量子任务会话确认",
+		"taskDeleteSessionSummary": "请确认是否删除该子任务关联的对话会话。任务记录和任务目录会保留。",
+		"taskDeleteSessionDescription": "删除与任务关联的对话会话。",
+		"taskDeleteSessionWarning": "会话历史将不可恢复；任务记录和任务目录不会删除。",
+		"executionFallbackTitle": "批量执行控制确认",
+		"totalTasks": "任务总数",
+		"estimatedImpact": "预计影响",
+		"selectedTasks": "指定任务",
+		"resetFailedPartialWarning": "只有当前状态为“失败”的任务会被处理，其他任务 ID 将被忽略。",
+		"executionDeleteAllLabel": "删除全部任务",
+		"executionDeleteAllTitle": "删除全部批量任务确认",
+		"executionDeleteAllSummary": "请确认是否删除该项目内所有非运行子任务。运行中的任务会保留。",
+		"executionDeleteAllDescription": "删除项目内所有非运行任务；运行中的任务会保留。",
+		"executionDeleteAllWarning": "排队任务会先移出队列，随后连同任务记录、会话状态和产物目录永久删除。",
+		"executionStartLabel": "开始执行",
+		"executionStartTitle": "开始执行批量项目确认",
+		"executionStartSummary": "请确认是否开始执行该批量项目。待执行和已暂停任务会进入执行流程。",
+		"executionStartDescription": "将所有待执行任务加入队列，并继续已暂停任务；已完成或失败任务不会重跑。",
+		"executionStopLabel": "停止并清理",
+		"executionStopTitle": "停止批量项目执行确认",
+		"executionStopSummary": "请确认是否停止该项目中的未完成任务，并清理相关会话、状态和产物。",
+		"executionStopDescription": "停止项目中的全部未完成任务，保留已完成任务。",
+		"executionStopWarning": "排队、运行、失败和暂停任务的会话、状态及产物目录会被清理并重置为待执行。",
+		"executionResetLabel": "清空并重跑",
+		"executionResetTitle": "清空并重跑批量项目确认",
+		"executionResetSummary": "请确认是否清空该项目全部任务状态和产物，并立即重新执行整个项目。",
+		"executionResetDescription": "清空整个项目的执行状态和产物，然后立即重新执行全部任务。",
+		"executionResetWarning": "全部任务的会话、状态和产物目录都会被删除，包括已完成任务。该操作无法撤销。",
+		"executionResetFailedLabel": "重置失败任务",
+		"executionResetFailedTitle": "重置失败批量任务确认",
+		"executionResetFailedSummary": "请确认是否清理所选失败任务。只有当前状态为失败的任务会被处理。",
+		"executionResetFailedDescription": "清理所选失败任务；项目仍在执行时会立即重新入队，否则恢复为待执行。",
+		"executionResetFailedWarning": "所选失败任务的旧会话、错误状态和已有产物会被删除。"
+	},
+	"appShell": {
+		"routeTitles": {
+			"automation": "自动化",
+			"batchTasks": "批量任务",
+			"knowledgeAll": "全部知识库",
+			"knowledge": "知识库",
+			"skills": "技能广场",
+			"plugins": "插件",
+			"settings": "设置",
+			"project": "项目详情",
+			"chat": "对话"
+		},
+		"sidebarTrigger": {
+			"open": "侧边栏",
+			"expand": "展开侧边栏"
+		},
+		"windowControls": {
+			"minimize": "最小化",
+			"maximize": "最大化",
+			"restore": "还原",
+			"close": "关闭"
+		}
+	},
+	"modelSelect": {
+		"placeholder": "选择模型",
+		"searchPlaceholder": "搜索模型或供应商",
+		"clearSearch": "清除搜索",
+		"noResults": "未找到模型",
+		"noResultsHint": "请尝试其他模型名称、ID 或供应商",
+		"unset": "未设置",
+		"defaultBadge": "默认",
+		"visionBadge": "vision",
+		"cloudOnly": "云端",
+		"reasoningHeader": "推理",
+		"modelHeader": "模型",
+		"multiplier": "{{value}}×",
+		"free": "免费",
+		"reasoningLevel": {
+			"minimal": "极简",
+			"low": "低",
+			"medium": "中",
+			"high": "高",
+			"xhigh": "超高",
+			"max": "极高",
+			"none": "关闭",
+			"off": "关闭"
+		}
+	},
+	"setupWizard": {
+		"skip": "跳过",
+		"next": "下一步",
+		"back": "上一步",
+		"getStarted": "开始使用",
+		"progress": "{{current}} / {{total}}",
+		"permissions": {
+			"title": "授予权限",
+			"subtitle": "授权后可使用截图、自动化与系统通知等能力；均可稍后在设置中完成",
+			"systemSection": "系统权限",
+			"computerUseTitle": "Astravia Computer Use",
+			"computerUseDesc": "独立辅助程序负责前台窗口捕获，需单独完成辅助功能与屏幕录制授权",
+			"optionalHint": "权限均为可选，可随时在「设置 › 权限」中调整"
+		},
+		"languageAppearance": {
+			"title": "语言与外观",
+			"subtitle": "语言默认跟随系统；也可改主题模式与配色，之后可在设置中随时更改",
+			"language": "语言",
+			"appearance": "外观模式",
+			"theme": "主题配色"
+		},
+		"models": {
+			"title": "配置模型",
+			"subtitle": "选择一个服务商并填入你自己的 API Key，请求直接发往该服务商。",
+			"optionalHint": "可跳过，稍后在「设置 → 模型配置」补上"
+		},
+		"welcome": {
+			"title": "欢迎使用 Astravia",
+			"subtitle": "你的桌面 AI 编程助手已就绪，从一次对话开始吧",
+			"highlights": {
+				"chat": {
+					"title": "智能对话",
+					"desc": "在项目上下文中提问、改代码、跑命令"
+				},
+				"skills": {
+					"title": "技能与连接器",
+					"desc": "扩展能力市场，连接常用工具与服务"
+				},
+				"automation": {
+					"title": "自动化",
+					"desc": "定时任务与批量作业，把重复工作交给 Astravia"
+				}
+			}
+		}
+	}
+}

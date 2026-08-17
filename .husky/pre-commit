@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Fast pre-commit: staged Biome + lightweight guards.
+# Full typecheck / architecture guards: `bun run check` before PR.
+
+echo "Running pre-commit quality gate (staged)..."
+bun run check:precommit
+if [ $? -ne 0 ]; then
+  echo "Pre-commit checks failed. Fix the errors before committing."
+  echo "Full gate before PR: bun run check && bun run test:unit"
+  exit 1
+fi
+
+echo "Pre-commit checks passed."

@@ -1,0 +1,37 @@
+{
+	"id": "cowart-astravia",
+	"name": "%plugin.name%",
+	"version": "0.1.8",
+	"pluginApiVersion": "^1.0.0",
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "cowart_astravia",
+		"expose": "./plugin"
+	},
+	"styles": ["dist/style.css", "dist/style2.css"],
+	"icon": "assets/app-icon.png",
+	"permissions": [
+		"ui.slot.activity-tab",
+		"agent.session.read",
+		"agent.session.write",
+		"agent.skills.control",
+		"agent.mcp.control",
+		"agent.tools.register",
+		"agent.toolHandler.execute",
+		"fs.read",
+		"fs.write"
+	],
+	"agent": {
+		"skillPaths": ["agent/skills"],
+		"mcpServers": "./.mcp.json"
+	},
+	"description": "%plugin.description%",
+	"author": "Astravia (adapted from zhongerxin/Cowart)",
+	"defaultLocale": "zh",
+	"guidingWords": [
+		"%guidingWords.openCanvas%",
+		"%guidingWords.genImage%",
+		"%guidingWords.editAnnotated%"
+	]
+}

@@ -1,0 +1,19 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"noEmit": true,
+		"types": ["react"],
+		"paths": {
+			"@astravia/theme-sdk": ["../theme-sdk/src/index.ts"],
+			"@astravia/theme-sdk/*": ["../theme-sdk/src/*"],
+			"@astravia/ui": ["../ui/src/index.ts"],
+			"@astravia/ui/*": ["../ui/src/*"]
+		}
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx"],
+	"exclude": ["node_modules", "dist"]
+}

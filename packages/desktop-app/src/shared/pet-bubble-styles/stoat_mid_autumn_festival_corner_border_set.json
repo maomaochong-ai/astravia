@@ -1,0 +1,26 @@
+{
+	"id": "stoat_mid_autumn_festival_corner_border_set",
+	"labelKey": "settings.bubble.styles.midAutumn.label",
+	"descriptionKey": "settings.bubble.styles.midAutumn.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF7E3",
+			"borderColor": "#D7A743",
+			"color": "#65420D"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_mid_autumn_festival_corner_border_set.png",
+		"cornerWidth": "5.5rem",
+		"cornerHeight": "5.5rem",
+		"backgroundSize": "11rem 11rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-28px", "top": "-34px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-17px", "top": "-37px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-29px", "left": "-27px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-32px" } }
+		]
+	}
+}

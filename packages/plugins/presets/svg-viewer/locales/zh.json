@@ -1,0 +1,11 @@
+{
+	"plugin.name": "SVG Viewer",
+	"plugin.description": "预览 .svg 文件，支持渲染/源码切换、缩放与棋盘格背景。",
+	"tab.rendered": "渲染",
+	"tab.source": "源码",
+	"action.zoomOut": "缩小",
+	"action.resetZoom": "重置缩放",
+	"action.zoomIn": "放大",
+	"state.loading": "加载中…",
+	"error.read": "无法读取此 SVG 文件"
+}

@@ -1,0 +1,83 @@
+/* Align driver.js popover with desktop design tokens (DESIGN.md). */
+
+.driver-popover.astravia-driver-popover {
+	background-color: var(--popover);
+	color: var(--popover-foreground);
+	border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+	border-radius: 0.75rem;
+	box-shadow:
+		0 10px 30px color-mix(in srgb, var(--foreground) 12%, transparent),
+		0 0 0 1px color-mix(in srgb, var(--border) 40%, transparent);
+	max-width: 300px;
+	padding: 14px 16px 12px;
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-title {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 1.35;
+	color: var(--foreground);
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-description {
+	font-size: 12px;
+	line-height: 1.55;
+	color: color-mix(in srgb, var(--muted-foreground) 85%, transparent);
+	margin-top: 6px;
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-progress-text {
+	font-size: 11px;
+	color: color-mix(in srgb, var(--muted-foreground) 70%, transparent);
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-navigation-btns {
+	gap: 6px;
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-prev-btn,
+.driver-popover.astravia-driver-popover .driver-popover-next-btn {
+	border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+	border-radius: 0.5rem;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1;
+	padding: 7px 12px;
+	text-shadow: none;
+	background-color: var(--secondary);
+	color: var(--foreground);
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-prev-btn:hover,
+.driver-popover.astravia-driver-popover .driver-popover-next-btn:hover {
+	background-color: var(--accent);
+	border-color: color-mix(in srgb, var(--primary) 35%, transparent);
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-next-btn {
+	background-color: var(--primary);
+	border-color: var(--primary);
+	color: var(--primary-foreground);
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-next-btn:hover {
+	background-color: color-mix(in srgb, var(--primary) 90%, var(--foreground));
+	border-color: color-mix(in srgb, var(--primary) 90%, var(--foreground));
+}
+
+/* Hide driver.js default top-right close control (×). */
+.driver-popover.astravia-driver-popover .driver-popover-close-btn {
+	display: none;
+}
+
+.driver-popover.astravia-driver-popover .driver-popover-arrow-side-left.driver-popover-arrow,
+.driver-popover.astravia-driver-popover .driver-popover-arrow-side-right.driver-popover-arrow,
+.driver-popover.astravia-driver-popover .driver-popover-arrow-side-top.driver-popover-arrow,
+.driver-popover.astravia-driver-popover .driver-popover-arrow-side-bottom.driver-popover-arrow {
+	border-color: var(--popover);
+}
+
+.driver-overlay {
+	/* keep default SVG overlay; opacity controlled via config */
+}

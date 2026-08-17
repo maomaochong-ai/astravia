@@ -1,0 +1,118 @@
+{
+	"name": "@astravia/coding-agent",
+	"version": "0.0.1",
+	"description": "Coding agent CLI with read, bash, edit, write tools and session management",
+	"type": "module",
+	"piConfig": {
+		"name": "astravia"
+	},
+	"bin": {
+		"astravia-agent": "dist/cli.js"
+	},
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./hooks": {
+			"types": "./dist/core/hooks/index.d.ts",
+			"import": "./dist/core/hooks/index.js"
+		},
+		"./core/settings-manager.js": {
+			"types": "./dist/core/settings-manager.d.ts",
+			"import": "./dist/core/settings-manager.js"
+		},
+		"./core/mcp/index.js": {
+			"types": "./dist/core/mcp/index.d.ts",
+			"import": "./dist/core/mcp/index.js"
+		},
+		"./core/mcp/types.js": {
+			"types": "./dist/core/mcp/types.d.ts",
+			"import": "./dist/core/mcp/types.js"
+		},
+		"./core/resolve-config-value.js": {
+			"types": "./dist/core/resolve-config-value.d.ts",
+			"import": "./dist/core/resolve-config-value.js"
+		}
+	},
+	"files": [
+		"dist",
+		"docs",
+		"examples",
+		"banner.txt",
+		"CHANGELOG.md"
+	],
+	"scripts": {
+		"clean": "shx rm -rf dist",
+		"dev": "tsgo -p tsconfig.build.json --watch --preserveWatchOutput",
+		"build": "bun run generate:personas && bun run generate:modes && bun run generate:descriptions && tsgo -p tsconfig.build.json && shx chmod +x dist/cli.js && bun run copy-assets",
+		"generate:personas": "node scripts/generate-personas.mjs",
+		"generate:modes": "node scripts/generate-modes.mjs",
+		"generate:descriptions": "node scripts/generate-tool-descriptions.mjs",
+		"build:binary": "bun run build && bun build --compile ./dist/cli.js --outfile dist/astravia && bun run copy-binary-assets",
+		"copy-assets": "shx mkdir -p dist/modes/interactive/theme && shx cp src/modes/interactive/theme/*.json dist/modes/interactive/theme/ && shx mkdir -p dist/core/export-html/vendor && shx cp src/core/export-html/template.html src/core/export-html/template.css src/core/export-html/template.js dist/core/export-html/ && shx cp src/core/export-html/vendor/*.js dist/core/export-html/vendor/",
+		"copy-binary-assets": "shx cp package.json dist/ && shx cp README.md dist/ && shx cp CHANGELOG.md dist/ && shx mkdir -p dist/theme && shx cp src/modes/interactive/theme/*.json dist/theme/ && shx mkdir -p dist/export-html/vendor && shx cp src/core/export-html/template.html dist/export-html/ && shx cp src/core/export-html/vendor/*.js dist/export-html/vendor/ && shx cp -r docs dist/ && shx cp -r examples dist/ && shx cp ../../node_modules/@silvia-odwyer/photon-node/photon_rs_bg.wasm dist/",
+		"test": "vitest --run",
+		"test:coverage": "vitest --run --coverage",
+		"prepublishOnly": "bun run clean && bun run build"
+	},
+	"dependencies": {
+		"@mariozechner/jiti": "^2.6.2",
+		"@modelcontextprotocol/sdk": "^1.29.0",
+		"@silvia-odwyer/photon-node": "^0.3.4",
+		"@sinclair/typebox": "^0.34.41",
+		"@astravia/action-rpc": "workspace:*",
+		"@astravia/agent-core": "workspace:*",
+		"@astravia/ai": "workspace:*",
+		"@astravia/ecosystem-adapter": "workspace:*",
+		"@astravia/runtime-telemetry": "workspace:*",
+		"ajv": "^8.17.1",
+		"ajv-formats": "^3.0.1",
+		"chalk": "^5.5.0",
+		"cli-highlight": "^2.1.11",
+		"diff": "^8.0.2",
+		"extract-zip": "^2.0.1",
+		"file-type": "^21.1.1",
+		"glob": "^13.0.1",
+		"hosted-git-info": "^9.0.2",
+		"ignore": "^7.0.5",
+		"marked": "^15.0.12",
+		"minimatch": "^10.1.1",
+		"proper-lockfile": "^4.1.2",
+		"strip-ansi": "^7.1.0",
+		"yaml": "^2.8.2"
+	},
+	"overrides": {
+		"rimraf": "6.1.2",
+		"gaxios": {
+			"rimraf": "6.1.2"
+		}
+	},
+	"optionalDependencies": {
+		"@mariozechner/clipboard": "^0.3.2"
+	},
+	"devDependencies": {
+		"@types/diff": "^7.0.2",
+		"@types/hosted-git-info": "^3.0.5",
+		"@types/ms": "^2.1.0",
+		"@types/node": "^24.3.0",
+		"@types/proper-lockfile": "^4.1.4",
+		"shx": "^0.4.0",
+		"typescript": "^5.7.3"
+	},
+	"keywords": [
+		"coding-agent",
+		"ai",
+		"llm",
+		"cli",
+		"tui",
+		"agent"
+	],
+	"author": "Mario Zechner",
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=20.0.0"
+	}
+}

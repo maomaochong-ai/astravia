@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "xianxia",
+	"version": "0.1.0",
+	"sdkVersion": "^0.1.0",
+	"displayName": {
+		"zh-CN": "仙侠",
+		"en-US": "Xianxia"
+	},
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "theme_xianxia",
+		"expose": "./theme"
+	},
+	"development": {
+		"origin": "http://127.0.0.1:3010",
+		"entry": "mf-manifest.json"
+	},
+	"styles": ["dist/style.css"],
+	"capabilities": [
+		"appearance",
+		"component:app.background",
+		"component:chat.inputBarBackground",
+		"component:sidebar.navigation",
+		"page:sanctum"
+	]
+}

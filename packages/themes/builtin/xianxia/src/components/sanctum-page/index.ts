@@ -1,0 +1,1 @@
+export { XianxiaSanctumPage } from "./XianxiaSanctumPage";

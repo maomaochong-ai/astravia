@@ -1,0 +1,11 @@
+{
+	"plugin.name": "SVG Viewer",
+	"plugin.description": "Preview .svg files with a rendered/source toggle, zoom and a checkerboard backdrop.",
+	"tab.rendered": "Rendered",
+	"tab.source": "Source",
+	"action.zoomOut": "Zoom out",
+	"action.resetZoom": "Reset zoom",
+	"action.zoomIn": "Zoom in",
+	"state.loading": "Loading…",
+	"error.read": "Failed to read this SVG file"
+}

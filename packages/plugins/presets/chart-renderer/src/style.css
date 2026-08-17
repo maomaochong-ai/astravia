@@ -1,0 +1,6 @@
+/* 导入 theme 层 + utilities 层（不要 preflight，避免 reset 污染宿主全局）。
+   只 @import utilities 会漏掉依赖 theme 变量的工具类（spacing/radius：p-3 / gap-3 /
+   rounded-xl …生成不出来），故 theme 层必须一并导入。 */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);

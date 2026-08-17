@@ -1,0 +1,165 @@
+{
+	"sidebar": {
+		"nav": {
+			"newSession": "新会话",
+			"automation": "自动化",
+			"batchTasks": "批量任务",
+			"knowledge": "知识库",
+			"skills": "能力",
+			"plugins": "插件",
+			"modelSettings": "模型设置",
+			"agentSettings": "Agent 设置",
+			"appearance": "外观",
+			"more": "更多",
+			"betaBadge": "BETA"
+		},
+		"clawConnected": "Claw 已连接",
+		"hide": "隐藏侧边栏",
+		"empty": {
+			"title": "还没有项目",
+			"description": "点击上方 + 新建项目"
+		},
+		"projects": {
+			"noSessions": "暂无会话",
+			"collapseSessions": "折叠会话",
+			"expandMore": "展开更多（{{count}}）",
+			"scrollToTop": "滚动到顶部",
+			"scrollToBottom": "滚动到底部"
+		},
+		"defaultConversation": {
+			"noConversations": "暂无对话",
+			"emptyTitle": "还没有对话",
+			"emptyDescription": "开始一段新对话后，历史会显示在这里",
+			"emptyAction": "开始新对话",
+			"emptyClawTitle": "还没有 Claw 记录",
+			"emptyClawDescription": "通过微信、飞书等渠道与 Claw 对话后，记录会出现在这里"
+		},
+		"session": {
+			"forkedTooltip": "由其他会话分叉而来"
+		},
+		"dialogs": {
+			"deleteBatchTitle": "删除批量项目",
+			"deleteBatchMessage": "确定要删除批量项目「{{name}}」吗？此操作不可撤回。",
+			"deleteConfirm": "删除",
+			"removeTitle": "从列表中移除",
+			"removeMessage": "确定要将「{{name}}」从项目列表中移除吗？此操作不会删除磁盘上的文件。",
+			"removeConfirm": "移除",
+			"deleteProjectTitle": "删除项目",
+			"deleteProjectMessage": "确定要永久删除「{{name}}」吗？此操作将从磁盘上彻底删除该项目文件夹，不可恢复。",
+			"clearConversationTitle": "清空会话",
+			"clearConversationMessage": "将删除「对话」项目下 {{count}} 个会话（保留产物，Claw 会话不受影响），此操作不可恢复。",
+			"clearClawTitle": "清空 Claw 记录",
+			"clearClawMessage": "将删除 {{count}} 条 Claw 会话记录（保留产物），此操作不可恢复。",
+			"clearConfirm": "清空"
+		},
+		"time": {
+			"justNow": "刚刚",
+			"minutes": "{{n}}分",
+			"hours": "{{n}}时",
+			"days": "{{n}}天",
+			"weeks": "{{n}}周",
+			"months": "{{n}}月",
+			"years": "{{n}}年"
+		}
+	},
+	"filterTabs": {
+		"all": "全部",
+		"normal": "普通",
+		"batch": "批量任务",
+		"conversation": "对话",
+		"claw": "Claw"
+	},
+	"actions": {
+		"newProject": "新建项目",
+		"openProject": "打开项目",
+		"importProject": "导入项目",
+		"more": "更多"
+	},
+	"contextMenu": {
+		"openInFinder": "在访达中打开",
+		"openInExplorer": "从此电脑打开",
+		"clearConversation": "清空会话",
+		"clearConversationDisabled": "请先停止运行中的会话",
+		"clearClaw": "清空记录",
+		"clearClawDisabled": "请先停止运行中的 Claw 会话",
+		"clawSettings": "Claw 设置",
+		"archiveProject": "归档项目",
+		"removeFromList": "从列表中移除",
+		"deleteProject": "删除项目",
+		"rename": "重命名",
+		"openArtifactDir": "打开产物目录",
+		"delete": "删除"
+	},
+	"importDialog": {
+		"failedTitle": "导入失败",
+		"failedConfirm": "好的",
+		"partialTitle": "导入完成（部分源路径缺失）",
+		"partialMessage": "项目「{{name}}」已导入，但有 {{count}} 个 batch 源路径在本机不存在：\n\n{{list}}\n\n这些任务的元数据已保留，进入项目后可手动重链或删除。",
+		"partialMore": "\n…还有 {{count}} 项",
+		"doneTitle": "导入完成",
+		"doneMessage": "项目「{{name}}」已导入到工作区。",
+		"viewProject": "查看项目",
+		"gotIt": "知道了"
+	},
+	"detail": {
+		"typeBatch": "批量任务",
+		"showInFinder": "在 Finder 中显示",
+		"showInExplorer": "在资源管理器中显示",
+		"finder": "Finder",
+		"explorer": "资源管理器",
+		"export": "导出",
+		"exportTitle": "导出项目（含会话历史）",
+		"newSession": "新会话",
+		"closeActivityPanel": "关闭活动面板",
+		"openActivityPanel": "打开活动面板",
+		"sessionCount": "{{count}} 个会话",
+		"taskCount": "{{count}} 个任务",
+		"persona": "项目人设",
+		"unsavedChanges": "未保存的更改",
+		"saved": "已保存",
+		"saveFailed": "保存失败",
+		"save": "保存",
+		"editorPlaceholder": "在此编写 AGENTS.md 项目指令...",
+		"agentsMdHint": "AGENTS.md 用于定义项目级别的 AI 指令，所有会话都会自动加载此文件。",
+		"quickSave": "快速保存"
+	},
+	"exportDialog": {
+		"title": "导出项目",
+		"message": "确定要导出项目「{{name}}」吗？\n\n将打包当前项目目录下的所有文件，包括 .astravia/sessions 历史、batch 任务工作目录与状态。文件锁（*.lock）会被排除。",
+		"confirm": "导出",
+		"failedTitle": "导出失败",
+		"failedConfirm": "好的"
+	},
+	"update": {
+		"newVersion": "发现新版本 {{version}}，点击后台下载",
+		"downloading": "正在下载 {{version}}（{{pct}}%）",
+		"ready": "更新 {{version}} 已就绪，点击重启",
+		"checkFailed": "更新检查失败，点击重试",
+		"downloadProgress": "下载进度",
+		"bannerReady": "新版本 {{version}} 已就绪",
+		"bannerRestart": "重启更新",
+		"bannerDismiss": "忽略"
+	},
+	"tabPicker": {
+		"moreTabs": "更多标签页",
+		"hiddenPanels": "已隐藏面板",
+		"availablePlugins": "可添加插件面板",
+		"menu": "标签页菜单"
+	},
+	"tour": {
+		"sidebar": {
+			"projects": {
+				"title": "项目区域",
+				"description": "这里管理你的工作项目。点击项目可展开会话列表，也可以用上方按钮新建或导入项目。"
+			},
+			"conversations": {
+				"title": "对话区域",
+				"description": "默认对话列表在这里。最近的会话会按时间排列，点击即可继续上次的对话。"
+			},
+			"skills": {
+				"title": "能力入口",
+				"description": "点这里打开能力页，安装技能与连接器，让 Astravia 具备更多专业能力。"
+			}
+		}
+	}
+}

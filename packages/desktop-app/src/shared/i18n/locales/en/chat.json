@@ -1,0 +1,658 @@
+{
+	"activityPanel": {
+		"tabs": {
+			"file": "Files",
+			"batchProgress": "Progress",
+			"todo": "Todo",
+			"backgroundTasks": "Background tasks",
+			"debug": "Debug",
+			"knowledgeHistory": "Processing history",
+			"workflow": "Workflows",
+			"database": "Database"
+		},
+		"backgroundTasks": {
+			"statusRunning": "Running",
+			"statusCompleted": "Completed",
+			"statusFailed": "Failed",
+			"statusKilled": "Killed",
+			"subagentStatusPending": "Pending",
+			"subagentStatusInterrupted": "Interrupted",
+			"durationSec": "{{sec}}s",
+			"durationMin": "{{min}}m {{sec}}s",
+			"durationHour": "{{hr}}h {{min}}m",
+			"empty": "No background tasks",
+			"clearFinished": "Clear finished ({{count}})",
+			"stop": "Stop"
+		},
+		"batchProgress": {
+			"notFound": "Batch project not found"
+		},
+		"debug": {
+			"toolCalls": "Tool calls",
+			"requestHistory": "Request history"
+		},
+		"todo": {
+			"empty": "No todo items"
+		},
+		"toolCalls": {
+			"filterAll": "All",
+			"filterSuccess": "Success",
+			"filterError": "Failed",
+			"noSession": "No active session",
+			"searchPlaceholder": "Search tool name...",
+			"loading": "Loading...",
+			"recordCount": "{{count}} records",
+			"refresh": "Refresh",
+			"empty": "No tool calls yet",
+			"noMatch": "No matches",
+			"args": "Arguments",
+			"result": "Result"
+		},
+		"requestHistory": {
+			"noSession": "No active session",
+			"loading": "Loading...",
+			"requestCount": "{{count}} requests",
+			"refresh": "Refresh",
+			"empty": "After sending a message in debug mode, request history will appear here",
+			"showInFolder": "Reveal on disk"
+		},
+		"schedule": {
+			"statusRunning": "Running",
+			"statusSuccess": "Success",
+			"statusFailed": "Failed",
+			"statusAborted": "Aborted",
+			"unnamedTask": "Unnamed task",
+			"noTasks": "This project has no automation tasks",
+			"overview": "Automation overview",
+			"refresh": "Refresh",
+			"totalTasks": "Total tasks",
+			"enabled": "Enabled",
+			"todayExecutions": "Today",
+			"taskControl": "Task control",
+			"enabledBadge": "Enabled",
+			"pausedBadge": "Paused",
+			"run": "Run",
+			"pause": "Pause",
+			"enable": "Enable",
+			"executionRecords": "Execution records",
+			"noRecords": "No execution records"
+		},
+		"htmlPreview": {
+			"title": "HTML preview"
+		},
+		"workflow": {
+			"empty": "No workflows",
+			"noTranscript": "No messages from this workflow yet",
+			"stop": "Stop",
+			"statusQueued": "Queued",
+			"statusPending": "Starting",
+			"statusRunning": "Running",
+			"statusCompleted": "Completed",
+			"statusFailed": "Failed",
+			"statusInterrupted": "Interrupted",
+			"processingTitle": "{{count}} workflow(s) in progress",
+			"doneTitle": "All workflows finished"
+		}
+	},
+	"fileExplorer": {
+		"clearArtifactsTitle": "Clear artifacts",
+		"clearArtifactsMessage": "This will delete all artifact files under the {{label}} project cwd (session records are kept). This cannot be undone.",
+		"clearArtifactsConfirm": "Clear",
+		"clearArtifactsFailed": "Failed to clear artifacts",
+		"conversationLabel": "\"Conversation\"",
+		"moveFailed": "Move failed",
+		"deleteFailed": "Delete failed",
+		"selectProject": "Select a project to browse files",
+		"fileList": "Project files",
+		"clearArtifacts": "Clear artifacts",
+		"refresh": "Refresh",
+		"newFile": "New file",
+		"newFolder": "New folder",
+		"collapseAll": "Collapse all",
+		"newFileInputLabel": "Enter a new file name",
+		"newFolderInputLabel": "Enter a new folder name",
+		"createAlreadyExists": "A file or folder with this name already exists",
+		"createFailed": "Failed to create item",
+		"invalidName": {
+			"empty": "Name cannot be empty",
+			"dotPath": "Name cannot be . or ..",
+			"pathSeparator": "Name cannot contain path separators",
+			"invalidCharacter": "Name contains characters not allowed on Windows",
+			"reservedName": "This name is reserved on Windows",
+			"trailingCharacter": "Name cannot end with a space or period"
+		},
+		"emptyFolder": "This folder is empty",
+		"openInFinder": "Reveal in Finder",
+		"openInExplorer": "Reveal in Explorer",
+		"copy": "Copy",
+		"paste": "Paste",
+		"copyPath": "Copy path",
+		"copyName": "Copy name",
+		"rename": "Rename",
+		"delete": "Delete",
+		"confirmDeleteTitle": "Confirm delete",
+		"confirmDeleteFolder": "folder",
+		"confirmDeleteFile": "file",
+		"confirmDeletePrefix": "Delete {{type}}",
+		"confirmDeleteSuffix": "?{{folderNote}} This cannot be undone.",
+		"confirmDeleteFolderNote": " All contents inside the folder will be deleted.",
+		"confirmDeleteMultiplePrefix": "Delete these {{count}} items",
+		"confirmDeleteMultipleMore": " and {{count}} more",
+		"confirmDeleteMultipleSuffix": "? This cannot be undone.",
+		"cancel": "Cancel",
+		"transfer": {
+			"title": "Add files to project",
+			"pasteCopyTitle": "Paste files",
+			"pasteMoveTitle": "Move files",
+			"description": "Place {{count}} item(s) in “{{destination}}”",
+			"moveWarning": "Move removes successfully transferred items from their original location.",
+			"conflictLabel": "{{count}} item(s) have name conflicts",
+			"keepBoth": "Keep both",
+			"replace": "Replace existing items",
+			"skip": "Skip conflicting items",
+			"copy": "Copy",
+			"move": "Move",
+			"cancel": "Cancel",
+			"processing": "Processing…",
+			"prepareFailed": "Unable to read dropped files",
+			"commitFailed": "File transfer failed",
+			"failedCount": "{{count}} item(s) failed to transfer"
+		}
+	},
+	"fileEditor": {
+		"loading": "Opening file…",
+		"edit": "Edit",
+		"preview": "Preview",
+		"save": "Save",
+		"saving": "Saving…",
+		"saved": "Saved",
+		"unsaved": "Unsaved changes",
+		"conflict": "Another program changed this file. Reload it, or explicitly overwrite the version on disk.",
+		"reload": "Reload",
+		"overwrite": "Overwrite",
+		"errorTooLarge": "Files larger than 2 MB cannot be edited",
+		"errorPreviewTooLarge": "This file is too large to preview",
+		"errorNotUtf8": "This file is not valid UTF-8 text and cannot be edited",
+		"errorRead": "Unable to read this file",
+		"errorSave": "Unable to save this file. Try again.",
+		"unsupported": "Preview is not supported for this file type",
+		"download": "Download file",
+		"showTree": "Show file tree",
+		"hideTree": "Hide file tree",
+		"previous": "Previous (←)",
+		"next": "Next (→)",
+		"downloadShort": "Download",
+		"refresh": "Refresh",
+		"close": "Close"
+	},
+	"appshot": {
+		"errorSelfCapture": "Appshot skipped: the frontmost window is Astravia itself",
+		"errorNoPermission": "Appshot capture failed: Screen Recording and Accessibility permissions are missing. Grant them in Settings › Permissions",
+		"errorHelperFailed": "Appshot capture failed, please try again"
+	},
+	"askUserQuestion": {
+		"cancelledMessage": "Cancelled by user, not answered",
+		"defaultQuestionLabel": "Question {{number}}"
+	},
+	"atPanel": {
+		"emptyDirectory": "Empty directory",
+		"enterDirectory": "Tab to enter",
+		"goUp": "..",
+		"header": "Reference file",
+		"loading": "Loading...",
+		"noResults": "No matches found",
+		"searchResults": "{{count}} results"
+	},
+	"backgroundTasksBadge": {
+		"runningTasksTooltip": "{{count}} background tasks running"
+	},
+	"bashHeader": {
+		"statusError": "Command failed: {{short}}",
+		"statusPending": "Running: {{short}}",
+		"statusSuccess": "Ran command: {{short}}"
+	},
+	"bashTerminalCard": {
+		"copyCommand": "Copy command",
+		"metaDescription": "Local metadata, UI only, not sent to the model"
+	},
+	"browser": {
+		"addressPlaceholder": "Enter a URL and press Enter",
+		"back": "Back",
+		"empty": "Click a link in the conversation, or type a URL above",
+		"failed": "Failed to load page",
+		"forward": "Forward",
+		"loading": "Loading…",
+		"noSession": "No active session",
+		"openExternal": "Open in system browser",
+		"reload": "Reload",
+		"retry": "Retry",
+		"stop": "Stop",
+		"tab": "Browser"
+	},
+	"capability": {
+		"network": "Network",
+		"read": "Read",
+		"write": "Write"
+	},
+	"chatExport": {
+		"defaultSessionName": "Astravia Session"
+	},
+	"chatView": {
+		"defaultSessionTitle": "Astravia Session",
+		"exportButton": {
+			"title": "Export full session as HTML"
+		},
+		"panelButton": {
+			"closed": "Open activity panel",
+			"open": "Close activity panel"
+		},
+		"pinButton": {
+			"pinned": "Unpin window",
+			"unpinned": "Pin window (keep on top)"
+		}
+	},
+	"contextRing": {
+		"tooltip": {
+			"compacting": "Compacting context...",
+			"unknown": "Context window {{window}} (usage unknown)",
+			"usage": "Context {{percent}}% used ({{window}} window)"
+		}
+	},
+	"copyButton": {
+		"copied": "Copied",
+		"label": "Copy"
+	},
+	"dropZone": {
+		"externalRef": "Images are attached automatically; other files are referenced",
+		"internalRef": "Reference from within the project",
+		"releaseToRef": "Release to reference file"
+	},
+	"editDiff": {
+		"anchor": {
+			"badge": "Anchor edit",
+			"delete": "Delete",
+			"insertAfter": "Insert after",
+			"replace": "Replace line",
+			"replaceRange": "Replace range"
+		},
+		"netChangeLabel": "Net {{net}}",
+		"newTextEmpty": "Empty replacement text",
+		"oldTextEmpty": "Empty match text"
+	},
+	"executionModeSelector": {
+		"fullAccess": {
+			"label": "Full access",
+			"title": "Allow full access to the current system"
+		},
+		"sandbox": {
+			"label": "Sandboxed",
+			"title": "Allow restricted access within the workspace only"
+		},
+		"sandboxUnavailable": "{{platform}} sandbox unavailable: {{reason}}"
+	},
+	"export": {
+		"shareNavDescription": "shared a session",
+		"shareNavDescriptionWithNickname": "{{nickname}} shared a session"
+	},
+	"filterByTags": {
+		"hitCount": "{{count}} pages matched",
+		"noResults": "No pages matched",
+		"noTitle": "(untitled)"
+	},
+	"guideBadgeSwiper": {
+		"dismissTooltip": "Don't show again",
+		"petFeatureText": "New desktop pet feature — click to enable in settings",
+		"quickPanelText": "Astravia now has a Quick Panel — click to set it up"
+	},
+	"imagePreview": {
+		"altText": "Loaded image",
+		"imageLabel": "Image",
+		"originalLabel": "Original",
+		"processedLabel": "Model input",
+		"showInFolderButton": "Show original in file manager"
+	},
+	"inputActionBar": {
+		"chip": {
+			"removeTooltip": "Click to remove"
+		},
+		"knowledgeRetrieval": {
+			"label": "Knowledge search",
+			"tooltip": "When on, this turn can call knowledge-base tools and prefers answering from your knowledge base"
+		}
+	},
+	"inputBar": {
+		"capsule": {
+			"appshotThumbnailAlt": "Screenshot",
+			"appshotPreview": "Preview screenshot",
+			"appshotIconAlt": "App icon",
+			"removeDefault": "Click to remove",
+			"removeImage": "Remove image",
+			"removeTooltip": "{{path}}\nClick to remove",
+			"activeGroup": "{{count}} plugins",
+			"imageBadge": "Image {{index}}"
+		},
+		"drawer": {
+			"permissionDesc": "Awaiting confirmation",
+			"permissionLabel": "Permission request",
+			"todoDesc": "{{done}}/{{total}} {{content}}",
+			"todoDescSimple": "{{done}}/{{total}}",
+			"todoLabel": "To-do",
+			"queueDelete": "Remove",
+			"queueDesc": "{{count}} queued",
+			"queueEmpty": "No queued messages",
+			"queueLabel": "Queued",
+			"queueSendNow": "Send now"
+		},
+		"permission": {
+			"allow": "Allow once",
+			"allowSession": "Don't ask again this session",
+			"deny": "Deny"
+		},
+		"placeholder": {
+			"defaults": [
+				"Ask Astravia, use / for skills, @ to reference files",
+				"Describe the task, press ⏎ to send",
+				"Paste a screenshot or @ a file to get started"
+			],
+			"noSession": "Select or create a session to start",
+			"suggestion": "↵ {{suggestion}}",
+			"thinking": "Astravia is thinking…"
+		},
+		"toolbar": {
+			"addImage": "Add image",
+			"attachFile": "Attach file reference",
+			"skills": "Skills"
+		},
+		"contextMenu": {
+			"cut": "Cut",
+			"copy": "Copy",
+			"paste": "Paste"
+		}
+	},
+	"knowledgeTools": {
+		"empty": "No results"
+	},
+	"listTags": {
+		"empty": "The knowledge base has no tags yet",
+		"tagCount": "{{count}} tags total"
+	},
+	"messageCards": {
+		"layoutList": "List",
+		"layoutStacked": "Stacked"
+	},
+	"messageList": {
+		"userMessage": {
+			"expand": "Expand message",
+			"skillBadge": "Skill",
+			"settingsAssist": {
+				"mcp": "MCP setup assist",
+				"models": "Model setup assist",
+				"knowledge": "Knowledge setup assist",
+				"knowledgeBase": "Knowledge base assist",
+				"batchTasks": "Batch tasks assist",
+				"automation": "Automation assist",
+				"im": "Claw setup assist",
+				"webhook": "Webhook setup assist",
+				"appearance": "Appearance setup assist",
+				"database": "Database setup assist",
+
+				"plugins": "Plugin setup assist",
+				"pet": "Pet setup assist",
+				"environment": "Environment setup assist",
+				"shortcuts": "Shortcut setup assist",
+				"agent": "Agent setup assist",
+				"unknown": "Settings setup assist"
+			},
+			"openInDatabase": "Open in Database",
+			"dbxAccessGuideTitle": "AI can't access the database yet: enable 'AI database access' in Settings → Database",
+			"dbxAccessGuideAction": "Enable"
+		},
+		"assistantFoldTip": {
+			"collapse": "Collapse {{count}} items",
+			"collapseLabel": "Collapse",
+			"expand": "Expand {{count}} items",
+			"expandLabel": "Expand",
+			"streaming": "Processing {{elapsed}}s",
+			"work": {
+				"collapse": "Collapse {{count}} steps",
+				"collapseZero": "Collapse process",
+				"expand": "Expand {{count}} steps",
+				"expandZero": "Expand process"
+			}
+		},
+		"assistantMessage": {
+			"predicting": "Astravia is predicting…",
+			"processing": "Processing..."
+		},
+		"compactionBoundary": "Context compacted",
+		"modelSwitched": "Switched model to {{name}}",
+		"compactionIndicator": "Compacting context...",
+		"streamingPhrases": [
+			"Astravia is replying…",
+			"Please hold on…",
+			"Astravia is working hard…"
+		],
+		"copyButton": {
+			"copied": "Copied",
+			"copy": "Copy"
+		},
+		"contextMenu": {
+			"edit": "Edit",
+			"copy": "Copy",
+			"delete": "Delete"
+		},
+		"selectionContextMenu": {
+			"copy": "Copy",
+			"addToInput": "Add to input"
+		},
+		"delete": {
+			"title": "Delete this message?",
+			"body": "Later messages will be kept, but their context will no longer include this message. This cannot be undone.",
+			"streamingBody": "The reply in progress will be stopped first. Later messages will be kept, but their context will no longer include this message. This cannot be undone.",
+			"confirm": "Delete",
+			"suppressForOneMinute": "Don't ask again for one minute"
+		},
+		"editButton": "Edit",
+		"forkButton": "Fork to new session",
+		"forkOrigin": {
+			"label": "Forked from original session",
+			"labelWithPreview": "Forked from message"
+		},
+		"branch": {
+			"prev": "Previous version",
+			"next": "Next version",
+			"position": "Version {{current}} of {{total}}"
+		},
+		"edit": {
+			"pendingHint": "Editing the last message — send to replace the original message and reply",
+			"overwriteDraftTitle": "Overwrite current draft?",
+			"overwriteDraftBody": "The input already has content. Editing the last message will replace your draft.",
+			"overwriteDraftConfirm": "Overwrite and edit"
+		},
+		"interrupt": {
+			"editTitle": "Interrupt this turn?",
+			"editBody": "Editing a past message will stop the reply in progress. Content already produced stays on the original branch.",
+			"switchTitle": "Interrupt this turn?",
+			"switchBody": "Switching branches will stop the reply in progress. Content already produced stays on the original branch.",
+			"forkTitle": "Interrupt this turn?",
+			"forkBody": "Forking to a new session will stop the reply in progress.",
+			"confirm": "Interrupt and continue",
+			"cancel": "Cancel"
+		},
+		"progressGroup": {
+			"fallbackTitle": "Working",
+			"genericDone": "Completed {{count}} steps",
+			"genericRunning": "Working on it"
+		},
+		"toolCallGroup": {
+			"completed": "{{count}} tool calls completed",
+			"inProgress": "{{completed}}/{{total}} tool calls",
+			"thinking": "{{count}} thinking steps"
+		}
+	},
+	"modelSelector": {
+		"defaultBadge": "Default",
+		"selectModel": "Select model",
+		"visionBadge": "vision"
+	},
+	"newSession": {
+		"greetingDefault": "How's it going today?",
+		"greetingTitle": "Hi, {{nickname}}",
+		"subtitle": "I can help you get work done. What can I do for you?",
+		"defaultContext": "General conversation",
+		"projectContext": "Project · {{name}}",
+		"mascot": {
+			"menuTrigger": "Mascot settings",
+			"hideMascot": "Hide mascot",
+			"showMascot": "Show mascot",
+			"playOnce": "Play the current mascot animation once"
+		}
+	},
+	"questionPanel": {
+		"keyboardHint": "↑↓ Navigate · Space select · ←→ Switch · Enter next",
+		"multiSelectHint": "Multiple choice",
+		"otherOption": "Other (custom input)",
+		"otherPlaceholder": "Type your answer…",
+		"nextButton": "Next",
+		"questionTabLabel": "Question {{number}}",
+		"submitButton": "Submit",
+		"title": "Astravia needs your choice"
+	},
+	"sandboxGrantsBadge": {
+		"revoke": "Revoke",
+		"revokeAll": "Revoke all",
+		"title": "Sandbox grants for this session",
+		"tooltip": "Sandbox grants for this session"
+	},
+	"sendButton": {
+		"sendMessage": "Send message",
+		"stopGenerating": "Stop generating"
+	},
+	"session": {
+		"emptyMessageLabel": "(image)"
+	},
+	"sessionViewer": {
+		"badge": {
+			"liveUpdate": "Live update",
+			"readOnly": "Read-only view"
+		},
+		"emptyState": {
+			"noPath": "No session path specified"
+		},
+		"export": {
+			"defaultTitle": "Astravia Session"
+		},
+		"exportButton": {
+			"title": "Export full session as HTML"
+		},
+		"header": {
+			"subtitle": "This session was written by another client; the desktop app only displays it"
+		},
+		"panelToggleButton": {
+			"titleClose": "Close activity panel",
+			"titleOpen": "Open activity panel"
+		}
+	},
+	"skillPromptArea": {
+		"missingBadge": "Not installed",
+		"placeholder": "Type a prompt… use / for skills",
+		"removeSkill": "Click to remove",
+		"removeSkillMissing": "Skill not installed, click to remove",
+		"skillButtonLabel": "Skills",
+		"skillButtonTitle": "Skills"
+	},
+	"slashPanel": {
+		"emptyNoMatch": "No matches found",
+		"emptyNoMatchHint": "Try another keyword, or just type your request.",
+		"emptyNoSkills": "No skills available",
+		"emptyNoSkillsHint": "Install a skill from the ability market to call it here.",
+		"header": "Select a skill",
+		"resultCount": "{{count}} results",
+		"skillsSection": "Skills",
+		"sourceLabels": {
+			"agentsProject": "Generic · Project",
+			"agentsUser": "Generic",
+			"path": "Custom",
+			"project": "Project",
+			"user": "User",
+			"builtin": "Built-in",
+			"plugin": "Plugin",
+			"market": "Market"
+		},
+		"connectorsSection": "Connected"
+	},
+	"suggestionBubbles": {
+		"sendTooltip": "Click to send this suggestion"
+	},
+	"textPreview": {
+		"characterUnit": "chars",
+		"emptyLabel": "Empty",
+		"lineUnit": "lines"
+	},
+	"thinkingBlock": {
+		"lineCount": "{{count}} lines",
+		"title": "Thinking"
+	},
+	"toolCall": {
+		"error": "Error",
+		"meta": "meta",
+		"metaLabel": "Local metadata, UI only, not sent to the model"
+	},
+	"toolFormat": {
+		"unknown": "Unknown"
+	},
+	"toolLabel": {
+		"alias": {
+			"ask_user_question": "Ask",
+			"bash": "Run command",
+			"current_time": "Current time",
+			"dir_tree": "Directory tree",
+			"dispatch_workflows": "Dispatch workflows",
+			"doc_to_pdf": "To PDF",
+			"easy_use_astraviaApp": "Use app",
+			"edit": "Edit",
+			"extract_text_from_img": "Extract text (image)",
+			"extract_text_from_pdf": "Extract text (PDF)",
+			"find": "Find files",
+			"followup_task": "Follow-up task",
+			"glob": "Match files",
+			"grep": "Search",
+			"html_to_pdf": "To PDF",
+			"im_send_attachment": "Send attachment",
+			"interrupt_agent": "Interrupt agent",
+			"invoke_skill": "Run skill",
+			"list_agents": "List agents",
+			"ls": "List",
+			"memory": "Memory",
+			"read": "Read",
+			"render_pdf_page": "Render PDF page",
+			"send_message": "Send message",
+			"shell": "Run command",
+			"spawn_agent": "Spawn agent",
+			"task_output": "Task output",
+			"task_stop": "Stop task",
+			"todo": "Todo",
+			"tool_search": "Tool search",
+			"tree": "Directory tree",
+			"wait_agent": "Wait agent",
+			"write": "Write"
+		},
+		"knowledgeBase": {
+			"filterByTags": "Knowledge · Filter by tags",
+			"listTags": "Knowledge · List tags",
+			"writePage": "Knowledge · Write page"
+		}
+	},
+	"usageBar": {
+		"durationLabel": "Took {{duration}}",
+		"speedLabel": "Speed {{speed}} tok/s"
+	},
+	"writeContent": {
+		"label": "Write content"
+	},
+	"writePage": {
+		"actionCreate": "Create page",
+		"actionUpdate": "Update page",
+		"originalLocation": "Original: {{path}}"
+	}
+}

@@ -1,0 +1,37 @@
+{
+	"id": "astravia-ui-design",
+	"name": "%plugin.name%",
+	"version": "0.1.0",
+	"icon": "icon.png",
+	"agent_mode": ["work"],
+	"defaultLocale": "zh",
+	"pluginApiVersion": "^1.0.0",
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "astravia_ui_design",
+		"expose": "./plugin"
+	},
+	"styles": ["dist/style.css"],
+	"permissions": [
+		"ui.slot.global",
+		"ui.slot.activity-tab",
+		"ui.slot.file-preview",
+		"ui.slot.message",
+		"agent.session.read",
+		"agent.session.write",
+		"agent.tools.register",
+		"agent.toolHandler.execute",
+		"agent.skills.control",
+		"agent.command.run",
+		"agent.command.spawn",
+		"fs.read",
+		"fs.write"
+	],
+	"commands": ["node", "npm"],
+	"agent": {
+		"skillPaths": ["agent/skills/astravia-ui-design"]
+	},
+	"description": "%plugin.description%",
+	"author": "Astravia"
+}

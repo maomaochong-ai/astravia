@@ -1,0 +1,26 @@
+{
+	"id": "stoat_dragon_boat_festival_corner_border_set",
+	"labelKey": "settings.bubble.styles.dragonBoat.label",
+	"descriptionKey": "settings.bubble.styles.dragonBoat.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#F2F8E9",
+			"borderColor": "#76A96D",
+			"color": "#28513C"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_dragon_boat_festival_corner_border_set.png",
+		"cornerWidth": "5.5rem",
+		"cornerHeight": "5.5rem",
+		"backgroundSize": "11rem 11rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-35px", "top": "-31px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-20px", "top": "-31px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-26px", "left": "-32px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-26px", "right": "-27px" } }
+		]
+	}
+}

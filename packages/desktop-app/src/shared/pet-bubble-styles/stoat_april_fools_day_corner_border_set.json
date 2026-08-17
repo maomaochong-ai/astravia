@@ -1,0 +1,26 @@
+{
+	"id": "stoat_april_fools_day_corner_border_set",
+	"labelKey": "settings.bubble.styles.aprilFools.label",
+	"descriptionKey": "settings.bubble.styles.aprilFools.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF2F5",
+			"borderColor": "#F06B83",
+			"color": "#5A246E"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_april_fools_day_corner_border_set.png",
+		"cornerWidth": "4.75rem",
+		"cornerHeight": "3.5625rem",
+		"backgroundSize": "9.5rem 7.125rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-16px", "top": "-27px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-21px", "top": "-30px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-22px", "left": "-19px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-34px" } }
+		]
+	}
+}

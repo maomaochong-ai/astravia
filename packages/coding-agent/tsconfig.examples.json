@@ -1,0 +1,15 @@
+{
+	"extends": "../../tsconfig.base.json",
+	"compilerOptions": {
+		"noEmit": true,
+		"paths": {
+			"@astravia/coding-agent": ["./src/index.ts"],
+			"@astravia/coding-agent/hooks": ["./src/core/hooks/index.ts"],
+			"@astravia/ai": ["../ai/src/index.ts"],
+			"@sinclair/typebox": ["../../node_modules/@sinclair/typebox"]
+		},
+		"skipLibCheck": true
+	},
+	"include": ["examples/**/*.ts"],
+	"exclude": ["node_modules", "dist"]
+}

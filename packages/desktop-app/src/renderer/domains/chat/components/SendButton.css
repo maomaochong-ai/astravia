@@ -1,0 +1,277 @@
+/* Send button icon morphing. */
+.send-button {
+	--send-button-to-send-duration: 1s;
+	--send-button-to-stop-duration: calc(var(--send-button-to-send-duration) / 3);
+
+	background: var(--send-button-inactive-background, color-mix(in srgb, var(--muted-foreground) 18%, transparent));
+	color: var(--send-button-inactive-foreground, var(--muted-foreground));
+	box-shadow: none;
+}
+
+.send-button-wrap[data-active="true"] .send-button {
+	background: var(--send-button-active-background, var(--primary));
+	color: var(--send-button-active-foreground, var(--primary-foreground));
+	box-shadow: var(
+		--send-button-active-shadow,
+		0 6px 18px -6px color-mix(in srgb, var(--primary) 70%, transparent)
+	);
+}
+
+/* Streaming-state ripple: two staggered rings expand outward from the
+   button. Sits in the wrapper (not the button) so it isn't clipped by
+   the button's overflow-hidden. */
+.send-button-ripple {
+	position: absolute;
+	inset: 0;
+	border-radius: 9999px;
+	border: 1.5px solid color-mix(in srgb, var(--primary) 55%, transparent);
+	pointer-events: none;
+	opacity: 0;
+	transform: scale(1);
+	animation: send-button-ripple 1.8s ease-out infinite;
+	will-change: transform, opacity;
+}
+
+.send-button-ripple-2 {
+	animation-delay: 0.9s;
+}
+
+@keyframes send-button-ripple {
+	0% {
+		transform: scale(1);
+		opacity: 0.55;
+	}
+	80% {
+		opacity: 0.05;
+	}
+	100% {
+		transform: scale(1.35);
+		opacity: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.send-button-ripple {
+		animation: none;
+		display: none;
+	}
+}
+
+.send-button-icon,
+.send-button-outgoing-arrow {
+	position: absolute;
+	display: block;
+	width: 16px;
+	height: 16px;
+	color: inherit;
+}
+
+.send-button-stem,
+.send-button-side,
+.send-button-outgoing-stem,
+.send-button-outgoing-side {
+	position: absolute;
+	display: block;
+	width: 2px;
+	background: currentColor;
+	border-radius: 999px;
+	transform-origin: top center;
+}
+
+.send-button-stem {
+	left: 50%;
+	top: 3px;
+	width: 2px;
+	height: 12px;
+	transform: translateX(-50%);
+}
+
+.send-button-side {
+	left: 7px;
+	top: 3px;
+	height: 8px;
+	opacity: 1;
+}
+
+.send-button-side-left {
+	transform: rotate(-45deg);
+}
+
+.send-button-side-right {
+	transform: rotate(45deg);
+}
+
+.send-button-outgoing-stem {
+	left: 50%;
+	top: 3px;
+	height: 12px;
+	transform: translateX(-50%);
+}
+
+.send-button-outgoing-side {
+	left: 7px;
+	top: 3px;
+	height: 8px;
+}
+
+.send-button-outgoing-side-left {
+	transform: rotate(-45deg);
+}
+
+.send-button-outgoing-side-right {
+	transform: rotate(45deg);
+}
+
+.send-button[data-icon-state="stop"] .send-button-stem {
+	top: 2px;
+	width: 12px;
+	height: 12px;
+	border-radius: 3px;
+}
+
+.send-button[data-icon-state="stop"] .send-button-side,
+.send-button[data-icon-state="to-stop"] .send-button-side {
+	opacity: 0;
+}
+
+.send-button[data-icon-state="to-stop"] .send-button-stem {
+	animation: send-button-stem-to-stop var(--send-button-to-stop-duration) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.send-button[data-icon-state="to-send"] .send-button-icon {
+	animation: send-button-icon-to-send var(--send-button-to-send-duration) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.send-button[data-icon-state="to-send"] .send-button-stem {
+	animation: send-button-stem-to-send var(--send-button-to-send-duration) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.send-button[data-icon-state="to-send"] .send-button-side-left {
+	animation: send-button-left-side-to-send var(--send-button-to-send-duration) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.send-button[data-icon-state="to-send"] .send-button-side-right {
+	animation: send-button-right-side-to-send var(--send-button-to-send-duration) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+}
+
+.send-button-outgoing-arrow {
+	animation: send-button-outgoing-arrow var(--send-button-to-stop-duration) cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes send-button-outgoing-arrow {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(-26px);
+	}
+}
+
+@keyframes send-button-stem-to-stop {
+	0% {
+		top: 3px;
+		width: 2px;
+		height: 12px;
+		border-radius: 999px;
+		opacity: 0;
+	}
+	46% {
+		top: 6px;
+		width: 3px;
+		height: 3px;
+		border-radius: 999px;
+		opacity: 0;
+	}
+	100% {
+		top: 2px;
+		width: 12px;
+		height: 12px;
+		border-radius: 3px;
+		opacity: 1;
+	}
+}
+
+@keyframes send-button-icon-to-send {
+	0%,
+	43% {
+		transform: translateY(0);
+	}
+	70% {
+		transform: translateY(-5px);
+	}
+	88% {
+		transform: translateY(1px);
+	}
+	100% {
+		transform: translateY(0);
+	}
+}
+
+@keyframes send-button-stem-to-send {
+	0% {
+		top: 2px;
+		width: 12px;
+		height: 12px;
+		border-radius: 3px;
+	}
+	18% {
+		top: 11px;
+		width: 3px;
+		height: 3px;
+		border-radius: 999px;
+	}
+	43% {
+		top: 3px;
+		width: 2px;
+		height: 12px;
+		border-radius: 999px;
+	}
+	100% {
+		top: 3px;
+		width: 2px;
+		height: 12px;
+		border-radius: 999px;
+	}
+}
+
+@keyframes send-button-left-side-to-send {
+	0%,
+	42.9% {
+		opacity: 0;
+		transform: rotate(0deg);
+	}
+	43% {
+		opacity: 1;
+		transform: rotate(0deg);
+	}
+	76% {
+		opacity: 1;
+		transform: rotate(-55deg);
+	}
+	100% {
+		opacity: 1;
+		transform: rotate(-45deg);
+	}
+}
+
+@keyframes send-button-right-side-to-send {
+	0%,
+	42.9% {
+		opacity: 0;
+		transform: rotate(0deg);
+	}
+	43% {
+		opacity: 1;
+		transform: rotate(0deg);
+	}
+	76% {
+		opacity: 1;
+		transform: rotate(55deg);
+	}
+	100% {
+		opacity: 1;
+		transform: rotate(45deg);
+	}
+}

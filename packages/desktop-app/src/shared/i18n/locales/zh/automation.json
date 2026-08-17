@@ -1,0 +1,118 @@
+{
+	"page": {
+		"title": "自动化",
+		"subtitle": "让 AI 按计划自动执行任务，解放双手",
+		"newTask": "新建任务",
+		"newTaskTitle": "新建定时任务"
+	},
+	"recommend": {
+		"title": "推荐任务",
+		"use": "使用此模板",
+		"items": {
+			"morningBrief": {
+				"name": "每日晨间简报",
+				"desc": "工作日早上汇总仓库变更、未提交改动与建议关注点",
+				"schedule": "工作日 09:00",
+				"prompt": "请作为我的每日晨间助手，在当前工作区完成一次简报：\n1. 查看 git status 与近期 commit（如有 git）\n2. 列出未提交改动、未推送分支或潜在阻塞\n3. 用简洁条目给出今日建议关注的 3 件事\n输出用中文，结构清晰，不要修改任何文件。"
+			},
+			"dailySummary": {
+				"name": "每日工作总结",
+				"desc": "傍晚回顾当天改动并生成简短工作日志",
+				"schedule": "每天 18:00",
+				"prompt": "请在当前工作区生成今日工作总结：\n1. 根据 git log / 文件改动梳理今天完成了什么\n2. 标出未完成或需要跟进的事项\n3. 给出明日可执行的下一步（最多 3 条）\n输出用中文、条目化，不要修改代码。"
+			},
+			"weeklyReview": {
+				"name": "每周复盘",
+				"desc": "周五下午根据本周提交生成周报复盘",
+				"schedule": "每周五 17:00",
+				"prompt": "请基于当前仓库完成本周复盘：\n1. 汇总本周主要 commit 与功能进展\n2. 归纳风险、技术债或反复出现的问题\n3. 给出下周优先级建议（最多 5 条）\n输出适合直接粘贴到周报，用中文，不要改动仓库文件。"
+			}
+		}
+	},
+
+	"dialog": {
+		"namePlaceholderEdit": "任务名称",
+		"namePlaceholderNew": "新建任务",
+		"cancel": "取消",
+		"save": "保存",
+		"create": "创建"
+	},
+	"form": {
+		"namePlaceholder": "任务名称",
+		"promptPlaceholder": "输入提示词...使用 / 唤出技能",
+		"selectWorkDir": "选择工作目录",
+		"conversation": "对话",
+		"modelEmpty": "暂无模型",
+		"modelSelect": "选择模型",
+		"defaultTag": "默认",
+		"enabled": "已启用",
+		"disabled": "已停用",
+		"fullAccess": "完全访问",
+		"useSandbox": "使用沙盒",
+		"inherit": "跟随默认（{{mode}}）",
+		"sandbox": "沙盒",
+		"sandboxUnavailable": "{{platform}} 沙盒不可用：{{reason}}",
+		"every": "每隔",
+		"unitHours": "小时",
+		"unitDays": "天"
+	},
+	"scheduleMode": {
+		"once": "单次",
+		"daily": "每天",
+		"interval": "间隔"
+	},
+	"schedule": {
+		"once": "{{year}}年{{month}}月{{day}}日 {{time}} 执行一次",
+		"daily": "每天 {{time}} 执行",
+		"weekly": "每{{days}} {{time}} 执行",
+		"intervalOne": "每隔 1 小时执行",
+		"interval": "每隔 {{hours}} 小时执行",
+		"weekdayJoin": "、",
+		"weekdayNames": ["周日", "周一", "周二", "周三", "周四", "周五", "周六"]
+	},
+	"list": {
+		"running": "运行中",
+		"pending": "待运行",
+		"disabled": "已停用",
+		"once": "一次性",
+		"runNow": "立即执行",
+		"run": "执行",
+		"sectionTitle": "自动化任务",
+		"pause": "暂停",
+		"enable": "启用",
+		"edit": "编辑",
+		"delete": "删除",
+		"success": "成功",
+		"failed": "失败",
+		"neverRun": "从未执行",
+		"justNow": "刚刚",
+		"minutesAgo": "{{n}}分钟前",
+		"hoursAgo": "{{n}}小时前",
+		"daysAgo": "{{n}}天前",
+		"fullAccess": "完全访问",
+		"useSandbox": "使用沙盒",
+		"inheritDefault": "跟随默认"
+	},
+	"confirm": {
+		"deleteTitle": "确认删除任务「{{name}}」",
+		"deleteMsg": "删除后无法撤回，请确认是否继续。",
+		"delete": "删除",
+		"cancel": "取消"
+	},
+	"drawer": {
+		"close": "关闭",
+		"runNow": "立即执行",
+		"pause": "暂停",
+		"enable": "启用",
+		"edit": "编辑"
+	},
+	"history": {
+		"title": "执行历史",
+		"refresh": "刷新",
+		"empty": "暂无执行记录",
+		"success": "成功",
+		"failed": "失败",
+		"running": "执行中",
+		"aborted": "已中止"
+	}
+}

@@ -1,0 +1,26 @@
+{
+	"id": "stoat_children_day_corner_border_set",
+	"labelKey": "settings.bubble.styles.childrenDay.label",
+	"descriptionKey": "settings.bubble.styles.childrenDay.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF6EC",
+			"borderColor": "#F2A1BF",
+			"color": "#6E2E46"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_children_day_corner_border_set.png",
+		"cornerWidth": "4.75rem",
+		"cornerHeight": "4.75rem",
+		"backgroundSize": "9.5rem 9.5rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-18px", "top": "-27px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-27px", "top": "-34px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-26px", "left": "-21px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-35px" } }
+		]
+	}
+}

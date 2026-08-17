@@ -1,0 +1,48 @@
+# Changelog
+
+All notable changes to `@astravia-org/plugin-vite` are documented in this file.
+
+## [Unreleased]
+### Changed
+- **品牌更名 Astravia**：全库由 Vetta 更名为 Astravia（`@vetta/*` → `@astravia/*`；应用名、窗口标题、协议、数据目录与 UI 文案同步更新）。
+
+### Added
+
+- **宿主共享 `@astravia/ui`**：`astraviaPluginFederation` 默认将 `@astravia/ui` 设为 MF `singleton + import:false`，并 rollup external 到 `astravia-host://ui`，与 desktop-app 的 share scope / host shim 对齐；插件可选用宿主 primitives 而不打进 bundle。
+
+## [0.0.4] — 2026-07-31
+
+### Fixed
+
+- **打包纳入 `plugin.json` 的包内图标**：`icon` 为包内相对路径（png/jpg/webp/gif/svg）时，图标文件此前不会进 zip，导致安装后宿主 `vetta-plugin://` 取图 404、上传能力市场被服务端以「压缩包内缺少 icon 文件」拒绝。判定与宿主 / 服务端一致：Iconify 名与 `http(s)://` 外链不落包；声明的图标文件缺失时打包直接报错。
+
+## [0.0.3] — 2026-07-23
+
+### Added
+
+- 插件 CSS 构建产物自动通过原生 `@scope` 限定到当前插件根节点，`:root` / `:host` 自动映射为 `:scope`，插件作者无需手写选择器前缀或 cascade layer。
+
+## [0.0.2] — 2026-07-15
+
+### Added
+
+- **`VETTA_PLUGIN_DEV_WATCH=1` 跳过打包**：宿主 dev 热更新的 `vite build --watch` 只需要 dist，watch 模式下不再每轮增量构建都重打 zip。
+- **打包始终纳入 `scripts/` 与 `agent/docs/`**（若存在），便于工作台脚本与内嵌手册随 zip 分发；MCP 声明时仍额外纳入 `mcp/`。
+- **插件打包包含 MCP 资源**：声明 `agent.mcpServers` 时将配置文件（路径形式）及约定目录 `mcp/`、`scripts/` 打入 zip。
+
+## [0.0.1] — 2026-07-14
+
+### Changed
+
+- **npm 包名**：由 `@vetta/plugin-vite` 更名为 `@vetta-org/plugin-vite`（发布 scope 与 org `vetta-org` 对齐）；构建时 external 的 SDK 名为 `@vetta-org/plugin-sdk`。
+
+### Added
+
+- Added Vite helpers for building Vetta Module Federation plugins with host-provided React shared dependencies.
+- Added a plugin package helper that creates runtime-only install archives without Module Federation type and build metadata.
+- Added automatic runtime-only zip packaging after Vite production builds.
+- Added shared Rollup defaults for plugin entry points, host-provided SDK imports, and collision-safe asset names.
+
+### Fixed
+
+- Disabled unused Module Federation DTS output to avoid Windows output-directory cleanup races, and skip packaging failed builds.

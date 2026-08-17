@@ -1,0 +1,139 @@
+{
+	"page": {
+		"title": "Batch Tasks",
+		"subtitle": "Configure once and let AI process multiple folders automatically",
+		"newProject": "New Project"
+	},
+	"stats": {
+		"total": "Total",
+		"running": "Running",
+		"completed": "Done",
+		"failed": "Failed"
+	},
+	"empty": {
+		"title": "No batch tasks yet",
+		"desc": "Create a batch task and let AI process multiple folders automatically",
+		"action": "Create your first project"
+	},
+	"time": {
+		"justNow": "just now",
+		"minutes": "{{n}} min",
+		"hours": "{{n}} hr",
+		"days": "{{n}} d",
+		"weeks": "{{n}} wk"
+	},
+	"group": {
+		"badge": "Batch"
+	},
+	"dialog": {
+		"editTitle": "Edit Project",
+		"newTitle": "New Batch Project",
+		"namePlaceholderEdit": "Project name",
+		"namePlaceholderNew": "New batch project",
+		"cancel": "Cancel",
+		"save": "Save",
+		"create": "Create"
+	},
+	"form": {
+		"namePlaceholder": "Project name",
+		"promptPlaceholder": "Enter a prompt... type / to invoke skills",
+		"model": "Model",
+		"modelEmpty": "No available models",
+		"modelSelect": "Select model",
+		"defaultTag": "Default",
+		"concurrency": "Concurrency",
+		"timeout": "Timeout (minutes)",
+		"timeoutHint": "Hard timeout for a single subtask run. Resuming after a pause restarts the timer.",
+		"sandbox": "Sandbox status",
+		"sandboxInherit": "Follow global default ({{mode}})",
+		"fullAccess": "Full access",
+		"useSandbox": "Use sandbox",
+		"sandboxUnavailable": "{{platform}} sandbox unavailable: {{reason}}",
+		"notifyTitle": "Enable notifications",
+		"notifyDesc": "Push once to the configured webhook after each subtask completes, and push a summary when the whole project finishes (manage webhooks in Settings → Notifications).",
+		"artifact": "Artifact check",
+		"optional": "Optional",
+		"artifactPlaceholder": "One filename or wildcard per line; leave empty to skip the check",
+		"artifactHint": "All patterns must match at the top level of the subtask directory to count as success. Glob supported: * matches any characters, ? matches a single character.",
+		"folderLabel": "Folder list",
+		"folderEmpty": "No folders",
+		"folderModePicker": "Pick",
+		"folderModeText": "Text",
+		"selectFolder": "Select folders",
+		"folderTextHint": "When multi-folder selection is unstable on Linux, paste paths directly, one folder per line."
+	},
+	"status": {
+		"waiting": "Waiting",
+		"notRun": "Not run",
+		"running": "Running",
+		"completed": "Done",
+		"failed": "Failed",
+		"paused": "Paused"
+	},
+	"list": {
+		"matchCount": "{{filtered}}/{{total}} matched",
+		"taskCount": "{{n}} tasks",
+		"completedOf": "{{completed}}/{{total}} done",
+		"runningSuffix": " · {{n}} running",
+		"pausedSuffix": " · {{n}} paused",
+		"failedReset": "{{n}} failed · reset",
+		"resetFailedHint": "Click to reset {{n}} failed tasks",
+		"searchPlaceholder": "Search task titles…",
+		"clear": "Clear",
+		"noMatch": "No tasks matching \"{{query}}\"",
+		"noTasks": "No tasks",
+		"expandMore": "Show more ({{n}})",
+		"collapse": "Collapse"
+	},
+	"actions": {
+		"stop": "Stop",
+		"start": "Start",
+		"reset": "Reset",
+		"editProject": "Edit project",
+		"deleteProject": "Delete project",
+		"goToSession": "Go to session",
+		"cancelWait": "Cancel wait",
+		"run": "Run",
+		"resume": "Resume",
+		"retry": "Retry",
+		"rerun": "Rerun",
+		"delete": "Delete",
+		"allDoneOrFailed": "All tasks are done or failed. Click the \"{{n}} failed · reset\" badge to reset and retry",
+		"allDone": "All tasks done"
+	},
+	"confirm": {
+		"cannotDeleteTitle": "Cannot delete project",
+		"cannotDeleteMsg": "Please stop it first.",
+		"ok": "OK",
+		"cancel": "Cancel",
+		"delete": "Delete",
+		"deleteProjectTitle": "Delete project \"{{name}}\"?",
+		"deleteProjectMsg": "This cannot be undone. Please confirm to continue.",
+		"startTitle": "Start execution?",
+		"startMsg": "Will run {{parts}} tasks in order by concurrency (other states unaffected). Continue?",
+		"start": "Start",
+		"partNeverExecuted": "{{n}} \"not run\"",
+		"partPaused": "{{n}} \"paused\"",
+		"partJoin": " and ",
+		"stopTitle": "Stop?",
+		"stopMsg": "Will abort all running tasks ({{running}}), and clear the session, artifacts and state of all tasks except \"done\" ({{target}}), resetting them to \"not run\".\n\nKept: sessions, artifacts and state of completed tasks.\nCompleted tasks are kept. This cannot be undone.",
+		"stop": "Stop",
+		"resetFailedTitle": "Reset failed tasks?",
+		"resetFailedQueueActive": "Will clear the session, artifacts and state of {{n}} failed tasks and append them to the queue to continue. This cannot be undone. Continue?",
+		"resetFailedIdle": "Will clear the session, artifacts and state of {{n}} failed tasks and reset them to \"not run\". You can then click \"Start\" to continue. This cannot be undone. Continue?",
+		"reset": "Reset",
+		"resetTitle": "Reset?",
+		"resetMsg": "Will delete sessions and files of all tasks (including done) and re-run all {{n}} tasks. This cannot be undone. Continue?",
+		"rerunTitle": "Rerun task \"{{name}}\"?",
+		"retryTitle": "Retry task \"{{name}}\"?",
+		"rerunMsg": "Will delete this task's existing session and artifacts and re-run it. This cannot be undone. Continue?",
+		"retryMsg": "Will delete this task's session and files and re-run it. This cannot be undone. Continue?",
+		"rerun": "Rerun",
+		"retry": "Retry",
+		"deleteTaskTitle": "Delete task?",
+		"deleteTaskMsg": "This cannot be undone. Please confirm to continue."
+	},
+	"error": {
+		"stopFirst": "Please stop it first"
+	}
+}

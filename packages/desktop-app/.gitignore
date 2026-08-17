@@ -1,0 +1,21 @@
+# 反向白名单：根 .gitignore 把 .env.* 全部忽略，但 desktop-app 的环境配置
+# （仅是后端地址，不含密钥）需要纳入版本管理，方便团队/CI 共享。
+# .env.development 改由各开发者本地维护（本地后端地址各异），不纳入版本管理。
+!/.env.test
+!/.env.production
+
+# DMG 背景图由 scripts/generate-dmg-background.js 在 mac 打包时生成
+/build/background.png
+/build/background@2x.png
+
+# 内置插件 zip 解压后的开发 staging
+/.artifacts/
+
+# appshot-helper 编译产物（scripts/build-appshot-helper.js 生成）
+/resources/appshot/
+
+# dbx-mcp 引擎二进制（scripts/fetch-dbx-mcp.mjs 下载，版本锁定，不入库）
+/resources/dbx-mcp/
+
+# WebdriverIO Electron E2E runtime data
+/.wdio-electron-user-data/

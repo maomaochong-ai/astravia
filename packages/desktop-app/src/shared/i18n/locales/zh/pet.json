@@ -1,0 +1,93 @@
+{
+	"settings": {
+		"pageTitle": "Astravia Vivi",
+		"showPet": "显示桌宠",
+		"showPetDesc": "关闭后隐藏桌宠窗口，并在下次启动时保持隐藏。",
+		"alwaysOnTop": "保持在最前",
+		"alwaysOnTopDesc": "开启后桌宠会浮在其他窗口上方；关闭后它会像普通窗口一样被遮挡。",
+		"developerDesc": "用于分辨桌宠窗口边界和视频实际显示区域。",
+		"debugFrame": "调试边框",
+		"debugFrameDesc": "显示窗口边界、视频区域边界，并在桌宠窗口内实时展示窗口大小和视频大小。",
+		"decoration": {
+			"sectionDescription": "当前仅展示可用的装饰素材，后续可接入实际装饰逻辑。",
+			"materialMissing": "素材缺失",
+			"available": "可用",
+			"missing": "缺失",
+			"items": {
+				"monitor": "显示器",
+				"santa": "圣诞装",
+				"business": "商务装",
+				"office": "办公祈祷",
+				"peekingMonitor": "探出显示器",
+				"dragonBoat": "端午装饰"
+			}
+		},
+		"bubble": {
+			"sectionDescription": "选择桌宠对话气泡样式。不同样式可以拥有独立背景、尺寸和装饰位置。",
+			"styleTitle": "气泡样式",
+			"styleDescription": "选择后会立即应用到桌宠窗口。",
+			"styles": {
+				"plain": {
+					"label": "普通气泡",
+					"description": "跟随应用主题变化的基础气泡。"
+				},
+				"springFestival": {
+					"label": "春节气泡",
+					"description": "暖红背景，使用春节四角装饰。"
+				},
+				"dragonBoat": {
+					"label": "端午气泡",
+					"description": "青绿色背景，使用端午四角装饰。"
+				},
+				"midAutumn": {
+					"label": "中秋气泡",
+					"description": "月黄色背景，使用中秋四角装饰。"
+				},
+				"qingming": {
+					"label": "清明气泡",
+					"description": "浅绿色背景，使用清明四角装饰。"
+				},
+				"winterSolstice": {
+					"label": "冬至气泡",
+					"description": "冰蓝色背景，使用冬至四角装饰。"
+				},
+				"aprilFools": {
+					"label": "愚人节气泡",
+					"description": "浅紫色背景，使用愚人节四角装饰。"
+				},
+				"childrenDay": {
+					"label": "儿童节气泡",
+					"description": "明黄色背景，使用儿童节四角装饰。"
+				},
+				"christmas": {
+					"label": "圣诞气泡",
+					"description": "浅绿色背景，使用圣诞四角装饰。"
+				},
+				"halloween": {
+					"label": "万圣节气泡",
+					"description": "暖橙色背景，使用万圣节四角装饰。"
+				},
+				"laborDay": {
+					"label": "劳动节气泡",
+					"description": "暖橘色背景，使用劳动节四角装饰。"
+				},
+				"nationalDay": {
+					"label": "国庆气泡",
+					"description": "暖红色背景，使用国庆四角装饰。"
+				},
+				"songkran": {
+					"label": "宋干节气泡",
+					"description": "浅蓝色背景，使用宋干节四角装饰。"
+				},
+				"valentineDay": {
+					"label": "情人节气泡",
+					"description": "浅粉色背景，使用情人节四角装饰。"
+				}
+			}
+		}
+	},
+	"video": {
+		"missingTitle": "桌宠视频",
+		"missingSubtitle": "未提供"
+	}
+}

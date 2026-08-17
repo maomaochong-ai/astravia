@@ -1,0 +1,26 @@
+{
+	"id": "stoat_valentine_day_corner_border_set",
+	"labelKey": "settings.bubble.styles.valentineDay.label",
+	"descriptionKey": "settings.bubble.styles.valentineDay.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF0F2",
+			"borderColor": "#F58FA1",
+			"color": "#7A263B"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_valentine_day_corner_border_set.png",
+		"cornerWidth": "4.75rem",
+		"cornerHeight": "3.5625rem",
+		"backgroundSize": "9.5rem 7.125rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-17px", "top": "-23px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-14px", "top": "-21px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-19px", "left": "-15px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-17px", "right": "-17px" } }
+		]
+	}
+}

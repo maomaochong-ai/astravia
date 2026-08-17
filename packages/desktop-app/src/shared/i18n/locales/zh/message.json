@@ -1,0 +1,23 @@
+{
+	"title": "消息中心",
+	"triggerTitle": "消息中心",
+	"tabs": {
+		"all": "全部",
+		"notifications": "通知"
+	},
+	"empty": {
+		"all": "暂无消息",
+		"notifications": "暂无通知"
+	},
+	"notification": {
+		"markAllRead": "全部已读",
+		"clearRead": "清空已读",
+		"delete": "删除"
+	},
+	"time": {
+		"justNow": "刚刚",
+		"minutesAgo": "{{n}} 分钟前",
+		"hoursAgo": "{{n}} 小时前",
+		"daysAgo": "{{n}} 天前"
+	}
+}

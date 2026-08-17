@@ -1,0 +1,27 @@
+{
+	"extends": "../../../../tsconfig.base.json",
+	"compilerOptions": {
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"jsx": "react-jsx",
+		"noEmit": true,
+		"types": ["react"],
+		"paths": {
+			"@/*": ["../../../desktop-app/src/*"],
+			"@domains/*": ["../../../desktop-app/src/renderer/domains/*"],
+			"@preload/*": ["../../../desktop-app/src/preload/*"],
+			"@shared/*": ["../../../desktop-app/src/renderer/shared/*"],
+			"@astravia/theme-sdk": ["../../../theme-sdk/src/index.ts"],
+			"@astravia/theme-sdk/*": ["../../../theme-sdk/src/*"],
+			"@astravia/theme-ui": ["../../../theme-ui/src/index.ts"],
+			"@astravia/theme-ui/*": ["../../../theme-ui/src/*"],
+			"@astravia/desktop-theme-ui/app-shell": ["../../../desktop-app/src/renderer/shared/theme/sdk/app-shell.ts"],
+			"@astravia/desktop-theme-ui/sidebar": ["../../../desktop-app/src/renderer/shared/theme/sdk/sidebar-primitives.ts"],
+			"@astravia/ui": ["../../../ui/src/index.ts"],
+			"@astravia/ui/*": ["../../../ui/src/*"]
+		}
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "vite.config.ts"],
+	"exclude": ["node_modules", "dist"]
+}

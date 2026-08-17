@@ -1,0 +1,63 @@
+{
+	"name": "@astravia/theme-sdk",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./src/index.ts",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"import": "./src/index.ts"
+		},
+		"./appearance": {
+			"types": "./src/appearance/index.ts",
+			"import": "./src/appearance/index.ts"
+		},
+		"./app-shell": {
+			"types": "./src/app-shell/index.ts",
+			"import": "./src/app-shell/index.ts"
+		},
+		"./host": {
+			"types": "./src/host/index.ts",
+			"import": "./src/host/index.ts"
+		},
+		"./module": {
+			"types": "./src/module/index.ts",
+			"import": "./src/module/index.ts"
+		},
+		"./pages": {
+			"types": "./src/pages/index.ts",
+			"import": "./src/pages/index.ts"
+		},
+		"./routing": {
+			"types": "./src/routing/index.ts",
+			"import": "./src/routing/index.ts"
+		},
+		"./sidebar": {
+			"types": "./src/sidebar/index.ts",
+			"import": "./src/sidebar/index.ts"
+		},
+		"./storage": {
+			"types": "./src/storage/index.ts",
+			"import": "./src/storage/index.ts"
+		},
+		"./usage": {
+			"types": "./src/usage/index.ts",
+			"import": "./src/usage/index.ts"
+		}
+	},
+
+
+	"files": ["src"],
+	"scripts": {
+		"check": "tsgo --noEmit -p tsconfig.json"
+	},
+	"peerDependencies": {
+		"react": "^19.0.0"
+	},
+	"devDependencies": {
+		"@types/react": "^19.1.1",
+		"typescript": "^5.9.2"
+	}
+}

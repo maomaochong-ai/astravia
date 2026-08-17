@@ -1,0 +1,401 @@
+@import "tailwindcss";
+@import "@astravia/theme-ui/styles.css";
+@plugin "@iconify/tailwind4";
+@source "./**/*.{ts,tsx}";
+
+:root {
+	--xianxia-app-frame-radius: 22px;
+	--xianxia-input-bar-background-radius: 28px;
+	--xianxia-main-content-background-radius: var(--xianxia-app-frame-radius);
+	--xianxia-scene-card-background-radius: 24px;
+	--xianxia-sidebar-background-radius: 24px;
+	--xianxia-skill-card-background-radius: 9999px;
+}
+
+.xianxia-input-bar-background {
+	border-radius: var(--xianxia-input-bar-background-radius);
+}
+
+.xianxia-input-bar-toolbar-right {
+	padding-right: 16px;
+}
+
+.xianxia-send-button {
+	--send-button-active-background: radial-gradient(
+		circle at 38% 32%,
+		rgb(151 162 193) 0%,
+		rgb(111 124 160) 58%,
+		rgb(88 101 137) 100%
+	);
+	--send-button-active-foreground: rgb(255 253 235);
+	--send-button-active-shadow:
+		inset 0 1px 2px rgb(255 255 255 / 42%),
+		0 0 8px rgb(255 255 255 / 72%);
+	--send-button-inactive-background: radial-gradient(
+		circle at 38% 32%,
+		rgb(151 162 193 / 58%) 0%,
+		rgb(111 124 160 / 48%) 58%,
+		rgb(88 101 137 / 42%) 100%
+	);
+	--send-button-inactive-foreground: rgb(255 253 235 / 68%);
+}
+
+.xianxia-send-button .send-button-icon,
+.xianxia-send-button .send-button-outgoing-arrow {
+	filter: drop-shadow(0 0 2px rgb(255 248 210 / 72%));
+}
+
+.xianxia-scene-card-background {
+	border-radius: var(--xianxia-scene-card-background-radius);
+}
+
+.xianxia-sidebar-background {
+	background: linear-gradient(
+		to top right,
+		rgb(255 255 255 / 80%) 0%,
+		rgb(255 255 255 / 80%) 72%,
+		rgb(255 255 255 / 70%) 80%,
+		rgb(255 255 255 / 32%) 90%,
+		rgb(255 255 255 / 30%) 100%
+	);
+	border-right-color: transparent;
+	border-radius: var(--xianxia-sidebar-background-radius) 0 0 var(--xianxia-sidebar-background-radius);
+	-webkit-backdrop-filter: blur(1px);
+	backdrop-filter: blur(2px);
+}
+
+.xianxia-sidebar-background::before {
+	position: absolute;
+	z-index: 0;
+	top: 34px;
+	right: -34px;
+	width: 176px;
+	height: 176px;
+	border-radius: 9999px;
+	background: radial-gradient(
+		circle,
+		rgb(255 240 184 / 10%) 0%,
+		rgb(246 210 119 / 8%) 34%,
+		rgb(238 191 91 / 5%) 56%,
+		transparent 74%
+	);
+	content: "";
+	filter: blur(4px);
+	pointer-events: none;
+}
+
+.xianxia-sidebar-background::after {
+	position: absolute;
+	z-index: 20;
+	top: 0;
+	right: -1px;
+	bottom: 0;
+	width: 1px;
+	background: linear-gradient(
+		to top,
+		rgb(255 231 157 / 88%) 0%,
+		rgb(244 207 117 / 68%) 42%,
+		rgb(238 191 91 / 34%) 76%,
+		rgb(238 191 91 / 8%) 80%,
+		transparent 100%
+	);
+	content: "";
+	filter:
+		drop-shadow(2px 0 3px rgb(255 239 181 / 58%))
+		drop-shadow(5px 0 8px rgb(238 191 91 / 30%));
+	pointer-events: none;
+}
+
+.xianxia-skill-card-background {
+	border-radius: var(--xianxia-skill-card-background-radius);
+}
+
+.xianxia-achievement-panel-content {
+	container-type: inline-size;
+}
+
+/* Growth report dialog metrics: column count + end-of-row divider reset */
+.xianxia-growth-report-metrics {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	row-gap: 0.75rem;
+}
+
+.xianxia-growth-report-metric:not(:nth-child(2n + 1)) {
+	border-left: 1px solid rgb(203 213 225 / 55%);
+}
+
+@container (min-width: 28rem) {
+	.xianxia-growth-report-metrics {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.xianxia-growth-report-metric:not(:nth-child(2n + 1)) {
+		border-left: none;
+	}
+
+	.xianxia-growth-report-metric:not(:nth-child(3n + 1)) {
+		border-left: 1px solid rgb(203 213 225 / 55%);
+	}
+}
+
+@container (min-width: 48rem) {
+	.xianxia-growth-report-metrics {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+		row-gap: 0;
+	}
+
+	.xianxia-growth-report-metric:not(:nth-child(3n + 1)) {
+		border-left: none;
+	}
+
+	.xianxia-growth-report-metric:not(:nth-child(6n + 1)) {
+		border-left: 1px solid rgb(203 213 225 / 55%);
+	}
+}
+
+.xianxia-hidden-scrollbar {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
+
+.xianxia-hidden-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+.xianxia-achievement-grid {
+	display: grid;
+	grid-template-columns: repeat(3, var(--sanctum-achievement-size));
+	justify-content: center;
+	column-gap: var(--sanctum-achievement-gap-size);
+	row-gap: 0.25rem;
+	min-width: 0;
+}
+
+.xianxia-achievement-cell:nth-child(3n) .sanctum-achievement-connector {
+	display: none;
+}
+
+.sanctum-achievement-connector {
+	top: 3.75rem; /* top-3: 非 current 行 */
+}
+
+.xianxia-achievement-cell:nth-child(-n+2) .sanctum-achievement-connector {
+	top: 4.5rem; /* top-6: current 行 (3列时 row 0 = cells 0-2) */
+}
+
+@container (min-width: 38.25rem) {
+	.xianxia-achievement-grid {
+		grid-template-columns: repeat(4, var(--sanctum-achievement-size));
+	}
+
+	.xianxia-achievement-cell:nth-child(3n) .sanctum-achievement-connector {
+		display: flex;
+	}
+
+	.xianxia-achievement-cell:nth-child(4n) .sanctum-achievement-connector {
+		display: none;
+	}
+
+	.xianxia-achievement-cell:nth-child(-n+3) .sanctum-achievement-connector {
+		top: 4.5rem; /* top-6: current 行 (4列时 row 0 = cells 0-3) */
+	}
+}
+
+@container (min-width: 48.25rem) {
+	.xianxia-achievement-grid {
+		grid-template-columns: repeat(5, var(--sanctum-achievement-size));
+	}
+
+	.xianxia-achievement-cell:nth-child(4n) .sanctum-achievement-connector {
+		display: flex;
+	}
+
+	.xianxia-achievement-cell:nth-child(5n) .sanctum-achievement-connector {
+		display: none;
+	}
+
+	.xianxia-achievement-cell:nth-child(-n+4) .sanctum-achievement-connector {
+		top: 4.5rem; /* top-6: current 行 (5列时 row 0 = cells 0-4) */
+	}
+}
+
+.xianxia-app-frame {
+	--xianxia-app-frame-inset: 12px;
+	--xianxia-app-frame-overlay-inset: var(--xianxia-app-frame-inset);
+	--xianxia-app-frame-overlay-radius: var(--xianxia-app-frame-radius);
+	--xianxia-font-family: "Palatino Linotype", Palatino, "Book Antiqua", KaiTi, STKaiti, "Kaiti SC", "楷体", serif;
+	--font-sans: var(--xianxia-font-family);
+
+	font-family: var(--xianxia-font-family);
+}
+
+.xianxia-app-frame:has(> .xianxia-app-background-edge-to-edge) {
+	--xianxia-app-frame-inset: 0px;
+	--xianxia-app-frame-overlay-inset: 2px;
+	--xianxia-app-frame-overlay-radius: 8px;
+	--xianxia-app-frame-radius: 10px;
+	--xianxia-main-content-background-radius: 10px;
+	--xianxia-sidebar-background-radius: 10px;
+
+	border-radius: var(--xianxia-app-frame-radius);
+}
+
+.xianxia-app-frame img,
+body.xianxia-sanctum-page-active img {
+	user-select: none;
+	-webkit-user-drag: none;
+}
+
+body.xianxia-sanctum-page-active {
+	font-family: "Palatino Linotype", Palatino, "Book Antiqua", KaiTi, STKaiti, "Kaiti SC", "楷体", serif;
+}
+
+.xianxia-app-frame > [data-theme-layout="app.frameContent"] {
+	padding: var(--xianxia-app-frame-inset);
+}
+
+body.xianxia-sanctum-page-active [data-theme-surface="app.frame"] > span {
+	background-image: url("./assets/sanctum-background.webp") !important;
+}
+
+.xianxia-app-frame-overlay {
+	inset: var(--xianxia-app-frame-overlay-inset);
+	border-radius: var(--xianxia-app-frame-overlay-radius);
+	box-shadow:
+		inset 0 0 14px rgb(255 255 255 / 28%),
+		0 0 5px rgb(255 255 255 / 78%),
+		0 0 14px rgb(230 240 255 / 48%);
+}
+
+.xianxia-app-frame:has(> .xianxia-app-background-edge-to-edge) > .xianxia-app-frame-overlay {
+	box-shadow:
+		inset 0 0 5px rgb(255 255 255 / 78%),
+		inset 0 0 14px rgb(230 240 255 / 48%),
+		inset 0 0 22px rgb(255 255 255 / 20%);
+}
+
+.xianxia-app-frame-overlay::before {
+	position: absolute;
+	inset: 0;
+	padding: 2px;
+	border-radius: inherit;
+	background:
+		radial-gradient(
+			ellipse 32% 42% at 100% 0%,
+			rgb(255 253 240 / 96%) 0%,
+			rgb(255 248 222 / 72%) 28%,
+			rgb(246 237 211 / 34%) 58%,
+			transparent 100%
+		),
+		linear-gradient(
+			115deg,
+			rgb(255 255 255 / 95%) 0%,
+			rgb(205 220 245 / 45%) 24%,
+			rgb(255 255 255 / 88%) 50%,
+			rgb(205 220 245 / 42%) 76%,
+			rgb(255 255 255 / 95%) 100%
+		);
+	content: "";
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+}
+
+.xianxia-main-content-background {
+	border-radius: 0 var(--xianxia-main-content-background-radius) var(--xianxia-main-content-background-radius) 0;
+}
+
+.xianxia-guiding-words {
+	background: rgb(244 245 249 / 80%);
+	border-radius: 20px;
+}
+
+.xianxia-guiding-words-frame {
+	border-radius: 20px;
+	box-shadow:
+		inset 0 0 10px rgb(255 255 255 / 32%),
+		0 0 4px rgb(255 255 255 / 72%),
+		0 0 10px rgb(238 191 91 / 24%);
+}
+
+.xianxia-guiding-words-frame::before {
+	position: absolute;
+	inset: 0;
+	padding: 1px;
+	border-radius: inherit;
+	background:
+		radial-gradient(
+			ellipse 36% 44% at 100% 0%,
+			rgb(255 253 240 / 92%) 0%,
+			rgb(255 246 210 / 58%) 38%,
+			transparent 100%
+		),
+		linear-gradient(
+			115deg,
+			rgb(255 255 255 / 88%) 0%,
+			rgb(218 225 241 / 44%) 28%,
+			rgb(255 250 230 / 76%) 62%,
+			rgb(210 220 241 / 42%) 100%
+		);
+	content: "";
+	-webkit-mask:
+		linear-gradient(#000 0 0) content-box,
+		linear-gradient(#000 0 0);
+	-webkit-mask-composite: xor;
+	mask-composite: exclude;
+}
+
+.xianxia-scroll-mask-left {
+	-webkit-mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 100%);
+	mask-image: linear-gradient(to right, transparent 0, #000 40px, #000 100%);
+}
+
+.xianxia-scroll-mask-right {
+	-webkit-mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 40px), transparent 100%);
+	mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 40px), transparent 100%);
+}
+
+.xianxia-scroll-mask-both {
+	-webkit-mask-image: linear-gradient(
+		to right,
+		transparent 0,
+		#000 40px,
+		#000 calc(100% - 40px),
+		transparent 100%
+	);
+	mask-image: linear-gradient(
+		to right,
+		transparent 0,
+		#000 40px,
+		#000 calc(100% - 40px),
+		transparent 100%
+	);
+}
+
+.xianxia-frame-glow-silver {
+	filter: drop-shadow(0 0 3px rgb(255 255 255 / 90%))
+		drop-shadow(0 0 9px rgb(240 247 255 / 58%));
+}
+
+.xianxia-frame-glow-silver-subtle {
+	filter: drop-shadow(0 0 1px rgb(255 255 255 / 88%))
+		drop-shadow(0 0 4px rgb(242 248 255 / 48%));
+}
+
+.xianxia-frame-glow-gold {
+	filter: drop-shadow(0 0 3px rgb(255 245 195 / 82%))
+		drop-shadow(0 0 10px rgb(238 191 91 / 42%));
+}
+
+.xianxia-frame-glow-gold-subtle {
+	filter: drop-shadow(0 0 1px rgb(255 245 195 / 58%))
+		drop-shadow(0 0 5px rgb(238 191 91 / 22%));
+}
+
+.xianxia-frame-glow-gold-strong {
+	filter: drop-shadow(0 0 3px rgb(255 248 208 / 90%))
+		drop-shadow(0 0 9px rgb(238 191 91 / 52%));
+}

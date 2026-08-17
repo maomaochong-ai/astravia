@@ -1,0 +1,52 @@
+export {
+	type AccessSubject,
+	type AuthorizedCapabilityClient,
+	CAPABILITY_CONSTRAINT_KINDS,
+	type CapabilityAccessHandle,
+	type CapabilityAccessSessionFactory,
+	type CapabilityAccessSessionOptions,
+	type CapabilityConstraint,
+	type CapabilityConstraintKind,
+	type CapabilityGrant,
+	type CapabilityInvokeOptions,
+	createCapabilityGrant,
+} from "./access.js";
+export { type CapabilityCatalogEntry, createCapabilityCatalog } from "./catalog.js";
+export {
+	type AnyCapabilityToken,
+	CAPABILITY_ERROR_CODES,
+	CAPABILITY_LAYERS,
+	CAPABILITY_PREFIXES,
+	CAPABILITY_PUBLISHERS,
+	type CapabilityDefinition,
+	CapabilityError,
+	type CapabilityErrorCode,
+	type CapabilityExecutionContext,
+	type CapabilityHandler,
+	type CapabilityId,
+	type CapabilityLayer,
+	type CapabilityModule,
+	type CapabilityModuleDefinition,
+	type CapabilityParser,
+	type CapabilityToken,
+	capabilityLayerFromId,
+	capabilityPublisherFromId,
+	type Disposable,
+	defineCapability,
+	defineCapabilityModule,
+	isCapabilityError,
+	isCapabilityId,
+	parseCapabilityId,
+} from "./contracts.js";
+export * from "./domain.js";
+export * from "./foundation.js";
+export {
+	type CapabilityJsonObject,
+	type CapabilityJsonSchema,
+	type CapabilityJsonValue,
+	type CapabilitySchema,
+	type CapabilityTypeBoxSchemaOptions,
+	defineCapabilityInputSchema,
+	defineCapabilityNoOutputSchema,
+	defineCapabilityOutputSchema,
+} from "./schema.js";

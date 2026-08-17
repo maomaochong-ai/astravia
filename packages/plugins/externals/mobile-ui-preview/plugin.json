@@ -1,0 +1,27 @@
+{
+	"id": "mobile-ui-preview",
+	"name": "%plugin.name%",
+	"version": "0.3.3",
+	"pluginApiVersion": "^1.0.0",
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "mobile_ui_preview",
+		"expose": "./plugin"
+	},
+	"styles": ["dist/style.css"],
+	"permissions": [
+		"ui.slot.activity-tab",
+		"agent.session.read",
+		"agent.session.write",
+		"agent.skills.control",
+		"fs.read",
+		"workspace.read"
+	],
+	"agent": {
+		"skillPaths": ["agent/skills/mobile-ui-design"]
+	},
+	"defaultLocale": "zh",
+	"description": "%plugin.description%",
+	"author": "Astravia"
+}

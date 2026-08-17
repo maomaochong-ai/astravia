@@ -1,0 +1,11 @@
+Ask the user one or more multiple-choice questions during execution, then block until they answer. Use this to gather preferences or requirements, clarify ambiguous instructions, get a decision on an implementation choice, or offer the user a direction to take.
+
+Usage notes:
+- Prefer asking over guessing when a choice would meaningfully change what you build and you cannot resolve it from the request, the code, or sensible defaults. Do NOT use it for choices with an obvious default or facts you can verify yourself.
+- Put several related questions in ONE call (questions supports 1-4). Do not call this tool repeatedly in a row for things you could ask together.
+- Each question needs 2-4 options. Do NOT add an "Other" option yourself — the user can always type free text via an automatic "Other" input.
+- To recommend an option, add a badge like ["推荐"] (or "Recommended") to it and make it the first option. You may add other short badges to signal trade-offs (e.g. "更快", "成本低"). Badges are display-only guidance.
+- Set multiSelect: true only when the user may legitimately pick more than one option.
+- Keep `header` to a few characters — it is shown as a small chip.
+
+After the user answers, you receive their selections (free-text answers included) and continue. If the user cancels, you are told they declined; proceed without their input.

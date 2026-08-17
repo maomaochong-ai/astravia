@@ -1,0 +1,18 @@
+/* 快捷面板局部样式：透明窗口下隐藏滚动条占位、保留圆角内的细滚动条。 */
+
+/* 快捷面板输入框明确关掉浏览器默认 outline（与主窗口 focus = border 策略一致） */
+.quickpanel-input:focus,
+.quickpanel-input:focus-visible {
+	outline: none;
+}
+
+/* 隐藏滚动条：是否可滚动改由列表底部/顶部渐隐遮罩提示（见 RecentList）。 */
+.quickpanel-scroll {
+	scrollbar-width: none;
+}
+
+.quickpanel-scroll::-webkit-scrollbar {
+	width: 0;
+	height: 0;
+	display: none;
+}

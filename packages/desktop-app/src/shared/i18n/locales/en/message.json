@@ -1,0 +1,23 @@
+{
+	"title": "Message Center",
+	"triggerTitle": "Message Center",
+	"tabs": {
+		"all": "All",
+		"notifications": "Notifications"
+	},
+	"empty": {
+		"all": "No messages",
+		"notifications": "No notifications"
+	},
+	"notification": {
+		"markAllRead": "Mark all read",
+		"clearRead": "Clear read",
+		"delete": "Delete"
+	},
+	"time": {
+		"justNow": "Just now",
+		"minutesAgo": "{{n}}m ago",
+		"hoursAgo": "{{n}}h ago",
+		"daysAgo": "{{n}}d ago"
+	}
+}

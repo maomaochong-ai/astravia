@@ -1,0 +1,44 @@
+{
+	"$schema": "https://biomejs.dev/schemas/2.3.5/schema.json",
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true,
+			"style": {
+				"noNonNullAssertion": "off",
+				"useConst": "error",
+				"useNodejsImportProtocol": "off"
+			},
+			"suspicious": {
+				"noExplicitAny": "off",
+				"noControlCharactersInRegex": "off",
+				"noEmptyInterface": "off"
+			}
+		}
+	},
+	"formatter": {
+		"enabled": true,
+		"formatWithErrors": false,
+		"indentStyle": "tab",
+		"indentWidth": 3,
+		"lineWidth": 120
+	},
+	"files": {
+		"includes": [
+			"package.json",
+			"knip.config.ts",
+			"scripts/quality/**/*.mjs",
+			"packages/*/src/**/*.ts",
+			"packages/*/test/**/*.ts",
+			"packages/coding-agent/examples/**/*.ts",
+			"!**/node_modules/**/*",
+			"!**/test-sessions.ts",
+			"!**/models.generated.ts",
+			"!**/routeTree.gen.ts",
+			"!**/personas-data.ts",
+			"!**/modes-data.ts",
+			"!**/descriptions-data.ts",
+			"!!**/node_modules"
+		]
+	}
+}

@@ -1,0 +1,15 @@
+{
+	"plugin.name": "图表渲染",
+	"plugin.description": "在对话消息下方渲染 Agent 生成的 Chart.js 图表。",
+	"guiding.chart": "图表",
+	"guiding.bar": "柱状图",
+	"guiding.line": "折线图",
+	"guiding.pie": "饼图",
+	"guiding.dataviz": "数据可视化",
+	"chart.defaultTitle": "图表",
+	"action.downloadPng": "下载 PNG",
+	"state.preparing": "正在准备图表...",
+	"error.invalidArgs": "图表参数无效，Agent 可以根据 chart-renderer skill 修正后重试。",
+	"error.unavailable": "图表数据不可用",
+	"error.renderFailed": "图表渲染失败，请让 Agent 按 chart-renderer skill 重试。"
+}

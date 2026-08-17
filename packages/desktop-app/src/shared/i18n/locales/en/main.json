@@ -1,0 +1,27 @@
+{
+	"tray": {
+		"showWindow": "Show Window",
+		"hideWindow": "Hide Window",
+		"quitAstravia": "Quit Astravia",
+		"quit": "Quit",
+		"hideToTray": "Hide to Tray"
+	},
+	"notification": {
+		"turnComplete": "Response completed",
+		"turnError": "Response failed",
+		"questionPending": "A question needs your confirmation. Click to view.",
+		"sessionFallback": "New Session"
+	},
+	"pet": {
+		"openDevTools": "Open Pet DevTools"
+	},
+	"updater": {
+		"errors": {
+			"developmentUnsupported": "Automatic updates are unavailable in development mode",
+			"configurationUnavailable": "This build has no update source configured",
+			"checkFailed": "Failed to check for updates",
+			"downloadFailed": "Failed to download the update",
+			"installFailed": "Failed to install the update"
+		}
+	}
+}

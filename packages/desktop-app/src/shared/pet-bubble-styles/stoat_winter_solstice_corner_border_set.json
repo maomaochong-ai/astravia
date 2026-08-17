@@ -1,0 +1,26 @@
+{
+	"id": "stoat_winter_solstice_corner_border_set",
+	"labelKey": "settings.bubble.styles.winterSolstice.label",
+	"descriptionKey": "settings.bubble.styles.winterSolstice.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#EEF7FA",
+			"borderColor": "#6EAFC3",
+			"color": "#245160"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_winter_solstice_corner_border_set.png",
+		"cornerWidth": "5.5rem",
+		"cornerHeight": "5.5rem",
+		"backgroundSize": "11rem 11rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-28px", "top": "-30px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-28px", "top": "-31px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-24px", "left": "-32px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-24px", "right": "-27px" } }
+		]
+	}
+}

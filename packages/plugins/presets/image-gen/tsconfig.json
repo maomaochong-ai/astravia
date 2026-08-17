@@ -1,0 +1,23 @@
+{
+	"compilerOptions": {
+		"target": "ES2022",
+		"module": "ESNext",
+		"lib": ["ES2022", "DOM", "DOM.Iterable"],
+		"strict": true,
+		"esModuleInterop": true,
+		"skipLibCheck": true,
+		"forceConsistentCasingInFileNames": true,
+		"moduleResolution": "bundler",
+		"baseUrl": ".",
+		"paths": {
+			"@astravia-org/plugin-sdk": ["../../plugin-sdk/src/index.ts"],
+			"@astravia-org/plugin-sdk/*": ["../../plugin-sdk/src/*"]
+		},
+		"isolatedModules": true,
+		"jsx": "react-jsx",
+		"jsxImportSource": "react",
+		"noEmit": true,
+		"types": ["node"]
+	},
+	"include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.d.ts"]
+}

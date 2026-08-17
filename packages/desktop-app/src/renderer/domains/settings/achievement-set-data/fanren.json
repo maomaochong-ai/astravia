@@ -1,0 +1,275 @@
+{
+	"id": "fanren",
+	"achievements": [
+		{
+			"id": "mortalWarrior",
+			"targetActiveMs": 0,
+			"imageUrl": "./achievements/fanren/mortal_warrior_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "qiRefiningRealm",
+			"targetActiveMs": 600000,
+			"imageUrl": "./achievements/fanren/qi_refining_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "foundationBuildingRealm",
+			"targetActiveMs": 3600000,
+			"imageUrl": "./achievements/fanren/foundation_building_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "goldenCoreRealm",
+			"targetActiveMs": 10800000,
+			"imageUrl": "./achievements/fanren/golden_core_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "nascentSoulRealm",
+			"targetActiveMs": 28800000,
+			"imageUrl": "./achievements/fanren/nascent_soul_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "spiritTransformationRealm",
+			"targetActiveMs": 72000000,
+			"imageUrl": "./achievements/fanren/spirit_transformation_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "voidRefiningRealm",
+			"targetActiveMs": 180000000,
+			"imageUrl": "./achievements/fanren/void_refining_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "bodyFusionRealm",
+			"targetActiveMs": 360000000,
+			"imageUrl": "./achievements/fanren/body_fusion_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "greatAscensionRealm",
+			"targetActiveMs": 720000000,
+			"imageUrl": "./achievements/fanren/great_ascension_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "tribulationTranscendRealm",
+			"targetActiveMs": 1260000000,
+			"imageUrl": "./achievements/fanren/tribulation_transcend_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "trueImmortalRealm",
+			"targetActiveMs": 1800000000,
+			"imageUrl": "./achievements/fanren/true_immortal_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "goldenImmortalRealm",
+			"targetActiveMs": 2700000000,
+			"imageUrl": "./achievements/fanren/golden_immortal_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "taiyiJadeImmortalRealm",
+			"targetActiveMs": 3600000000,
+			"imageUrl": "./achievements/fanren/taiyi_jade_immortal_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "daluoGoldenImmortalRealm",
+			"targetActiveMs": 5400000000,
+			"imageUrl": "./achievements/fanren/daluo_golden_immortal_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		},
+		{
+			"id": "daoAncestorRealm",
+			"targetActiveMs": 7200000000,
+			"imageUrl": "./achievements/fanren/dao_ancestor_realm_badge.webp",
+			"frameUrl": "./achievements/frame_rejuvenation_epic.webp",
+			"surfaceColors": { "backgroundColor": "#2b211a", "borderColor": "#b47b55" },
+			"frameDecoration": {
+				"cornerWidth": "7rem",
+				"cornerHeight": "7rem",
+				"backgroundSize": "14rem 14rem",
+				"corners": [
+					{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-21px", "top": "-27px" } },
+					{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-22px", "top": "-24px" } },
+					{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-28px", "left": "-22px" } },
+					{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-29px", "right": "-30px" } }
+				]
+			}
+		}
+	]
+}

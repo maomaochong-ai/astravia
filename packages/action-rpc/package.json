@@ -1,0 +1,21 @@
+{
+	"name": "@astravia/action-rpc",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json"
+	},
+	"dependencies": {
+		"@hono/node-server": "^1.19.14",
+		"hono": "^4.12.23"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"typescript": "^5.9.2"
+	}
+}

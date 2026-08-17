@@ -1,0 +1,2 @@
+# 插件构建产物：各插件 build 产出的 release zip 目录不入库（presets/* 与 externals/* 通用）
+release/

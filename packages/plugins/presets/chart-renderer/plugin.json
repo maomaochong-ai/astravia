@@ -1,0 +1,29 @@
+{
+	"id": "chart-renderer",
+	"name": "%plugin.name%",
+	"icon": "icon.png",
+	"version": "0.1.21",
+	"agent_mode": ["work"],
+	"defaultLocale": "zh",
+	"pluginApiVersion": "^1.0.0",
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "chart_renderer",
+		"expose": "./plugin"
+	},
+	"styles": ["dist/style.css"],
+	"permissions": ["ui.slot.tool-call", "agent.skills.control", "agent.tools.register", "agent.toolHandler.execute"],
+	"description": "%plugin.description%",
+	"author": "Astravia",
+	"guidingWords": [
+		"%guiding.chart%",
+		"%guiding.bar%",
+		"%guiding.line%",
+		"%guiding.pie%",
+		"%guiding.dataviz%"
+	],
+	"agent": {
+		"skillPaths": ["skills/"]
+	}
+}

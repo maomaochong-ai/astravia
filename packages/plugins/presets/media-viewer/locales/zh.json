@@ -1,0 +1,23 @@
+{
+	"plugin.name": "媒体查看器",
+	"plugin.description": "内置常见图片、音频和视频文件的预览。",
+	"preview.unsupported": "暂不支持预览此媒体格式",
+	"image.error": "无法加载此图片",
+	"video.error": "无法播放此视频",
+	"audio.error": "无法播放此音频",
+	"audio.coverAlt": "专辑封面",
+	"audio.loopOn": "循环播放",
+	"audio.loopOff": "关闭循环",
+	"audio.play": "播放",
+	"audio.pause": "暂停",
+	"audio.speed": "播放速度",
+	"audio.mute": "静音",
+	"audio.unmute": "取消静音",
+	"zoom.in": "放大",
+	"zoom.out": "缩小",
+	"zoom.reset": "适应窗口",
+	"fullscreen.enter": "全屏",
+	"fullscreen.exit": "退出全屏",
+	"view.reset": "适应",
+	"view.resetTitle": "适应窗口"
+}

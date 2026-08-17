@@ -1,0 +1,41 @@
+{
+	"id": "plugin-workbench",
+	"name": "%plugin.name%",
+	"icon": "icon.png",
+	"version": "0.1.6",
+	"defaultLocale": "zh",
+	"pluginApiVersion": "^1.0.0",
+	"runtime": "module-federation",
+	"entry": "dist/mf-manifest.json",
+	"moduleFederation": {
+		"remoteName": "plugin_workbench",
+		"expose": "./plugin"
+	},
+	"styles": ["dist/style.css"],
+	"permissions": [
+		"ui.slot.activity-tab",
+		"ui.slot.input-action",
+		"ui.slot.message",
+		"agent.session.read",
+		"agent.skills.control",
+		"agent.systemPrompt.write",
+		"agent.tools.register",
+		"agent.toolHandler.execute",
+		"agent.command.run",
+		"fs.read",
+		"fs.write"
+	],
+	"commands": ["node", "npm"],
+	"agent": {
+		"skillPaths": ["agent/skills"],
+		"systemPrompt": {
+			"promptPaths": ["agent/prompts/workbench-mode.md"]
+		}
+	},
+	"description": "%plugin.description%",
+	"author": "Astravia",
+	"guidingWords": ["%guidingWords.createPlugin%", "%guidingWords.applyPlugin%"],
+	"contributionMode": {
+		"hardIsolation": true
+	}
+}

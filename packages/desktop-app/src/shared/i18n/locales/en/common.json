@@ -1,0 +1,984 @@
+{
+	"appName": "Astravia",
+	"actions": {
+		"cancel": "Cancel",
+		"confirm": "Confirm",
+		"save": "Save",
+		"delete": "Delete",
+		"close": "Close",
+		"apply": "Apply",
+		"back": "Back"
+	},
+	"tour": {
+		"next": "Next",
+		"prev": "Back",
+		"done": "Done",
+		"progress": "{{current}} / {{total}}"
+	},
+	"appearance": {
+		"languageTitle": "Language",
+		"languageHint": "Defaults to your system language; change anytime"
+	},
+	"updateRestart": {
+		"title": "Update Ready",
+		"message": "Version {{latestVersion}} has been downloaded (current {{currentVersion}}). Restart Astravia now to apply the update, or choose \"Later\" to be reminded next launch.",
+		"later": "Later",
+		"install": "Restart Now"
+	},
+	"filePreview": {
+		"showInFolder": "Show in Folder",
+		"download": "Download",
+		"close": "Close (Esc)"
+	},
+	"actionApproval": {
+		"reject": "Reject",
+		"confirm": "Confirm",
+		"processing": "Processing...",
+		"permission": "Permission: {{permission}}",
+		"permissionPrefix": "Permission: ",
+		"whyConfirm": "The AI is requesting this action. It will run only after you confirm.",
+		"genericTitle": "Confirm action",
+		"genericSummary": "Please confirm whether to allow this action.",
+		"genericImpact": "Confirm to run it. Reject cancels the request without changing your data.",
+		"showTechnicalDetails": "Show technical details",
+		"hideTechnicalDetails": "Hide technical details",
+		"unreadableRequest": "This request could not be fully parsed. If you are unsure, reject it and ask the AI to explain.",
+		"fields": {
+			"request": "Request",
+			"operation": "Operation",
+			"arrayCount": "{{count}} items",
+			"objectSummary": "{{count}} fields"
+		}
+	},
+	"manageApproval": {
+		"fallbackTitle": "Action Confirmation",
+		"fallbackConfirm": "Confirm",
+		"fallbackBadge": "Action",
+		"rawInput": "Request payload",
+		"yes": "Yes",
+		"no": "No",
+		"on": "On",
+		"off": "Off",
+		"toggle": {
+			"willBecome": "Will become",
+			"stateOnHint": "When on, related capabilities are available. Existing settings are kept.",
+			"stateOffHint": "When off, usage is paused. Settings stay so you can turn it back on anytime.",
+			"editableHint": "You can flip this before confirming"
+		},
+		"toggleCopy": {
+			"mcp": {
+				"enableTitle": "Turn on MCP server",
+				"disableTitle": "Turn off MCP server",
+				"enableSummary": "Once on, the AI can use this MCP's capabilities in chat (browse the web, call external tools, etc.).",
+				"disableSummary": "Once off, this MCP pauses and cannot be used in chat. Configuration is not deleted.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "This MCP becomes available immediately for later chats.",
+				"disableImpact": "This MCP pauses immediately. Settings remain; nothing is uninstalled."
+			},
+			"skills": {
+				"enableTitle": "Turn on skill",
+				"disableTitle": "Turn off skill",
+				"enableSummary": "Once on, the AI can use this skill in chat when needed.",
+				"disableSummary": "Once off, this skill will not be used. Files are not uninstalled.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "The skill becomes available for use in chat.",
+				"disableImpact": "The skill is paused. Configuration and files remain."
+			},
+			"plugins": {
+				"enableTitle": "Turn on plugin",
+				"disableTitle": "Turn off plugin",
+				"enableSummary": "Once on, this plugin's UI and capabilities become active again.",
+				"disableSummary": "Once off, the plugin pauses. It is not uninstalled.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "Plugin features apply to the app immediately.",
+				"disableImpact": "Plugin features pause immediately. Install and settings remain."
+			},
+			"im": {
+				"enableTitle": "Turn on Claw (IM bridge)",
+				"disableTitle": "Turn off Claw (IM bridge)",
+				"enableSummary": "Once on, you can chat with the AI through Feishu, WeChat, and other external channels.",
+				"disableSummary": "Once off, external IM channels can no longer reach the local AI.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "The IM bridge runs with current settings; external messages can enter chat.",
+				"disableImpact": "New IM messages stop arriving. Existing sessions remain."
+			},
+			"webhook": {
+				"enableTitle": "Turn on message push",
+				"disableTitle": "Turn off message push",
+				"enableSummary": "Once on, notifications can be sent to this webhook (e.g. DingTalk / Feishu bot).",
+				"disableSummary": "Once off, no more messages are pushed to this address. URL and secrets remain.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "This channel can receive notifications and test messages.",
+				"disableImpact": "This channel pauses. Configuration is not deleted."
+			},
+			"general.notifications": {
+				"enableTitle": "Turn on system notifications",
+				"disableTitle": "Turn off system notifications",
+				"enableSummary": "Once on, task completion and update events can show as system alerts.",
+				"disableSummary": "Once off, the app will not show system notifications.",
+				"enableConfirm": "Turn on",
+				"disableConfirm": "Turn off",
+				"enableImpact": "Matching events will show system notifications.",
+				"disableImpact": "System notifications stop. In-app status remains visible."
+			}
+		},
+		"fieldWithKey": "{{prefix}}.{{key}}",
+		"fields": {
+			"modelKey": "Model",
+			"reasoningLevel": "Reasoning level",
+			"provider": "Provider",
+			"config": "Config",
+			"serverName": "MCP server",
+			"enabled": "Enabled",
+			"skillName": "Skill name",
+			"resourceType": "Type",
+			"name": "Name",
+			"newName": "New name",
+			"path": "Path",
+			"paths": "File paths",
+			"language": "Language",
+			"executionMode": "Execution mode",
+			"experimental": "Experimental features",
+			"knowledgeBase": "Knowledge base settings",
+			"kbId": "Knowledge base ID",
+			"relPath": "Relative path",
+			"move": "Move files",
+			"pluginId": "Plugin ID",
+			"url": "Install URL",
+			"kind": "Platform",
+			"webhookUrl": "Webhook URL",
+			"signSecret": "Signing secret",
+			"id": "ID",
+			"title": "Title",
+			"level": "Level",
+			"text": "Message",
+			"displayName": "Display name",
+			"baseUrl": "Base URL",
+			"api": "API type",
+			"apiKey": "API Key",
+			"models": "Models",
+			"command": "Command",
+			"args": "Arguments",
+			"cwd": "Working directory",
+			"headers": "Headers",
+			"shortcutActionId": "Shortcut action",
+			"shortcutCombo": "Key combo",
+			"quickpanelTrigger": "Summon trigger",
+			"quickpanelBehavior": "After send"
+		},
+		"shortcuts": {
+			"ops": {
+				"set-binding": {
+					"title": "Change shortcut",
+					"summary": "Pick a feature, then click the key area and press a new combo. It applies right after you confirm.",
+					"confirm": "Save shortcut",
+					"badge": "Shortcut",
+					"impact": "You can trigger this feature with the new combo. Conflicting bindings will fail to save."
+				},
+				"reset-binding": {
+					"title": "Restore default shortcut",
+					"summary": "Put this feature’s shortcut back to the system default.",
+					"confirm": "Restore default",
+					"badge": "Reset",
+					"impact": "This feature will use its default key combo again."
+				},
+				"reset-all-bindings": {
+					"title": "Restore all default shortcuts",
+					"summary": "Clear custom shortcuts for the features below and restore defaults.",
+					"confirm": "Restore all defaults",
+					"badge": "Reset",
+					"impact": "Global feature shortcuts return to defaults. Quick Panel summon and after-send stay the same.",
+					"warningTitle": "Global feature keys only",
+					"warning": "Does not change how you open the Quick Panel, or whether send opens the main window."
+				},
+				"set-quick-panel-trigger": {
+					"title": "Change Quick Panel summon",
+					"summary": "Choose which key to double-tap to open the Quick Panel. “Disabled” means you’ll use the main window instead.",
+					"confirm": "Save summon method",
+					"badge": "Shortcut",
+					"impact": "Applies immediately. You can change it again anytime."
+				},
+				"set-quick-panel-behavior": {
+					"title": "Change after-send behavior",
+					"summary": "After you send from the Quick Panel, open the main window to follow up, or keep running in the background.",
+					"confirm": "Save after-send behavior",
+					"badge": "Shortcut",
+					"impact": "Only affects chats you start later from the Quick Panel."
+				}
+			},
+			"bindingSectionTitle": "Feature shortcuts",
+			"bindingSectionDescription": "Same as Settings → Shortcuts. Pick a feature, then record a key combo.",
+			"actionField": "Feature",
+			"comboField": "Key combo",
+			"comboFieldHint": "Click, then press the new combination to record",
+			"resetToDefault": "Will restore to {{shortcut}}",
+			"quickPanelTriggerSectionTitle": "Quick Panel summon",
+			"quickPanelTriggerSectionDescription": "Same options as on the Shortcuts settings page.",
+			"quickPanelBehaviorSectionTitle": "After you send",
+			"quickPanelBehaviorSectionDescription": "Same as “after-send behavior” on the settings page.",
+			"quickPanelTriggers": {
+				"none": "Disabled",
+				"mod": "Double-tap ⌘ / Ctrl",
+				"alt": "Double-tap ⌥ / Alt",
+				"shift": "Double-tap ⇧"
+			},
+			"quickPanelTriggerHints": {
+				"none": "Turn off double-tap summon; use the main window when needed",
+				"mod": "Double-tap ⌘ (Mac) or Ctrl (Windows) anywhere to open the panel",
+				"alt": "Double-tap ⌥ / Alt anywhere to open the panel",
+				"shift": "Double-tap ⇧ anywhere to open the panel"
+			},
+			"quickPanelBehaviors": {
+				"foreground": "Open main window",
+				"background": "Run in background"
+			},
+			"quickPanelBehaviorHints": {
+				"foreground": "After send, open the main window on the new chat",
+				"background": "After send, close the panel and keep the chat running in the background"
+			}
+		},
+		"models": {
+			"ops": {
+				"set-default": {
+					"title": "Set default chat model",
+					"summary": "Choose the model used by default for new chats. You can change it below before confirming.",
+					"confirm": "Set as default",
+					"badge": "Default model",
+					"impact": "New chats will prefer this model. Existing chats keep their current model."
+				},
+				"upsert-provider": {
+					"title": "Create or Update Provider Confirmation",
+					"summary": "Review the provider configuration. Secret fields are masked; confirmation writes the submitted config.",
+					"confirm": "Save provider",
+					"badge": "Provider",
+					"impact": "Provider config will be written to local models.json and affect available models."
+				},
+				"remove-provider": {
+					"title": "Remove Provider Confirmation",
+					"summary": "Models under this provider will become unavailable and default model references will be cleared.",
+					"confirm": "Remove provider",
+					"badge": "Remove",
+					"impact": "This provider and its models will be removed from local config.",
+					"warning": "Removing a provider also clears default model references that depend on it."
+				}
+			},
+			"createProviderHint": "Create",
+			"updateProviderHint": "Update existing",
+			"modelsCount": "{{count}} models",
+			"defaultSectionTitle": "Default model",
+			"defaultSectionDescription": "Same as Settings → Models. Takes effect after you confirm.",
+			"defaultModelHint": "Pick from configured models"
+		},
+		"mcp": {
+			"ops": {
+				"upsert": {
+					"title": "Create or Update MCP Server Confirmation",
+					"summary": "Review the MCP server configuration. Secret headers are masked.",
+					"confirm": "Save MCP server",
+					"badge": "MCP",
+					"impact": "MCP server config will be written to local mcp.json and may affect agent tools."
+				},
+				"set-enabled": {
+					"title": "Enable/Disable MCP Server Confirmation",
+					"summary": "Change whether this MCP server is enabled.",
+					"confirm": "Confirm status change",
+					"badge": "Enabled state",
+					"impact": "The MCP server enabled state will update immediately."
+				},
+				"remove": {
+					"title": "Remove MCP Server Confirmation",
+					"summary": "The MCP server configuration will be removed locally.",
+					"confirm": "Remove server",
+					"badge": "Remove",
+					"impact": "This MCP server config will be removed locally.",
+					"warning": "You will need to reconfigure the MCP server to restore it."
+				}
+			},
+			"headersConfigured": "Custom headers included (secrets masked)"
+		},
+		"skills": {
+			"ops": {
+				"set-enabled": {
+					"title": "Enable/Disable Skill Confirmation",
+					"summary": "Change whether this skill is enabled.",
+					"confirm": "Confirm status change",
+					"badge": "Skill",
+					"impact": "Skill/scene enabled state takes effect immediately."
+				},
+				"uninstall": {
+					"title": "Uninstall Skill Confirmation",
+					"summary": "Local skill files will be removed. This cannot be undone.",
+					"confirm": "Uninstall",
+					"badge": "Uninstall",
+					"impact": "Local skill files will be uninstalled and cannot be restored easily.",
+					"warning": "Skill files will be removed. This cannot be undone."
+				}
+			}
+		},
+		"projects": {
+			"ops": {
+				"create": {
+					"title": "Create Project Confirmation",
+					"summary": "Create a new project and add it to the sidebar.",
+					"confirm": "Create project",
+					"badge": "Create",
+					"impact": "A new project will be created in the sidebar and the directory ensured."
+				},
+				"open": {
+					"title": "Open Project Confirmation",
+					"summary": "Open the project at the specified path.",
+					"confirm": "Open project",
+					"badge": "Open",
+					"impact": "The project path will open and join the active list."
+				},
+				"rename": {
+					"title": "Rename Project Confirmation",
+					"summary": "Update the project display name.",
+					"confirm": "Rename project",
+					"badge": "Rename",
+					"impact": "Only the sidebar display name changes; disk path is untouched."
+				},
+				"archive": {
+					"title": "Archive Project Confirmation",
+					"summary": "Move the project to the archive list. Session history is kept.",
+					"confirm": "Archive project",
+					"badge": "Archive",
+					"impact": "The project moves to the archive list; session history is kept."
+				},
+				"unarchive": {
+					"title": "Unarchive Project Confirmation",
+					"summary": "Restore the project to the active list.",
+					"confirm": "Unarchive project",
+					"badge": "Unarchive",
+					"impact": "The project returns to the active list."
+				},
+				"remove": {
+					"title": "Remove Project Confirmation",
+					"summary": "Remove the project from the list without deleting files on disk.",
+					"confirm": "Remove project",
+					"badge": "Remove",
+					"impact": "Remove the sidebar entry only; project files on disk are not deleted.",
+					"warning": "Only the sidebar entry is removed; project files on disk are kept."
+				}
+			},
+			"pathOptional": "Optional; omit to create under workspace by name"
+		},
+		"general": {
+			"ops": {
+				"set-notifications": {
+					"title": "Change notification settings",
+					"summary": "Choose whether system notifications are allowed.",
+					"confirm": "Save notifications",
+					"badge": "Notifications",
+					"impact": "Task and update alerts will show or hide based on the new setting."
+				},
+				"set-execution-mode": {
+					"title": "Change default permissions",
+					"summary": "Choose the default permission level for new chats. You can change it below.",
+					"confirm": "Save permissions",
+					"badge": "Permissions",
+					"impact": "New chats will use this permission. Existing chats stay as they are."
+				},
+				"set-workspace": {
+					"title": "Change default workspace",
+					"summary": "New projects will be created under this folder by default.",
+					"confirm": "Save workspace",
+					"badge": "Workspace",
+					"impact": "The default workspace path updates. Existing projects stay in place."
+				}
+			},
+			"notificationsOn": "Enable notifications",
+			"notificationsOff": "Disable notifications",
+			"notificationsTarget": "System notifications",
+			"notificationsTargetHint": "Task completion, updates, and similar alerts",
+			"executionModeSandbox": "Safe mode (sandbox)",
+			"executionModeFullAccess": "Full access",
+			"executionModeSandboxHint": "Limits where files can be changed. Safer for everyday use.",
+			"executionModeFullAccessHint": "Allows broader file and system actions. More capable, higher risk."
+		},
+		"agent": {
+			"ops": {
+				"set-experimental": {
+					"title": "Change experimental features",
+					"summary": "You can adjust these experimental toggles before confirming.",
+					"confirm": "Save experimental features",
+					"badge": "Experimental",
+					"impact": "Matching capabilities will turn on or off. Experimental features may be unstable."
+				}
+			},
+			"experimentalSectionTitle": "Experimental features",
+			"experimentalSectionDescription": "Same toggles as Settings → Agent. You can adjust them before confirming.",
+			"experimentalFields": {
+				"astraviaCli": "Astravia CLI",
+				"astraviaCliDesc": "Allow calling local capabilities from the terminal via Astravia CLI",
+				"promptPrediction": "Input prediction",
+				"promptPredictionDesc": "Suggest possible follow-up text while typing; may use a little quota",
+				"agentSkills": "Agent skill extensions",
+				"agentSkillsDesc": "Allow the agent to use extended skill capabilities"
+			}
+		},
+		"knowledge": {
+			"ops": {
+				"create": {
+					"title": "Create Knowledge Base Confirmation",
+					"summary": "Create a new knowledge base.",
+					"confirm": "Create",
+					"badge": "Create",
+					"impact": "A new knowledge base will be created."
+				},
+				"rename": {
+					"title": "Rename Knowledge Base Confirmation",
+					"summary": "Update the knowledge base name.",
+					"confirm": "Rename",
+					"badge": "Rename",
+					"impact": "The knowledge base display name will update."
+				},
+				"delete": {
+					"title": "Delete Knowledge Base Confirmation",
+					"summary": "The knowledge base and its processed data will be removed. This cannot be undone.",
+					"confirm": "Delete",
+					"badge": "Delete",
+					"impact": "The knowledge base and processed data will be deleted.",
+					"warning": "Deleting a knowledge base also removes processed artifacts. This cannot be undone."
+				},
+				"add-files": {
+					"title": "Add Files to Knowledge Base Confirmation",
+					"summary": "Add the selected files and start processing.",
+					"confirm": "Add files",
+					"badge": "Add files",
+					"impact": "Selected files will be added and enter processing."
+				},
+				"delete-entry": {
+					"title": "Delete Knowledge Entry Confirmation",
+					"summary": "Delete the specified entry from the knowledge base.",
+					"confirm": "Delete entry",
+					"badge": "Delete entry",
+					"impact": "The knowledge base entry will be deleted.",
+					"warning": "Deleted entries cannot be restored from the app."
+				},
+				"scan-now": {
+					"title": "Scan Knowledge Base Now Confirmation",
+					"summary": "Trigger one knowledge base scan and processing cycle.",
+					"confirm": "Scan now",
+					"badge": "Scan",
+					"impact": "One knowledge scan and processing cycle will start immediately."
+				},
+				"retry-failed": {
+					"title": "Retry Failed Knowledge Tasks Confirmation",
+					"summary": "Clear failed/quarantined records and reprocess.",
+					"confirm": "Retry failed",
+					"badge": "Retry",
+					"impact": "Failed/quarantined records will be cleared and reprocessed."
+				},
+				"set-processing": {
+					"title": "Change knowledge processing settings",
+					"summary": "You can edit these knowledge base options before confirming.",
+					"confirm": "Save knowledge base settings",
+					"badge": "Knowledge",
+					"impact": "Automatic knowledge processing will follow the new settings."
+				}
+			},
+			"globalAction": "Knowledge base global action",
+			"processingSectionTitle": "Knowledge processing",
+			"processingSectionDescription": "Same options as Settings → Knowledge. Only fields in this request are shown.",
+			"processingFields": {
+				"enabled": "Enable knowledge processing",
+				"enabledDesc": "When off, automatic processing pauses. Existing knowledge is not deleted.",
+				"pollIntervalMinutes": "Auto-process interval",
+				"pollIntervalDesc": "How often to check for files that need processing",
+				"processingModelKey": "Processing model",
+				"processingModelDesc": "Model used to read and organize documents",
+				"processingModelReasoningLevel": "Reasoning level",
+				"agentConcurrency": "Parallel processing jobs",
+				"agentConcurrencyDesc": "More parallel jobs is faster but uses more resources",
+				"ocrConcurrency": "Parallel OCR jobs",
+				"ocrConcurrencyDesc": "How many image text-recognition jobs run at once",
+				"pollMinutes": "Every {{count}} minutes"
+			}
+		},
+		"appearance": {
+			"ops": {
+				"set-language": {
+					"title": "Switch language",
+					"summary": "UI text will switch to the selected language.",
+					"confirm": "Switch language",
+					"badge": "Language",
+					"impact": "Menus, settings, and buttons switch immediately. Chat content is unchanged."
+				}
+			},
+			"languageZh": "Chinese",
+			"languageEn": "English"
+		},
+		"plugins": {
+			"ops": {
+				"set-enabled": {
+					"title": "Enable/Disable Plugin Confirmation",
+					"summary": "Change whether this plugin is enabled.",
+					"confirm": "Confirm status change",
+					"badge": "Plugin",
+					"impact": "Plugin enabled state will update immediately."
+				},
+				"install-from-url": {
+					"title": "Install Plugin from URL Confirmation",
+					"summary": "Download and install the plugin from the given URL.",
+					"confirm": "Install",
+					"badge": "Install",
+					"impact": "The plugin will be downloaded and installed from the URL."
+				},
+				"install-from-path": {
+					"title": "Install Plugin from Local Path Confirmation",
+					"summary": "Install the local zip, grant declared permissions once, and enable the plugin.",
+					"confirm": "Install and authorize",
+					"badge": "Install",
+					"impact": "The local plugin package will be installed, granted its declared permissions, and enabled."
+				},
+				"uninstall": {
+					"title": "Uninstall Plugin Confirmation",
+					"summary": "The plugin and its local data will be removed according to policy.",
+					"confirm": "Uninstall",
+					"badge": "Uninstall",
+					"impact": "The plugin will be uninstalled according to policy.",
+					"warning": "Plugin and its local data may be cleared according to policy."
+				},
+				"reload": {
+					"title": "Reload Plugin Confirmation",
+					"summary": "Reload this plugin.",
+					"confirm": "Reload",
+					"badge": "Reload",
+					"impact": "The plugin will be reloaded."
+				}
+			}
+		},
+		"im": {
+			"ops": {
+				"set-enabled": {
+					"title": "Enable/Disable IM Gateway Confirmation",
+					"summary": "Change whether the IM sidecar gateway is enabled.",
+					"confirm": "Confirm status change",
+					"badge": "IM",
+					"impact": "IM gateway enabled state will update."
+				},
+				"restart": {
+					"title": "Restart IM Gateway Confirmation",
+					"summary": "Restart the local IM sidecar process.",
+					"confirm": "Restart",
+					"badge": "Restart",
+					"impact": "The local IM gateway process will restart."
+				},
+				"set-agent-model": {
+					"title": "Set Claw model",
+					"summary": "Choose the model used for external IM (Claw) chats. Same picker as Settings.",
+					"confirm": "Save model",
+					"badge": "Claw model",
+					"impact": "Later chats from Feishu/WeChat use this model. Leave empty to follow the default."
+				}
+			},
+			"enableTitle": "Enable IM gateway",
+			"disableTitle": "Disable IM gateway",
+			"restartTarget": "Local IM gateway process",
+			"channelName": "Claw (IM bridge)",
+			"channelHint": "Connect external chat channels such as Feishu and WeChat",
+			"modelKeyPlaceholder": "Select a model, or clear",
+			"modelSectionTitle": "Claw model",
+			"modelSectionDescription": "Same as Settings → Claw. Supports model and reasoning level.",
+			"modelKeyHint": "Leave empty to clear a dedicated model and fall back to the default"
+		},
+		"webhook": {
+			"ops": {
+				"create": {
+					"title": "Create Webhook Confirmation",
+					"summary": "Review the webhook configuration. Signing secrets are masked.",
+					"confirm": "Create",
+					"badge": "Create",
+					"impact": "A new webhook endpoint config will be saved."
+				},
+				"update": {
+					"title": "Update Webhook Confirmation",
+					"summary": "Review the webhook fields that will be written.",
+					"confirm": "Update",
+					"badge": "Update",
+					"impact": "Webhook config will update for submitted fields."
+				},
+				"set-enabled": {
+					"title": "Enable/Disable Webhook Confirmation",
+					"summary": "Change whether this webhook is enabled.",
+					"confirm": "Confirm status change",
+					"badge": "Enabled state",
+					"impact": "Webhook enabled state will update."
+				},
+				"delete": {
+					"title": "Delete Webhook Confirmation",
+					"summary": "The webhook configuration will be permanently removed.",
+					"confirm": "Delete",
+					"badge": "Delete",
+					"impact": "Webhook config will be permanently deleted.",
+					"warning": "Deleted webhook config cannot be recovered."
+				},
+				"test": {
+					"title": "Test Webhook Confirmation",
+					"summary": "Send a test message to this webhook.",
+					"confirm": "Send test",
+					"badge": "Test",
+					"impact": "A test message will be sent to this webhook."
+				},
+				"send": {
+					"title": "Send Webhook Message Confirmation",
+					"summary": "Review the message that will be sent through the webhook.",
+					"confirm": "Send",
+					"badge": "Send",
+					"impact": "A custom message will be sent to this webhook."
+				}
+			},
+			"notFound": "Webhook endpoint not found",
+			"loadFailed": "Failed to load webhooks",
+			"feishu": "Feishu",
+			"dingtalk": "DingTalk",
+			"botSuffix": "bot"
+		},
+		"downloads": {
+			"ops": {
+				"cancel": {
+					"title": "Cancel download",
+					"summary": "This will stop the file download.",
+					"confirm": "Cancel download",
+					"badge": "Download",
+					"impact": "The download stops immediately. Partial files may remain depending on status.",
+					"warning": "You will need to download again for a complete file."
+				}
+			},
+			"status": "Status",
+			"statuses": {
+				"queued": "Queued",
+				"downloading": "Downloading",
+				"paused": "Paused",
+				"completed": "Completed",
+				"failed": "Failed",
+				"canceled": "Canceled"
+			}
+		},
+		"updater": {
+			"ops": {
+				"check": {
+					"title": "Check for Updates Confirmation",
+					"summary": "Check whether an application update is available.",
+					"confirm": "Check for updates",
+					"badge": "Check",
+					"impact": "The app will check for available updates."
+				},
+				"download": {
+					"title": "Download Update Confirmation",
+					"summary": "Start downloading the available update package.",
+					"confirm": "Download",
+					"badge": "Download",
+					"impact": "Download of the update package will start."
+				},
+				"install": {
+					"title": "Install Update Confirmation",
+					"summary": "Install the downloaded update. The app may need to restart.",
+					"confirm": "Install and restart",
+					"badge": "Install",
+					"impact": "The update will install and the app may restart.",
+					"warning": "Installing an update usually requires restarting the app. Save your work first."
+				},
+				"dismiss": {
+					"title": "Dismiss Update Prompt Confirmation",
+					"summary": "Temporarily dismiss the current update prompt.",
+					"confirm": "Dismiss",
+					"badge": "Dismiss",
+					"impact": "The current update prompt will be dismissed temporarily."
+				},
+				"cancel": {
+					"title": "Cancel Update Download Confirmation",
+					"summary": "Cancel the in-progress update download.",
+					"confirm": "Cancel download",
+					"badge": "Cancel",
+					"impact": "In-progress update download will be cancelled."
+				}
+			},
+			"target": "Application update"
+		},
+		"afterActionTitle": "What happens next",
+		"unknown": "Unknown",
+		"clearValue": "Clear",
+		"secretPlaceholder": "Leave empty to keep existing secret / no change"
+	},
+	"navigationApproval": {
+		"title": "Open page",
+		"summary": "The AI wants to open the following page. Confirm to switch there.",
+		"target": "Page",
+		"tab": "Settings section",
+		"section": "Location",
+		"confirm": "Open",
+		"responding": "Opening...",
+		"impact": "The app will switch to that page. Your data will not be changed.",
+		"targets": {
+			"chat": "Chat",
+			"automation": "Automation",
+			"batch-tasks": "Batch tasks",
+			"skills": "Capabilities",
+			"plugins": "Plugins",
+			"connectors": "Connectors",
+			"settings": "Settings"
+		}
+	},
+	"appearanceApproval": {
+		"pickerTitle": "Choose Appearance",
+		"themeChangeTitle": "Edit Appearance Change",
+		"apply": "Apply Appearance",
+		"confirmChange": "Confirm Change",
+		"submitting": "Submitting..."
+	},
+	"schedulerApproval": {
+		"createTitle": "Create Scheduled Task Confirmation",
+		"createDescription": "Review the scheduled task configuration. After confirmation, the task will be saved and scheduled according to its enabled state.",
+		"updateTitle": "Edit Scheduled Task Change",
+		"loadingCurrentTask": "Loading current task configuration...",
+		"updateNotFound": "Current scheduled task was not found, so the full configuration cannot be loaded.",
+		"updateLoadFailed": "Failed to load current scheduled task configuration.",
+		"taskId": "Task ID",
+		"taskNamePlaceholder": "Task name",
+		"confirmCreate": "Confirm Create",
+		"creating": "Creating...",
+		"confirmUpdate": "Confirm Update",
+		"updating": "Updating...",
+		"deleteTitle": "Delete Scheduled Task Confirmation",
+		"deleteLabel": "Delete Task",
+		"deleteTargetTask": "Task to Delete",
+		"deleteDescriptionTitle": "Deletion Impact",
+		"deleteDescription": "Deleting a scheduled task also removes all execution records for that task. This action cannot be undone.",
+		"deleteWarning": "If the task is currently running, abort it before deleting.",
+		"confirmDelete": "Confirm Delete",
+		"deleting": "Deleting...",
+		"toggleTitle": "Scheduled Task State Change Confirmation",
+		"enableTitle": "Enable Scheduled Task Confirmation",
+		"disableTitle": "Disable Scheduled Task Confirmation",
+		"enableLabel": "Enable Task",
+		"disableLabel": "Disable Task",
+		"enableDescription": "After enabling, the scheduled task will run automatically according to its Cron expression.",
+		"disableDescription": "After disabling, the scheduled task will no longer run automatically, but its configuration and history are kept.",
+		"executionTitle": "Scheduled Task Execution Confirmation",
+		"runNowTitle": "Run Scheduled Task Now Confirmation",
+		"abortTitle": "Abort Scheduled Task Confirmation",
+		"runNowLabel": "Run Now",
+		"abortLabel": "Abort Run",
+		"runNowDescription": "Trigger one execution of the scheduled task immediately without waiting for the next scheduled time. The task will run with its current prompt and parameters.",
+		"abortDescription": "Abort the currently running scheduled task agent. Execution will be interrupted, and generated output will be kept.",
+		"abortWarning": "Aborting immediately terminates the agent run, so the current execution state may be incomplete.",
+		"operationDescription": "Operation Details",
+		"executionDescriptionTitle": "What Happens Next",
+		"targetTask": "Target Task",
+		"rawInput": "Raw Request",
+		"fallbackAction": "Action",
+		"confirmAction": "Confirm {{action}}"
+	},
+	"batchTasksApproval": {
+		"confirmAction": "Confirm {{action}}",
+		"fallbackAction": "Action",
+		"unknown": "Unknown",
+		"unknownShort": "?",
+		"notFound": "Not found",
+		"count": "{{count}} items",
+		"yes": "Yes",
+		"no": "No",
+		"afterActionTitle": "What Happens Next",
+		"projectLoading": "Loading current project configuration...",
+		"projectLoadNotFound": "Current batch project was not found, so the full configuration cannot be loaded.",
+		"projectLoadFailed": "Failed to load current batch project configuration.",
+		"projectFallbackTitle": "Batch Project Operation Confirmation",
+		"projectCreateLabel": "Create Project",
+		"projectUpdateLabel": "Update Project",
+		"projectDeleteLabel": "Delete Project",
+		"projectCreateTitle": "Create Batch Project Confirmation",
+		"projectUpdateTitle": "Update Batch Project Confirmation",
+		"projectDeleteTitle": "Delete Batch Project Confirmation",
+		"projectCreateSummary": "Review the batch project configuration. After confirmation, one subtask will be created for each source folder.",
+		"projectUpdateSummary": "Review the batch project changes to write. The confirmation UI has merged the current configuration and will only append new source folders.",
+		"projectDeleteSummary": "Confirm whether to delete this batch project, all subtasks, session state, and task artifacts. This action cannot be undone.",
+		"projectFullAccessWarning": "Tasks will run with full access and may read or modify files inside and outside the selected folders. Confirm that the prompt and folders are trusted.",
+		"newProjectNamePlaceholder": "New batch project",
+		"projectNamePlaceholder": "Project name",
+		"sourceFolders": "Source folders",
+		"folderList": "Folder list",
+		"targetProject": "Target Project",
+		"projectPath": "Project Path",
+		"existingTasks": "Existing Tasks",
+		"includedTasks": "Included Tasks",
+		"notFoundInCurrentList": "Not found in the current list",
+		"projectNotFoundInCurrentList": "Project not found in the current list",
+		"taskNotFoundInCurrentList": "Task not found in the current list",
+		"projectDeleteWarning": "This permanently deletes the project directory, all task records, session state, and task artifacts. The operation will be rejected if tasks are running or queued.",
+		"taskFallbackTitle": "Batch Subtask Operation Confirmation",
+		"taskId": "Task ID",
+		"sourceFolder": "Source Folder",
+		"relatedSession": "Related Session",
+		"resumeDefaultText": "Continue",
+		"resumeTextLabel": "Additional message to send to the original session",
+		"lastError": "Last Error",
+		"status": {
+			"pending": "Pending",
+			"running": "Running",
+			"completed": "Completed",
+			"failed": "Failed",
+			"paused": "Paused"
+		},
+		"taskRunLabel": "Run Task",
+		"taskRunTitle": "Run Batch Subtask Confirmation",
+		"taskRunSummary": "Confirm whether to create a session for this pending subtask and start running it.",
+		"taskRunDescription": "Create a session for this pending task and start running it.",
+		"taskRetryLabel": "Retry from Start",
+		"taskRetryTitle": "Retry Batch Subtask Confirmation",
+		"taskRetrySummary": "Confirm whether to clear the old result for this subtask and rerun it from the start.",
+		"taskRetryDescription": "Clear old results and rerun this task from the start.",
+		"taskRetryWarning": "Old sessions, state, and existing artifacts in the task directory will be deleted and cannot be restored.",
+		"taskStopLabel": "Stop and Clean",
+		"taskStopTitle": "Stop Batch Subtask Confirmation",
+		"taskStopSummary": "Confirm whether to abort or remove this subtask and clean its session, state, and artifacts.",
+		"taskStopDescription": "Abort running or queued tasks and reset the state to pending.",
+		"taskStopWarning": "The current session, run state, and existing artifacts in the task directory will be deleted.",
+		"taskDeleteLabel": "Delete Task",
+		"taskDeleteTitle": "Delete Batch Subtask Confirmation",
+		"taskDeleteSummary": "Confirm whether to permanently delete this subtask and its related data from the project.",
+		"taskDeleteDescription": "Permanently remove this task from the project.",
+		"taskDeleteWarning": "Task records, project subdirectory, session state, and artifacts will be permanently deleted.",
+		"taskResumeLabel": "Resume Task",
+		"taskResumeTitle": "Resume Batch Subtask Confirmation",
+		"taskResumeSummary": "Confirm whether to send \"Continue\" to the paused original session and keep existing context.",
+		"taskResumeDescription": "Send \"Continue\" to the paused original session while keeping existing context and artifacts.",
+		"taskResumeWithTextLabel": "Resume with Message",
+		"taskResumeWithTextTitle": "Resume Batch Subtask with Message Confirmation",
+		"taskResumeWithTextSummary": "Confirm the additional message to send to the paused session. Existing context will be kept.",
+		"taskResumeWithTextDescription": "Send the additional message to the paused original session, then continue execution.",
+		"taskDeleteSessionLabel": "Delete Task Session",
+		"taskDeleteSessionTitle": "Delete Batch Subtask Session Confirmation",
+		"taskDeleteSessionSummary": "Confirm whether to delete the conversation session associated with this subtask. Task records and task directories are kept.",
+		"taskDeleteSessionDescription": "Delete the conversation session associated with this task.",
+		"taskDeleteSessionWarning": "Session history cannot be restored. Task records and task directories will not be deleted.",
+		"executionFallbackTitle": "Batch Execution Control Confirmation",
+		"totalTasks": "Total Tasks",
+		"estimatedImpact": "Estimated Impact",
+		"selectedTasks": "Selected Tasks",
+		"resetFailedPartialWarning": "Only tasks currently in the Failed state will be processed. Other task IDs will be ignored.",
+		"executionDeleteAllLabel": "Delete All Tasks",
+		"executionDeleteAllTitle": "Delete All Batch Tasks Confirmation",
+		"executionDeleteAllSummary": "Confirm whether to delete all non-running subtasks in this project. Running tasks will be kept.",
+		"executionDeleteAllDescription": "Delete all non-running tasks in the project. Running tasks will be kept.",
+		"executionDeleteAllWarning": "Queued tasks will be removed from the queue, then task records, session state, and artifact directories will be permanently deleted.",
+		"executionStartLabel": "Start Execution",
+		"executionStartTitle": "Start Batch Project Confirmation",
+		"executionStartSummary": "Confirm whether to start executing this batch project. Pending and paused tasks will enter the execution flow.",
+		"executionStartDescription": "Queue all pending tasks and resume paused tasks. Completed or failed tasks will not rerun.",
+		"executionStopLabel": "Stop and Clean",
+		"executionStopTitle": "Stop Batch Project Execution Confirmation",
+		"executionStopSummary": "Confirm whether to stop unfinished tasks in this project and clean related sessions, state, and artifacts.",
+		"executionStopDescription": "Stop all unfinished tasks in the project while keeping completed tasks.",
+		"executionStopWarning": "Queued, running, failed, and paused task sessions, state, and artifact directories will be cleaned and reset to pending.",
+		"executionResetLabel": "Clear and Rerun",
+		"executionResetTitle": "Clear and Rerun Batch Project Confirmation",
+		"executionResetSummary": "Confirm whether to clear all task state and artifacts in this project and rerun the whole project immediately.",
+		"executionResetDescription": "Clear the entire project execution state and artifacts, then rerun all tasks immediately.",
+		"executionResetWarning": "All task sessions, state, and artifact directories will be deleted, including completed tasks. This action cannot be undone.",
+		"executionResetFailedLabel": "Reset Failed Tasks",
+		"executionResetFailedTitle": "Reset Failed Batch Tasks Confirmation",
+		"executionResetFailedSummary": "Confirm whether to clean the selected failed tasks. Only tasks currently in the Failed state will be processed.",
+		"executionResetFailedDescription": "Clean selected failed tasks. If the project is still running, they will be queued immediately; otherwise they return to pending.",
+		"executionResetFailedWarning": "Old sessions, error state, and existing artifacts for the selected failed tasks will be deleted."
+	},
+	"appShell": {
+		"routeTitles": {
+			"automation": "Automation",
+			"batchTasks": "Batch Tasks",
+			"knowledgeAll": "All Knowledge Bases",
+			"knowledge": "Knowledge Base",
+			"skills": "Skills",
+			"plugins": "Plugins",
+			"settings": "Settings",
+			"project": "Project Details",
+			"chat": "Chat"
+		},
+		"sidebarTrigger": {
+			"open": "Sidebar",
+			"expand": "Expand sidebar"
+		},
+		"windowControls": {
+			"minimize": "Minimize",
+			"maximize": "Maximize",
+			"restore": "Restore",
+			"close": "Close"
+		}
+	},
+	"modelSelect": {
+		"placeholder": "Select model",
+		"searchPlaceholder": "Search models or providers",
+		"clearSearch": "Clear search",
+		"noResults": "No models found",
+		"noResultsHint": "Try another model name, ID, or provider",
+		"unset": "Not set",
+		"defaultBadge": "Default",
+		"visionBadge": "vision",
+		"cloudOnly": "Cloud",
+		"reasoningHeader": "Reasoning",
+		"modelHeader": "Model",
+		"multiplier": "{{value}}×",
+		"free": "Free",
+		"reasoningLevel": {
+			"minimal": "Minimal",
+			"low": "Low",
+			"medium": "Medium",
+			"high": "High",
+			"xhigh": "Xhigh",
+			"max": "Max",
+			"none": "None",
+			"off": "Off"
+		}
+	},
+	"setupWizard": {
+		"skip": "Skip",
+		"next": "Next",
+		"back": "Back",
+		"getStarted": "Get started",
+		"progress": "{{current}} / {{total}}",
+		"permissions": {
+			"title": "Grant permissions",
+			"subtitle": "Enable screenshots, automation, and system notifications. You can finish this later in Settings",
+			"systemSection": "System permissions",
+			"computerUseTitle": "Astravia Computer Use",
+			"computerUseDesc": "A separate helper captures the frontmost window and needs its own Accessibility and Screen Recording grants",
+			"optionalHint": "All permissions are optional. Adjust anytime in Settings → Permissions"
+		},
+		"languageAppearance": {
+			"title": "Language & appearance",
+			"subtitle": "Language defaults to your system. Adjust theme mode and colors — change anytime in Settings",
+			"language": "Language",
+			"appearance": "Appearance",
+			"theme": "Color theme"
+		},
+		"models": {
+			"title": "Set up a model",
+			"subtitle": "Pick a provider and paste your own API key — requests go straight to that provider.",
+			"optionalHint": "Optional — you can add it later in Settings › Models"
+		},
+		"welcome": {
+			"title": "Welcome to Astravia",
+			"subtitle": "Your desktop AI coding assistant is ready. Start with a conversation",
+			"highlights": {
+				"chat": {
+					"title": "Smart chat",
+					"desc": "Ask questions, edit code, and run commands in project context"
+				},
+				"skills": {
+					"title": "Skills & connectors",
+					"desc": "Extend capabilities and connect the tools you already use"
+				},
+				"automation": {
+					"title": "Automation",
+					"desc": "Scheduled tasks and batch jobs for repetitive work"
+				}
+			}
+		}
+	}
+}

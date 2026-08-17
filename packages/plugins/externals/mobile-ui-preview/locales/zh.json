@@ -1,0 +1,22 @@
+{
+	"plugin.name": "移动UI预览",
+	"plugin.description": "在仿真移动设备边框（iPhone / Android / iPad，含状态栏与横竖屏）内预览当前作用域的 HTML 页面。",
+	"tab.label": "移动预览",
+	"panel.previewTitle": "移动UI预览",
+	"panel.selectHtmlPlaceholder": "选择 HTML…",
+	"panel.selectHtmlTitle": "选择 HTML 文件",
+	"panel.selectDeviceTitle": "选择设备型号",
+	"panel.toLandscape": "切换横屏",
+	"panel.toPortrait": "切换竖屏",
+	"panel.refresh": "刷新",
+	"panel.export": "导出",
+	"panel.exportPng": "导出 PNG 渲染图",
+	"panel.exportPrompt": "生成工程化 Prompt",
+	"panel.emptyHint": "选择一个 HTML 文件开始预览",
+	"panel.noHtml": "当前作用域内没有 html/htm 文件",
+	"panel.noScope": "无可用作用域",
+	"group.iphone": "iPhone",
+	"group.android": "Android",
+	"group.tablet": "平板",
+	"device.androidTab": "Android 平板"
+}

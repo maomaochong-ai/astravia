@@ -1,0 +1,70 @@
+{
+	"subtitle": "安装并启用你需要的能力，让 Astravia 拥有更多专业技能",
+	"search": {
+		"placeholder": "搜索{{noun}}..."
+	},
+	"actions": {
+		"install": "安装",
+		"use": "使用",
+		"update": "更新",
+		"uninstall": "卸载"
+	},
+	"loading": "加载中...",
+	"card": {
+		"noDescription": "暂无描述",
+		"custom": "自定义",
+		"general": "通用",
+		"readonly": "只读",
+		"updatable": "可更新"
+	},
+	"group": {
+		"agentSkill": "通用 Agent Skill",
+		"custom": "自定义",
+		"uncategorized": "未分类",
+		"enabledCount": "{{n}} 已启用"
+	},
+	"empty": {
+		"noMatch": "没有匹配的结果",
+		"noMatchHint": "试试换个关键词",
+		"none": "暂无可用{{noun}}",
+		"noneHint": "稍后再来看看吧"
+	},
+	"error": {
+		"loadFailed": "加载失败",
+		"partialFallback": "{{error}}，当前仅显示已安装的{{noun}}"
+	},
+	"import": {
+		"failed": "导入失败：{{error}}",
+		"unknownError": "未知错误"
+	},
+	"tour": {
+		"capabilities": {
+			"banner": {
+				"title": "扩展专业能力",
+				"description": "能力页汇总技能与连接器。按想实现的功能挑选，一键添加后即可在对话中使用。"
+			},
+			"searchAdd": {
+				"title": "搜索与添加",
+				"description": "用搜索快速定位能力；也可点「添加能力」从本地导入 Skill / 插件，或手动配置 MCP 连接器。"
+			},
+			"scope": {
+				"title": "发现 / 我的",
+				"description": "「发现」浏览可添加的能力；「我的」管理已安装的能力，包括启用、配置与移除。"
+			},
+			"list": {
+				"title": "能力卡片",
+				"description": "每张卡片对应一项能力。可查看说明、添加或启用；需要凭证时会提示完成配置。"
+			}
+		}
+	},
+	"builtin": {
+		"create-skill": {
+			"name": "创建技能",
+			"description": "创建或更新符合 Astravia 规范的 Agent Skill，并正确放置文件、注册 skills-manifest.json 或更新插件配置。"
+		},
+		"publish-ability": {
+			"name": "发布能力",
+			"description": "把 skill、MCP、插件或能力套装提交到能力市场，讲清必填字段、多语言与审核流程。"
+		}
+	}
+}

@@ -1,0 +1,7985 @@
+{
+  "generatedFrom": "@astravia/capability-sdk Capability Tokens",
+  "foundation": [
+    {
+      "id": "cap.foundation.astravia.fs.read-directory",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "name",
+            "path",
+            "isDirectory",
+            "size",
+            "modifiedAt"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "isDirectory": {
+              "type": "boolean"
+            },
+            "size": {
+              "type": "number"
+            },
+            "modifiedAt": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.read-file",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "content",
+          "encoding"
+        ],
+        "properties": {
+          "content": {
+            "type": "string"
+          },
+          "encoding": {
+            "anyOf": [
+              {
+                "const": "utf8",
+                "type": "string"
+              },
+              {
+                "const": "base64",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.read-binary-file",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "data",
+          "mimeType",
+          "size"
+        ],
+        "properties": {
+          "data": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          },
+          "size": {
+            "type": "number"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.write-file",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path",
+          "content"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "content": {
+            "type": "string"
+          },
+          "encoding": {
+            "anyOf": [
+              {
+                "const": "utf8",
+                "type": "string"
+              },
+              {
+                "const": "base64",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.stat",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "size",
+              "modifiedAt",
+              "createdAt"
+            ],
+            "properties": {
+              "size": {
+                "type": "number"
+              },
+              "modifiedAt": {
+                "type": "number"
+              },
+              "createdAt": {
+                "type": "number"
+              }
+            }
+          }
+        ]
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.rename",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "oldPath",
+          "newPath"
+        ],
+        "properties": {
+          "oldPath": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "newPath": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.delete",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.move",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "sourcePath",
+          "destinationDirectory"
+        ],
+        "properties": {
+          "sourcePath": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "destinationDirectory": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.create-directory",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.fs.list-files-recursive",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "name",
+            "path",
+            "relPath"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "relPath": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.get-all",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.set",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "key",
+          "value"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "key": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "value": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.remove",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "key"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "key": {
+            "pattern": "^[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.clear",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.read-json",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "key"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "key": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "$id": "CapabilityJsonValue",
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "CapabilityJsonValue"
+            }
+          },
+          {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "$ref": "CapabilityJsonValue"
+              }
+            }
+          }
+        ]
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.write-json",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "key",
+          "value"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "key": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "value": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.list",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "prefix": {
+            "minLength": 1,
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.read-file",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "path"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.write-file",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "path",
+          "data"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.put-blob",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "blob"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "blob": {
+            "type": "object",
+            "required": [
+              "data",
+              "mimeType"
+            ],
+            "properties": {
+              "id": {
+                "minLength": 1,
+                "type": "string"
+              },
+              "data": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "mimeType": {
+                "pattern": "\\S",
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": {
+        "type": "object",
+        "required": [
+          "id",
+          "url",
+          "mimeType"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "mimeType": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.read-blob",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "id"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "data",
+              "mimeType"
+            ],
+            "properties": {
+              "data": {
+                "type": "string"
+              },
+              "mimeType": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.storage.get-blob-ref",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "namespace",
+          "id"
+        ],
+        "properties": {
+          "namespace": {
+            "pattern": "^(?!.*\\.\\.)[a-zA-Z0-9][a-zA-Z0-9._:-]{0,127}$",
+            "type": "string"
+          },
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "foundation",
+      "outputSchema": {
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "object",
+            "required": [
+              "id",
+              "url",
+              "mimeType"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "mimeType": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.foundation.astravia.network.request",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "request"
+        ],
+        "properties": {
+          "request": {
+            "$id": "CapabilityJsonValue",
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "$ref": "CapabilityJsonValue"
+                }
+              },
+              {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "$ref": "CapabilityJsonValue"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "foundation",
+      "outputSchema": {
+        "$id": "CapabilityJsonValue",
+        "anyOf": [
+          {
+            "type": "null"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "string"
+          },
+          {
+            "type": "array",
+            "items": {
+              "$ref": "CapabilityJsonValue"
+            }
+          },
+          {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "$ref": "CapabilityJsonValue"
+              }
+            }
+          }
+        ]
+      },
+      "version": 1
+    }
+  ],
+  "domain": [
+    {
+      "id": "cap.domain.astravia.agent-settings.experimental.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "astraviaCli",
+          "promptPrediction",
+          "agentSkills"
+        ],
+        "properties": {
+          "astraviaCli": {
+            "type": "boolean"
+          },
+          "promptPrediction": {
+            "type": "boolean"
+          },
+          "agentSkills": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.agent-settings.experimental.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "minProperties": 1,
+        "type": "object",
+        "properties": {
+          "astraviaCli": {
+            "type": "boolean"
+          },
+          "promptPrediction": {
+            "type": "boolean"
+          },
+          "agentSkills": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "astraviaCli",
+          "promptPrediction",
+          "agentSkills"
+        ],
+        "properties": {
+          "astraviaCli": {
+            "type": "boolean"
+          },
+          "promptPrediction": {
+            "type": "boolean"
+          },
+          "agentSkills": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "prompt",
+            "concurrency",
+            "tasks",
+            "createdAt",
+            "updatedAt"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "prompt": {
+              "type": "string"
+            },
+            "modelKey": {
+              "type": "string"
+            },
+            "executionMode": {
+              "anyOf": [
+                {
+                  "const": "inherit",
+                  "type": "string"
+                },
+                {
+                  "const": "sandbox",
+                  "type": "string"
+                },
+                {
+                  "const": "full-access",
+                  "type": "string"
+                }
+              ]
+            },
+            "concurrency": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "artifactPatterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "notifyEnabled": {
+              "type": "boolean"
+            },
+            "timeoutMinutes": {
+              "type": "number"
+            },
+            "skill": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "name",
+                "type"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "alias": {
+                  "type": "string"
+                },
+                "type": {
+                  "const": "skill",
+                  "type": "string"
+                }
+              }
+            },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "cwd",
+                  "sourcePath",
+                  "status",
+                  "createdAt",
+                  "updatedAt"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "cwd": {
+                    "type": "string"
+                  },
+                  "sourcePath": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "anyOf": [
+                      {
+                        "const": "pending",
+                        "type": "string"
+                      },
+                      {
+                        "const": "running",
+                        "type": "string"
+                      },
+                      {
+                        "const": "completed",
+                        "type": "string"
+                      },
+                      {
+                        "const": "failed",
+                        "type": "string"
+                      },
+                      {
+                        "const": "paused",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "sessionId": {
+                    "type": "string"
+                  },
+                  "sessionPath": {
+                    "type": "string"
+                  },
+                  "executionMode": {
+                    "anyOf": [
+                      {
+                        "const": "sandbox",
+                        "type": "string"
+                      },
+                      {
+                        "const": "full-access",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "error": {
+                    "type": "string"
+                  },
+                  "createdAt": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "updatedAt": {
+                    "minimum": 0,
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "createdAt": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "updatedAt": {
+              "minimum": 0,
+              "type": "number"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.get",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "concurrency",
+          "tasks",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "concurrency": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "artifactPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notifyEnabled": {
+            "type": "boolean"
+          },
+          "timeoutMinutes": {
+            "type": "number"
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "cwd",
+                "sourcePath",
+                "status",
+                "createdAt",
+                "updatedAt"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cwd": {
+                  "type": "string"
+                },
+                "sourcePath": {
+                  "type": "string"
+                },
+                "status": {
+                  "anyOf": [
+                    {
+                      "const": "pending",
+                      "type": "string"
+                    },
+                    {
+                      "const": "running",
+                      "type": "string"
+                    },
+                    {
+                      "const": "completed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "failed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "paused",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "sessionId": {
+                  "type": "string"
+                },
+                "sessionPath": {
+                  "type": "string"
+                },
+                "executionMode": {
+                  "anyOf": [
+                    {
+                      "const": "sandbox",
+                      "type": "string"
+                    },
+                    {
+                      "const": "full-access",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "error": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                "updatedAt": {
+                  "minimum": 0,
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "updatedAt": {
+            "minimum": 0,
+            "type": "number"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.create",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "prompt",
+              "folders",
+              "concurrency"
+            ],
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "modelKey": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "folders": {
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "pattern": "\\S",
+                  "type": "string"
+                }
+              },
+              "concurrency": {
+                "minimum": 1,
+                "maximum": 64,
+                "type": "integer"
+              },
+              "executionMode": {
+                "anyOf": [
+                  {
+                    "const": "inherit",
+                    "type": "string"
+                  },
+                  {
+                    "const": "sandbox",
+                    "type": "string"
+                  },
+                  {
+                    "const": "full-access",
+                    "type": "string"
+                  }
+                ]
+              },
+              "artifactPatterns": {
+                "type": "array",
+                "items": {
+                  "pattern": "\\S",
+                  "type": "string"
+                }
+              },
+              "notifyEnabled": {
+                "type": "boolean"
+              },
+              "timeoutMinutes": {
+                "minimum": 1,
+                "maximum": 10080,
+                "type": "integer"
+              },
+              "skill": {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "alias": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "type": {
+                    "const": "skill",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "concurrency",
+          "tasks",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "concurrency": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "artifactPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notifyEnabled": {
+            "type": "boolean"
+          },
+          "timeoutMinutes": {
+            "type": "number"
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "cwd",
+                "sourcePath",
+                "status",
+                "createdAt",
+                "updatedAt"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cwd": {
+                  "type": "string"
+                },
+                "sourcePath": {
+                  "type": "string"
+                },
+                "status": {
+                  "anyOf": [
+                    {
+                      "const": "pending",
+                      "type": "string"
+                    },
+                    {
+                      "const": "running",
+                      "type": "string"
+                    },
+                    {
+                      "const": "completed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "failed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "paused",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "sessionId": {
+                  "type": "string"
+                },
+                "sessionPath": {
+                  "type": "string"
+                },
+                "executionMode": {
+                  "anyOf": [
+                    {
+                      "const": "sandbox",
+                      "type": "string"
+                    },
+                    {
+                      "const": "full-access",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "error": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                "updatedAt": {
+                  "minimum": 0,
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "updatedAt": {
+            "minimum": 0,
+            "type": "number"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.update",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "data"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "additionalProperties": false,
+            "minProperties": 1,
+            "type": "object",
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "prompt": {
+                "type": "string"
+              },
+              "modelKey": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "concurrency": {
+                "minimum": 1,
+                "maximum": 64,
+                "type": "integer"
+              },
+              "executionMode": {
+                "anyOf": [
+                  {
+                    "const": "inherit",
+                    "type": "string"
+                  },
+                  {
+                    "const": "sandbox",
+                    "type": "string"
+                  },
+                  {
+                    "const": "full-access",
+                    "type": "string"
+                  }
+                ]
+              },
+              "artifactPatterns": {
+                "type": "array",
+                "items": {
+                  "pattern": "\\S",
+                  "type": "string"
+                }
+              },
+              "notifyEnabled": {
+                "type": "boolean"
+              },
+              "timeoutMinutes": {
+                "minimum": 1,
+                "maximum": 10080,
+                "type": "integer"
+              },
+              "newFolders": {
+                "type": "array",
+                "items": {
+                  "pattern": "\\S",
+                  "type": "string"
+                }
+              },
+              "skill": {
+                "anyOf": [
+                  {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": [
+                      "name",
+                      "type"
+                    ],
+                    "properties": {
+                      "name": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      },
+                      "alias": {
+                        "pattern": "\\S",
+                        "type": "string"
+                      },
+                      "type": {
+                        "const": "skill",
+                        "type": "string"
+                      }
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "concurrency",
+          "tasks",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "concurrency": {
+            "minimum": 1,
+            "type": "integer"
+          },
+          "artifactPatterns": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notifyEnabled": {
+            "type": "boolean"
+          },
+          "timeoutMinutes": {
+            "type": "number"
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "tasks": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "name",
+                "cwd",
+                "sourcePath",
+                "status",
+                "createdAt",
+                "updatedAt"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cwd": {
+                  "type": "string"
+                },
+                "sourcePath": {
+                  "type": "string"
+                },
+                "status": {
+                  "anyOf": [
+                    {
+                      "const": "pending",
+                      "type": "string"
+                    },
+                    {
+                      "const": "running",
+                      "type": "string"
+                    },
+                    {
+                      "const": "completed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "failed",
+                      "type": "string"
+                    },
+                    {
+                      "const": "paused",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "sessionId": {
+                  "type": "string"
+                },
+                "sessionPath": {
+                  "type": "string"
+                },
+                "executionMode": {
+                  "anyOf": [
+                    {
+                      "const": "sandbox",
+                      "type": "string"
+                    },
+                    {
+                      "const": "full-access",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "error": {
+                  "type": "string"
+                },
+                "createdAt": {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                "updatedAt": {
+                  "minimum": 0,
+                  "type": "number"
+                }
+              }
+            }
+          },
+          "createdAt": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "updatedAt": {
+            "minimum": 0,
+            "type": "number"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.run",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.retry",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.stop",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.resume",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.resume-with-text",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId",
+          "text"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.task.session.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.task.delete-all",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.start",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.stop",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.reset",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.batch-task.project.failed-task.reset",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "projectId",
+          "taskIds"
+        ],
+        "properties": {
+          "projectId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "taskIds": {
+            "type": "array",
+            "items": {
+              "pattern": "\\S",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "projectId",
+          "affectedTaskIds",
+          "queuedTaskIds"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "affectedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "queuedTaskIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.download.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": [
+            "id",
+            "url",
+            "filename",
+            "path",
+            "totalBytes",
+            "receivedBytes",
+            "status",
+            "createdAt"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            },
+            "filename": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "totalBytes": {
+              "type": "number"
+            },
+            "receivedBytes": {
+              "type": "number"
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "const": "queued",
+                  "type": "string"
+                },
+                {
+                  "const": "downloading",
+                  "type": "string"
+                },
+                {
+                  "const": "paused",
+                  "type": "string"
+                },
+                {
+                  "const": "completed",
+                  "type": "string"
+                },
+                {
+                  "const": "failed",
+                  "type": "string"
+                },
+                {
+                  "const": "canceled",
+                  "type": "string"
+                }
+              ]
+            },
+            "error": {
+              "type": "string"
+            },
+            "createdAt": {
+              "type": "number"
+            },
+            "completedAt": {
+              "type": "number"
+            },
+            "speedBytesPerSec": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.download.cancel",
+      "inputSchema": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.general-settings.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workspacePath",
+          "defaultExecutionMode",
+          "notificationsEnabled",
+          "debugMode",
+          "sandbox"
+        ],
+        "properties": {
+          "workspacePath": {
+            "type": "string"
+          },
+          "defaultExecutionMode": {
+            "anyOf": [
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "notificationsEnabled": {
+            "type": "boolean"
+          },
+          "debugMode": {
+            "type": "boolean"
+          },
+          "sandbox": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "status",
+              "backend",
+              "platform"
+            ],
+            "properties": {
+              "status": {
+                "anyOf": [
+                  {
+                    "const": "unknown",
+                    "type": "string"
+                  },
+                  {
+                    "const": "available",
+                    "type": "string"
+                  },
+                  {
+                    "const": "unavailable",
+                    "type": "string"
+                  }
+                ]
+              },
+              "backend": {
+                "anyOf": [
+                  {
+                    "const": "bundled-bwrap",
+                    "type": "string"
+                  },
+                  {
+                    "const": "system-bwrap",
+                    "type": "string"
+                  },
+                  {
+                    "const": "macos-seatbelt",
+                    "type": "string"
+                  },
+                  {
+                    "const": "windows-host",
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "platform": {
+                "type": "string"
+              },
+              "binaryPath": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string"
+              },
+              "details": {
+                "type": "string"
+              },
+              "checkedAt": {
+                "type": "number"
+              },
+              "features": {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "readRoots",
+                  "writeRoots",
+                  "denyRead",
+                  "denyWrite",
+                  "tempRootIsolation",
+                  "networkIsolation",
+                  "processTreeKill",
+                  "passiveProbe",
+                  "activeProbe"
+                ],
+                "properties": {
+                  "readRoots": {
+                    "type": "boolean"
+                  },
+                  "writeRoots": {
+                    "type": "boolean"
+                  },
+                  "denyRead": {
+                    "type": "boolean"
+                  },
+                  "denyWrite": {
+                    "type": "boolean"
+                  },
+                  "tempRootIsolation": {
+                    "type": "boolean"
+                  },
+                  "networkIsolation": {
+                    "type": "boolean"
+                  },
+                  "processTreeKill": {
+                    "type": "boolean"
+                  },
+                  "passiveProbe": {
+                    "type": "boolean"
+                  },
+                  "activeProbe": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.general-settings.notifications.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.general-settings.default-execution-mode.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "properties": {
+          "mode": {
+            "anyOf": [
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "mode"
+        ],
+        "properties": {
+          "mode": {
+            "anyOf": [
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.general-settings.workspace.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.im.status.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled",
+          "transport",
+          "agentModel",
+          "wechatBound",
+          "feishuAppId",
+          "runtime"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "transport": {
+            "anyOf": [
+              {
+                "const": "feishu",
+                "type": "string"
+              },
+              {
+                "const": "wechat",
+                "type": "string"
+              }
+            ]
+          },
+          "agentModel": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "provider",
+                  "model"
+                ],
+                "properties": {
+                  "provider": {
+                    "type": "string"
+                  },
+                  "model": {
+                    "type": "string"
+                  },
+                  "reasoningLevel": {
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "wechatBound": {
+            "type": "boolean"
+          },
+          "feishuAppId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "runtime": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "transport",
+              "activeSessions",
+              "consecutiveStartFailures"
+            ],
+            "properties": {
+              "transport": {
+                "anyOf": [
+                  {
+                    "const": "offline",
+                    "type": "string"
+                  },
+                  {
+                    "const": "connecting",
+                    "type": "string"
+                  },
+                  {
+                    "const": "online",
+                    "type": "string"
+                  },
+                  {
+                    "const": "error",
+                    "type": "string"
+                  },
+                  {
+                    "const": "awaiting_bind",
+                    "type": "string"
+                  }
+                ]
+              },
+              "lastError": {
+                "type": "string"
+              },
+              "lastErrorAt": {
+                "type": "string"
+              },
+              "activeSessions": {
+                "type": "number"
+              },
+              "sidecarPid": {
+                "type": "number"
+              },
+              "sidecarStartedAt": {
+                "type": "string"
+              },
+              "consecutiveStartFailures": {
+                "type": "number"
+              },
+              "binaryPath": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.im.log.list",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "limit"
+        ],
+        "properties": {
+          "limit": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "level",
+            "msg",
+            "time"
+          ],
+          "properties": {
+            "level": {
+              "anyOf": [
+                {
+                  "const": "debug",
+                  "type": "string"
+                },
+                {
+                  "const": "info",
+                  "type": "string"
+                },
+                {
+                  "const": "warn",
+                  "type": "string"
+                },
+                {
+                  "const": "error",
+                  "type": "string"
+                }
+              ]
+            },
+            "msg": {
+              "type": "string"
+            },
+            "time": {
+              "type": "string"
+            },
+            "fields": {
+              "type": "object",
+              "patternProperties": {
+                "^(.*)$": {}
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.im.enabled.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "enabled"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "transport",
+          "activeSessions",
+          "consecutiveStartFailures"
+        ],
+        "properties": {
+          "transport": {
+            "anyOf": [
+              {
+                "const": "offline",
+                "type": "string"
+              },
+              {
+                "const": "connecting",
+                "type": "string"
+              },
+              {
+                "const": "online",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              },
+              {
+                "const": "awaiting_bind",
+                "type": "string"
+              }
+            ]
+          },
+          "lastError": {
+            "type": "string"
+          },
+          "lastErrorAt": {
+            "type": "string"
+          },
+          "activeSessions": {
+            "type": "number"
+          },
+          "sidecarPid": {
+            "type": "number"
+          },
+          "sidecarStartedAt": {
+            "type": "string"
+          },
+          "consecutiveStartFailures": {
+            "type": "number"
+          },
+          "binaryPath": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.im.restart",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "transport",
+          "activeSessions",
+          "consecutiveStartFailures"
+        ],
+        "properties": {
+          "transport": {
+            "anyOf": [
+              {
+                "const": "offline",
+                "type": "string"
+              },
+              {
+                "const": "connecting",
+                "type": "string"
+              },
+              {
+                "const": "online",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              },
+              {
+                "const": "awaiting_bind",
+                "type": "string"
+              }
+            ]
+          },
+          "lastError": {
+            "type": "string"
+          },
+          "lastErrorAt": {
+            "type": "string"
+          },
+          "activeSessions": {
+            "type": "number"
+          },
+          "sidecarPid": {
+            "type": "number"
+          },
+          "sidecarStartedAt": {
+            "type": "string"
+          },
+          "consecutiveStartFailures": {
+            "type": "number"
+          },
+          "binaryPath": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.im.agent-model.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "agentModel"
+        ],
+        "properties": {
+          "agentModel": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "provider",
+                  "model"
+                ],
+                "properties": {
+                  "provider": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "model": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "reasoningLevel": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  }
+                }
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "transport",
+          "activeSessions",
+          "consecutiveStartFailures"
+        ],
+        "properties": {
+          "transport": {
+            "anyOf": [
+              {
+                "const": "offline",
+                "type": "string"
+              },
+              {
+                "const": "connecting",
+                "type": "string"
+              },
+              {
+                "const": "online",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              },
+              {
+                "const": "awaiting_bind",
+                "type": "string"
+              }
+            ]
+          },
+          "lastError": {
+            "type": "string"
+          },
+          "lastErrorAt": {
+            "type": "string"
+          },
+          "activeSessions": {
+            "type": "number"
+          },
+          "sidecarPid": {
+            "type": "number"
+          },
+          "sidecarStartedAt": {
+            "type": "string"
+          },
+          "consecutiveStartFailures": {
+            "type": "number"
+          },
+          "binaryPath": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.base.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "updatedAt",
+            "isDefault",
+            "nodes"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "minimum": 0,
+              "type": "number"
+            },
+            "isDefault": {
+              "type": "boolean"
+            },
+            "nodes": {
+              "type": "array",
+              "items": {
+                "$id": "T0",
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "anyOf": [
+                      {
+                        "const": "file",
+                        "type": "string"
+                      },
+                      {
+                        "const": "directory",
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "T0"
+                    }
+                  },
+                  "childCount": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "size": {
+                    "minimum": 0,
+                    "type": "number"
+                  },
+                  "sourcePath": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.file-status.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "anyOf": [
+                  {
+                    "const": "processed",
+                    "type": "string"
+                  },
+                  {
+                    "const": "stale",
+                    "type": "string"
+                  },
+                  {
+                    "const": "failed",
+                    "type": "string"
+                  },
+                  {
+                    "const": "unprocessed",
+                    "type": "string"
+                  }
+                ]
+              },
+              "wikiPath": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.processing.status.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "boolean"
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.processing.settings.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "pollIntervalMinutes": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "processingModelKey": {
+            "type": "string"
+          },
+          "processingModelReasoningLevel": {
+            "type": "string"
+          },
+          "agentConcurrency": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "ocrConcurrency": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.base.create",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.base.rename",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "newName"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "newName": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.base.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.entry.add-files",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kbId",
+          "paths",
+          "move"
+        ],
+        "properties": {
+          "kbId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "pattern": "\\S",
+              "type": "string"
+            }
+          },
+          "move": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.entry.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "kbId",
+          "relPath"
+        ],
+        "properties": {
+          "kbId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "relPath": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.processing.scan",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "skipped"
+        ],
+        "properties": {
+          "skipped": {
+            "type": "boolean"
+          },
+          "reason": {
+            "const": "no-model",
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.processing.retry-failed",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "skipped"
+        ],
+        "properties": {
+          "skipped": {
+            "type": "boolean"
+          },
+          "reason": {
+            "const": "no-model",
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.knowledge.processing.settings.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "minProperties": 1,
+            "type": "object",
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "pollIntervalMinutes": {
+                "anyOf": [
+                  {
+                    "const": 0,
+                    "type": "number"
+                  },
+                  {
+                    "const": 3,
+                    "type": "number"
+                  },
+                  {
+                    "const": 5,
+                    "type": "number"
+                  },
+                  {
+                    "const": 10,
+                    "type": "number"
+                  },
+                  {
+                    "const": 30,
+                    "type": "number"
+                  }
+                ]
+              },
+              "processingModelKey": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "processingModelReasoningLevel": {
+                "anyOf": [
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "agentConcurrency": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "ocrConcurrency": {
+                "minimum": 1,
+                "type": "integer"
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "pollIntervalMinutes": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "processingModelKey": {
+            "type": "string"
+          },
+          "processingModelReasoningLevel": {
+            "type": "string"
+          },
+          "agentConcurrency": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "ocrConcurrency": {
+            "minimum": 0,
+            "type": "integer"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.mcp.server.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "name",
+            "type",
+            "disabled"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "anyOf": [
+                {
+                  "const": "stdio",
+                  "type": "string"
+                },
+                {
+                  "const": "http",
+                  "type": "string"
+                }
+              ]
+            },
+            "disabled": {
+              "type": "boolean"
+            },
+            "command": {
+              "type": "string"
+            },
+            "url": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.mcp.server.get",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "disabled"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "const": "stdio",
+                "type": "string"
+              },
+              {
+                "const": "http",
+                "type": "string"
+              }
+            ]
+          },
+          "command": {
+            "type": "string"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "env": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "autoApprove": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startupTimeout": {
+            "type": "number"
+          },
+          "debug": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.mcp.server.upsert",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "data"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "anyOf": [
+              {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "type"
+                ],
+                "properties": {
+                  "type": {
+                    "const": "http",
+                    "type": "string"
+                  },
+                  "url": {
+                    "type": "string"
+                  },
+                  "headers": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^(.*)$": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "disabled": {
+                    "type": "boolean"
+                  },
+                  "autoApprove": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "startupTimeout": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "debug": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "type": {
+                    "const": "stdio",
+                    "type": "string"
+                  },
+                  "command": {
+                    "type": "string"
+                  },
+                  "args": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "env": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^(.*)$": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "cwd": {
+                    "type": "string"
+                  },
+                  "disabled": {
+                    "type": "boolean"
+                  },
+                  "autoApprove": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "startupTimeout": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "debug": {
+                    "type": "boolean"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "type",
+          "disabled"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "anyOf": [
+              {
+                "const": "stdio",
+                "type": "string"
+              },
+              {
+                "const": "http",
+                "type": "string"
+              }
+            ]
+          },
+          "command": {
+            "type": "string"
+          },
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "env": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "disabled": {
+            "type": "boolean"
+          },
+          "autoApprove": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "startupTimeout": {
+            "type": "number"
+          },
+          "debug": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.mcp.server.set-enabled",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "enabled"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.mcp.server.remove",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "defaultModel",
+          "providers"
+        ],
+        "properties": {
+          "defaultModel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "providers": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "displayName",
+                "hasApiKey",
+                "modelCount",
+                "models"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "displayName": {
+                  "type": "string"
+                },
+                "baseUrl": {
+                  "type": "string"
+                },
+                "api": {
+                  "type": "string"
+                },
+                "hasApiKey": {
+                  "type": "boolean"
+                },
+                "modelCount": {
+                  "type": "number"
+                },
+                "models": {
+                  "type": "array",
+                  "items": {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "required": [
+                      "id"
+                    ],
+                    "properties": {
+                      "id": {
+                        "type": "string"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "api": {
+                        "type": "string"
+                      },
+                      "reasoning": {
+                        "type": "boolean"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.config.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "providers"
+        ],
+        "properties": {
+          "defaultModel": {
+            "type": "string"
+          },
+          "providers": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "baseUrl": {
+                    "type": "string"
+                  },
+                  "apiKey": {
+                    "type": "string"
+                  },
+                  "api": {
+                    "type": "string"
+                  },
+                  "displayName": {
+                    "type": "string"
+                  },
+                  "authHeader": {
+                    "type": "boolean"
+                  },
+                  "headers": {
+                    "type": "object",
+                    "patternProperties": {
+                      "^(.*)$": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "models": {
+                    "type": "array",
+                    "items": {
+                      "additionalProperties": false,
+                      "type": "object",
+                      "required": [
+                        "id"
+                      ],
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "modelId": {
+                          "type": "string"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "api": {
+                          "type": "string"
+                        },
+                        "reasoning": {
+                          "type": "boolean"
+                        },
+                        "reasoningLevels": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "defaultReasoningLevel": {
+                          "type": "string"
+                        },
+                        "input": {
+                          "type": "array",
+                          "items": {
+                            "type": "string"
+                          }
+                        },
+                        "contextWindow": {
+                          "type": "number"
+                        },
+                        "maxTokens": {
+                          "type": "number"
+                        },
+                        "cost": {
+                          "additionalProperties": false,
+                          "type": "object",
+                          "required": [
+                            "input",
+                            "output",
+                            "cacheRead",
+                            "cacheWrite"
+                          ],
+                          "properties": {
+                            "input": {
+                              "type": "number"
+                            },
+                            "output": {
+                              "type": "number"
+                            },
+                            "cacheRead": {
+                              "type": "number"
+                            },
+                            "cacheWrite": {
+                              "type": "number"
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.provider.get",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider"
+        ],
+        "properties": {
+          "provider": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider"
+        ],
+        "properties": {
+          "provider": {
+            "type": "string"
+          },
+          "baseUrl": {
+            "type": "string"
+          },
+          "apiKey": {
+            "type": "string"
+          },
+          "api": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "authHeader": {
+            "type": "boolean"
+          },
+          "headers": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "modelId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "api": {
+                  "type": "string"
+                },
+                "reasoning": {
+                  "type": "boolean"
+                },
+                "reasoningLevels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "defaultReasoningLevel": {
+                  "type": "string"
+                },
+                "input": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "contextWindow": {
+                  "type": "number"
+                },
+                "maxTokens": {
+                  "type": "number"
+                },
+                "cost": {
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": [
+                    "input",
+                    "output",
+                    "cacheRead",
+                    "cacheWrite"
+                  ],
+                  "properties": {
+                    "input": {
+                      "type": "number"
+                    },
+                    "output": {
+                      "type": "number"
+                    },
+                    "cacheRead": {
+                      "type": "number"
+                    },
+                    "cacheWrite": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.probe",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "model"
+        ],
+        "properties": {
+          "provider": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "model": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.key.validate",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "modelKey"
+        ],
+        "properties": {
+          "modelKey": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "operation": {
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.default.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "modelKey"
+        ],
+        "properties": {
+          "modelKey": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "defaultModel"
+        ],
+        "properties": {
+          "defaultModel": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.provider.upsert",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider",
+          "data"
+        ],
+        "properties": {
+          "provider": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "baseUrl": {
+                "type": "string"
+              },
+              "apiKey": {
+                "type": "string"
+              },
+              "api": {
+                "type": "string"
+              },
+              "displayName": {
+                "type": "string"
+              },
+              "authHeader": {
+                "type": "boolean"
+              },
+              "headers": {
+                "type": "object",
+                "patternProperties": {
+                  "^(.*)$": {
+                    "type": "string"
+                  }
+                }
+              },
+              "models": {
+                "type": "array",
+                "items": {
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": [
+                    "id"
+                  ],
+                  "properties": {
+                    "id": {
+                      "pattern": "\\S",
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "api": {
+                      "type": "string"
+                    },
+                    "reasoning": {
+                      "type": "boolean"
+                    },
+                    "contextWindow": {
+                      "type": "number"
+                    },
+                    "maxTokens": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "baseUrl": {
+            "type": "string"
+          },
+          "apiKey": {
+            "type": "string"
+          },
+          "api": {
+            "type": "string"
+          },
+          "displayName": {
+            "type": "string"
+          },
+          "authHeader": {
+            "type": "boolean"
+          },
+          "headers": {
+            "type": "object",
+            "patternProperties": {
+              "^(.*)$": {
+                "type": "string"
+              }
+            }
+          },
+          "models": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "modelId": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "api": {
+                  "type": "string"
+                },
+                "reasoning": {
+                  "type": "boolean"
+                },
+                "reasoningLevels": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "defaultReasoningLevel": {
+                  "type": "string"
+                },
+                "input": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "contextWindow": {
+                  "type": "number"
+                },
+                "maxTokens": {
+                  "type": "number"
+                },
+                "cost": {
+                  "additionalProperties": false,
+                  "type": "object",
+                  "required": [
+                    "input",
+                    "output",
+                    "cacheRead",
+                    "cacheWrite"
+                  ],
+                  "properties": {
+                    "input": {
+                      "type": "number"
+                    },
+                    "output": {
+                      "type": "number"
+                    },
+                    "cacheRead": {
+                      "type": "number"
+                    },
+                    "cacheWrite": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.model.provider.remove",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "provider"
+        ],
+        "properties": {
+          "provider": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "workspacePath",
+          "projects",
+          "archivedProjects"
+        ],
+        "properties": {
+          "workspacePath": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "path"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "archivedProjects": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "path"
+              ],
+              "properties": {
+                "path": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.create",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.open",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.rename",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path",
+          "name"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.archive",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.unarchive",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.project.remove",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "path"
+        ],
+        "properties": {
+          "path": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "prompt",
+            "cron",
+            "isOnce",
+            "enabled",
+            "cwd",
+            "createdAt",
+            "updatedAt",
+            "lastRunAt",
+            "lastRunStatus"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "prompt": {
+              "type": "string"
+            },
+            "cron": {
+              "type": "string"
+            },
+            "isOnce": {
+              "type": "boolean"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "modelKey": {
+              "type": "string"
+            },
+            "executionMode": {
+              "anyOf": [
+                {
+                  "const": "inherit",
+                  "type": "string"
+                },
+                {
+                  "const": "sandbox",
+                  "type": "string"
+                },
+                {
+                  "const": "full-access",
+                  "type": "string"
+                }
+              ]
+            },
+            "skill": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "name",
+                "type"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "alias": {
+                  "pattern": "\\S",
+                  "type": "string"
+                },
+                "type": {
+                  "const": "skill",
+                  "type": "string"
+                }
+              }
+            },
+            "createdAt": {
+              "type": "number"
+            },
+            "updatedAt": {
+              "type": "number"
+            },
+            "lastRunAt": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "lastRunStatus": {
+              "anyOf": [
+                {
+                  "anyOf": [
+                    {
+                      "const": "success",
+                      "type": "string"
+                    },
+                    {
+                      "const": "failed",
+                      "type": "string"
+                    }
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.get",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "cron",
+          "isOnce",
+          "enabled",
+          "cwd",
+          "createdAt",
+          "updatedAt",
+          "lastRunAt",
+          "lastRunStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "isOnce": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "lastRunAt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastRunStatus": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "const": "success",
+                    "type": "string"
+                  },
+                  {
+                    "const": "failed",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.history.list",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "taskId",
+            "sessionId",
+            "startedAt",
+            "completedAt",
+            "status",
+            "prompt",
+            "responsePreview"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "taskId": {
+              "type": "string"
+            },
+            "sessionId": {
+              "type": "string"
+            },
+            "sessionPath": {
+              "type": "string"
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "startedAt": {
+              "type": "number"
+            },
+            "completedAt": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "status": {
+              "anyOf": [
+                {
+                  "const": "running",
+                  "type": "string"
+                },
+                {
+                  "const": "success",
+                  "type": "string"
+                },
+                {
+                  "const": "failed",
+                  "type": "string"
+                },
+                {
+                  "const": "aborted",
+                  "type": "string"
+                }
+              ]
+            },
+            "prompt": {
+              "type": "string"
+            },
+            "responsePreview": {
+              "type": "string"
+            },
+            "error": {
+              "type": "string"
+            },
+            "durationMs": {
+              "type": "number"
+            },
+            "executionMode": {
+              "anyOf": [
+                {
+                  "const": "sandbox",
+                  "type": "string"
+                },
+                {
+                  "const": "full-access",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.create",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "prompt",
+              "cron",
+              "isOnce",
+              "enabled",
+              "cwd"
+            ],
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "prompt": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "cron": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "isOnce": {
+                "type": "boolean"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "cwd": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "modelKey": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "executionMode": {
+                "anyOf": [
+                  {
+                    "const": "inherit",
+                    "type": "string"
+                  },
+                  {
+                    "const": "sandbox",
+                    "type": "string"
+                  },
+                  {
+                    "const": "full-access",
+                    "type": "string"
+                  }
+                ]
+              },
+              "skill": {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "alias": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "type": {
+                    "const": "skill",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "cron",
+          "isOnce",
+          "enabled",
+          "cwd",
+          "createdAt",
+          "updatedAt",
+          "lastRunAt",
+          "lastRunStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "isOnce": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "lastRunAt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastRunStatus": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "const": "success",
+                    "type": "string"
+                  },
+                  {
+                    "const": "failed",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.update",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId",
+          "data"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "additionalProperties": false,
+            "minProperties": 1,
+            "type": "object",
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "prompt": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "cron": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "isOnce": {
+                "type": "boolean"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "cwd": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "modelKey": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "executionMode": {
+                "anyOf": [
+                  {
+                    "const": "inherit",
+                    "type": "string"
+                  },
+                  {
+                    "const": "sandbox",
+                    "type": "string"
+                  },
+                  {
+                    "const": "full-access",
+                    "type": "string"
+                  }
+                ]
+              },
+              "skill": {
+                "additionalProperties": false,
+                "type": "object",
+                "required": [
+                  "name",
+                  "type"
+                ],
+                "properties": {
+                  "name": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "alias": {
+                    "pattern": "\\S",
+                    "type": "string"
+                  },
+                  "type": {
+                    "const": "skill",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "cron",
+          "isOnce",
+          "enabled",
+          "cwd",
+          "createdAt",
+          "updatedAt",
+          "lastRunAt",
+          "lastRunStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "isOnce": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "lastRunAt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastRunStatus": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "const": "success",
+                    "type": "string"
+                  },
+                  {
+                    "const": "failed",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "taskId"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "taskId": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.set-enabled",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId",
+          "enabled"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "prompt",
+          "cron",
+          "isOnce",
+          "enabled",
+          "cwd",
+          "createdAt",
+          "updatedAt",
+          "lastRunAt",
+          "lastRunStatus"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "cron": {
+            "type": "string"
+          },
+          "isOnce": {
+            "type": "boolean"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "cwd": {
+            "type": "string"
+          },
+          "modelKey": {
+            "type": "string"
+          },
+          "executionMode": {
+            "anyOf": [
+              {
+                "const": "inherit",
+                "type": "string"
+              },
+              {
+                "const": "sandbox",
+                "type": "string"
+              },
+              {
+                "const": "full-access",
+                "type": "string"
+              }
+            ]
+          },
+          "skill": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "type"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "alias": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              }
+            }
+          },
+          "createdAt": {
+            "type": "number"
+          },
+          "updatedAt": {
+            "type": "number"
+          },
+          "lastRunAt": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "lastRunStatus": {
+            "anyOf": [
+              {
+                "anyOf": [
+                  {
+                    "const": "success",
+                    "type": "string"
+                  },
+                  {
+                    "const": "failed",
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.run",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "taskId"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "taskId": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.scheduler.task.abort",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "taskId"
+        ],
+        "properties": {
+          "taskId": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "status",
+          "taskId"
+        ],
+        "properties": {
+          "status": {
+            "anyOf": [
+              {
+                "const": "accepted",
+                "type": "string"
+              },
+              {
+                "const": "noop",
+                "type": "string"
+              }
+            ]
+          },
+          "taskId": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.session.list",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "cwd"
+        ],
+        "properties": {
+          "cwd": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "path",
+            "cwd",
+            "firstMessage",
+            "modifiedAt"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "cwd": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "firstMessage": {
+              "type": "string"
+            },
+            "modifiedAt": {
+              "type": "number"
+            },
+            "lastMessagePreview": {
+              "type": "string"
+            },
+            "parentSessionPath": {
+              "type": "string"
+            },
+            "parentEntryId": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.session.runtime-project.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "cwd",
+            "sessionCount"
+          ],
+          "properties": {
+            "cwd": {
+              "type": "string"
+            },
+            "sessionCount": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.shortcut.settings.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bindings",
+          "quickPanel"
+        ],
+        "properties": {
+          "bindings": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "defaultShortcut",
+                "shortcut",
+                "isDefault"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "defaultShortcut": {
+                  "type": "string"
+                },
+                "shortcut": {
+                  "type": "string"
+                },
+                "isDefault": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "quickPanel": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "trigger",
+              "postSendBehavior"
+            ],
+            "properties": {
+              "trigger": {
+                "anyOf": [
+                  {
+                    "const": "none",
+                    "type": "string"
+                  },
+                  {
+                    "const": "mod",
+                    "type": "string"
+                  },
+                  {
+                    "const": "alt",
+                    "type": "string"
+                  },
+                  {
+                    "const": "shift",
+                    "type": "string"
+                  }
+                ]
+              },
+              "postSendBehavior": {
+                "anyOf": [
+                  {
+                    "const": "foreground",
+                    "type": "string"
+                  },
+                  {
+                    "const": "background",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.shortcut.binding.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "shortcut"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "shortcut": {
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bindings"
+        ],
+        "properties": {
+          "bindings": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "defaultShortcut",
+                "shortcut",
+                "isDefault"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "defaultShortcut": {
+                  "type": "string"
+                },
+                "shortcut": {
+                  "type": "string"
+                },
+                "isDefault": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.shortcut.binding.reset",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bindings",
+          "shortcut"
+        ],
+        "properties": {
+          "bindings": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "defaultShortcut",
+                "shortcut",
+                "isDefault"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "defaultShortcut": {
+                  "type": "string"
+                },
+                "shortcut": {
+                  "type": "string"
+                },
+                "isDefault": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "shortcut": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.shortcut.binding.reset-all",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "bindings"
+        ],
+        "properties": {
+          "bindings": {
+            "type": "array",
+            "items": {
+              "additionalProperties": false,
+              "type": "object",
+              "required": [
+                "id",
+                "defaultShortcut",
+                "shortcut",
+                "isDefault"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "defaultShortcut": {
+                  "type": "string"
+                },
+                "shortcut": {
+                  "type": "string"
+                },
+                "isDefault": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.quick-panel.trigger.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "trigger"
+        ],
+        "properties": {
+          "trigger": {
+            "anyOf": [
+              {
+                "const": "none",
+                "type": "string"
+              },
+              {
+                "const": "mod",
+                "type": "string"
+              },
+              {
+                "const": "alt",
+                "type": "string"
+              },
+              {
+                "const": "shift",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "trigger",
+          "postSendBehavior"
+        ],
+        "properties": {
+          "trigger": {
+            "anyOf": [
+              {
+                "const": "none",
+                "type": "string"
+              },
+              {
+                "const": "mod",
+                "type": "string"
+              },
+              {
+                "const": "alt",
+                "type": "string"
+              },
+              {
+                "const": "shift",
+                "type": "string"
+              }
+            ]
+          },
+          "postSendBehavior": {
+            "anyOf": [
+              {
+                "const": "foreground",
+                "type": "string"
+              },
+              {
+                "const": "background",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.quick-panel.post-send-behavior.set",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "behavior"
+        ],
+        "properties": {
+          "behavior": {
+            "anyOf": [
+              {
+                "const": "foreground",
+                "type": "string"
+              },
+              {
+                "const": "background",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "trigger",
+          "postSendBehavior"
+        ],
+        "properties": {
+          "trigger": {
+            "anyOf": [
+              {
+                "const": "none",
+                "type": "string"
+              },
+              {
+                "const": "mod",
+                "type": "string"
+              },
+              {
+                "const": "alt",
+                "type": "string"
+              },
+              {
+                "const": "shift",
+                "type": "string"
+              }
+            ]
+          },
+          "postSendBehavior": {
+            "anyOf": [
+              {
+                "const": "foreground",
+                "type": "string"
+              },
+              {
+                "const": "background",
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.skill.list",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "cwd": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "name",
+            "description",
+            "source",
+            "type"
+          ],
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "alias": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "source": {
+              "type": "string"
+            },
+            "type": {
+              "const": "skill",
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.skill.installed.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "object",
+        "patternProperties": {
+          "^(.*)$": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "version",
+              "installedAt",
+              "source",
+              "enabled"
+            ],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              },
+              "installedAt": {
+                "type": "string"
+              },
+              "source": {
+                "anyOf": [
+                  {
+                    "const": "market",
+                    "type": "string"
+                  },
+                  {
+                    "const": "custom",
+                    "type": "string"
+                  }
+                ]
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "type": {
+                "const": "skill",
+                "type": "string"
+              },
+              "alias": {
+                "type": "string"
+              },
+              "marketDescription": {
+                "type": "string"
+              },
+              "description": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.skill.installed.set-enabled",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "enabled"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "enabled"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.skill.installed.uninstall",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "type": {
+            "const": "skill",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.state.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "phase",
+          "currentVersion"
+        ],
+        "properties": {
+          "phase": {
+            "anyOf": [
+              {
+                "const": "idle",
+                "type": "string"
+              },
+              {
+                "const": "checking",
+                "type": "string"
+              },
+              {
+                "const": "available",
+                "type": "string"
+              },
+              {
+                "const": "downloading",
+                "type": "string"
+              },
+              {
+                "const": "ready",
+                "type": "string"
+              },
+              {
+                "const": "installing",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              }
+            ]
+          },
+          "currentVersion": {
+            "type": "string"
+          },
+          "latestVersion": {
+            "type": "string"
+          },
+          "releaseNote": {
+            "type": "string"
+          },
+          "progress": {
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "downloadedBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "totalBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "assetFileName": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.current-version.get",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "string"
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.check",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "phase",
+          "currentVersion"
+        ],
+        "properties": {
+          "phase": {
+            "anyOf": [
+              {
+                "const": "idle",
+                "type": "string"
+              },
+              {
+                "const": "checking",
+                "type": "string"
+              },
+              {
+                "const": "available",
+                "type": "string"
+              },
+              {
+                "const": "downloading",
+                "type": "string"
+              },
+              {
+                "const": "ready",
+                "type": "string"
+              },
+              {
+                "const": "installing",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              }
+            ]
+          },
+          "currentVersion": {
+            "type": "string"
+          },
+          "latestVersion": {
+            "type": "string"
+          },
+          "releaseNote": {
+            "type": "string"
+          },
+          "progress": {
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "downloadedBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "totalBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "assetFileName": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.download",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "phase",
+          "currentVersion"
+        ],
+        "properties": {
+          "phase": {
+            "anyOf": [
+              {
+                "const": "idle",
+                "type": "string"
+              },
+              {
+                "const": "checking",
+                "type": "string"
+              },
+              {
+                "const": "available",
+                "type": "string"
+              },
+              {
+                "const": "downloading",
+                "type": "string"
+              },
+              {
+                "const": "ready",
+                "type": "string"
+              },
+              {
+                "const": "installing",
+                "type": "string"
+              },
+              {
+                "const": "error",
+                "type": "string"
+              }
+            ]
+          },
+          "currentVersion": {
+            "type": "string"
+          },
+          "latestVersion": {
+            "type": "string"
+          },
+          "releaseNote": {
+            "type": "string"
+          },
+          "progress": {
+            "minimum": 0,
+            "maximum": 1,
+            "type": "number"
+          },
+          "downloadedBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "totalBytes": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "assetFileName": {
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.install",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.dismiss",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.updater.cancel",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "kind",
+            "name",
+            "enabled",
+            "createdAt",
+            "updatedAt"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "kind": {
+              "anyOf": [
+                {
+                  "const": "feishu",
+                  "type": "string"
+                },
+                {
+                  "const": "dingtalk",
+                  "type": "string"
+                }
+              ]
+            },
+            "name": {
+              "type": "string"
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "createdAt": {
+              "type": "string"
+            },
+            "updatedAt": {
+              "type": "string"
+            },
+            "urlMask": {
+              "type": "string"
+            },
+            "hasSignSecret": {
+              "type": "boolean"
+            },
+            "feishu": {
+              "additionalProperties": false,
+              "type": "object",
+              "properties": {
+                "mentionAll": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "dingtalk": {
+              "additionalProperties": false,
+              "type": "object",
+              "properties": {
+                "mentionAll": {
+                  "type": "boolean"
+                },
+                "atMobiles": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "keyword": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.provider.list",
+      "inputSchema": {
+        "type": "object",
+        "additionalProperties": false
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "kind",
+            "displayName"
+          ],
+          "properties": {
+            "kind": {
+              "anyOf": [
+                {
+                  "const": "feishu",
+                  "type": "string"
+                },
+                {
+                  "const": "dingtalk",
+                  "type": "string"
+                }
+              ]
+            },
+            "displayName": {
+              "type": "string"
+            },
+            "iconClass": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.create",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "data"
+        ],
+        "properties": {
+          "data": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "kind",
+              "name",
+              "webhookUrl"
+            ],
+            "properties": {
+              "kind": {
+                "anyOf": [
+                  {
+                    "const": "feishu",
+                    "type": "string"
+                  },
+                  {
+                    "const": "dingtalk",
+                    "type": "string"
+                  }
+                ]
+              },
+              "name": {
+                "type": "string"
+              },
+              "webhookUrl": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "signSecret": {
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "feishu": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "mentionAll": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "dingtalk": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "mentionAll": {
+                    "type": "boolean"
+                  },
+                  "atMobiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "keyword": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "enabled",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "feishu",
+                "type": "string"
+              },
+              {
+                "const": "dingtalk",
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "urlMask": {
+            "type": "string"
+          },
+          "hasSignSecret": {
+            "type": "boolean"
+          },
+          "feishu": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              }
+            }
+          },
+          "dingtalk": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              },
+              "atMobiles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "keyword": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.update",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "data"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "data": {
+            "additionalProperties": false,
+            "minProperties": 1,
+            "type": "object",
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "enabled": {
+                "type": "boolean"
+              },
+              "webhookUrl": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "signSecret": {
+                "type": "string"
+              },
+              "feishu": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "mentionAll": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "dingtalk": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "mentionAll": {
+                    "type": "boolean"
+                  },
+                  "atMobiles": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "keyword": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "enabled",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "feishu",
+                "type": "string"
+              },
+              {
+                "const": "dingtalk",
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "urlMask": {
+            "type": "string"
+          },
+          "hasSignSecret": {
+            "type": "boolean"
+          },
+          "feishu": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              }
+            }
+          },
+          "dingtalk": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              },
+              "atMobiles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "keyword": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.delete",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.set-enabled",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "enabled"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "name",
+          "enabled",
+          "createdAt",
+          "updatedAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "kind": {
+            "anyOf": [
+              {
+                "const": "feishu",
+                "type": "string"
+              },
+              {
+                "const": "dingtalk",
+                "type": "string"
+              }
+            ]
+          },
+          "name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "createdAt": {
+            "type": "string"
+          },
+          "updatedAt": {
+            "type": "string"
+          },
+          "urlMask": {
+            "type": "string"
+          },
+          "hasSignSecret": {
+            "type": "boolean"
+          },
+          "feishu": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              }
+            }
+          },
+          "dingtalk": {
+            "additionalProperties": false,
+            "type": "object",
+            "properties": {
+              "mentionAll": {
+                "type": "boolean"
+              },
+              "atMobiles": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "keyword": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.test",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.webhook.endpoint.send",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "message"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "message": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "text"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "text": {
+                "type": "string"
+              },
+              "level": {
+                "anyOf": [
+                  {
+                    "const": "info",
+                    "type": "string"
+                  },
+                  {
+                    "const": "warn",
+                    "type": "string"
+                  },
+                  {
+                    "const": "error",
+                    "type": "string"
+                  },
+                  {
+                    "const": "success",
+                    "type": "string"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "ok"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    }
+  ]
+}

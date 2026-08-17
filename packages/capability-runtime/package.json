@@ -1,0 +1,31 @@
+{
+	"name": "@astravia/capability-runtime",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./access": {
+			"types": "./dist/access.d.ts",
+			"import": "./dist/access.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json",
+		"test": "bunx vitest --run"
+	},
+	"dependencies": {
+		"@astravia/capability-sdk": "workspace:*"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"typescript": "^5.9.2"
+	}
+}

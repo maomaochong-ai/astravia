@@ -1,0 +1,90 @@
+# Changelog
+
+All notable changes to `@astravia-org/plugin-sdk` are documented in this file.
+
+## [Unreleased]
+### Changed
+- **品牌更名 Astravia**：全库由 Vetta 更名为 Astravia（`@vetta/*` → `@astravia/*`；应用名、窗口标题、协议、数据目录与 UI 文案同步更新）。
+
+### Added
+
+- Added plugin keyboard shortcuts on the host `ShortcutScopeStack`: permission `ui.shortcuts.register`, `ctx.ui.registerShortcutScope()`, types (`PluginShortcutScopeContribution` / `PluginShortcutBinding`), and React helper `usePluginShortcutScope()`. Kind is limited to `surface` | `overlay` | `modal` (`app` stays host-only for configurable global actions).
+- `ctx.command.spawn(file, args?, options?)`：长驻进程能力（ADR-0054）。返回 `PluginCommandSpawnHandle`（`stop()` / `status()` / `onExit()`），`allocatePort: true` 时宿主分配空闲端口并替换 args/env 中的 `{{PORT}}`。需清单 `commands` 声明 + 新权限 `agent.command.spawn`；进程随插件卸载/禁用/重载与 App 退出统一回收。
+- `PluginFsApi.saveAs(defaultFileName, content, encoding?, options?)`：经宿主原生保存对话框把内存字节写到用户选定的路径，返回保存路径（用户取消返回 `null`）。与 `writeFile` 不同，目标不受工程根限制——路径由用户当场在原生框里确认，插件无法静默写盘。需 `fs.write` 权限。
+- `PluginUiApi.copyImage(dataUrl)`：把 `data:image/...` 写入系统剪贴板，走 Electron 原生剪贴板，不依赖渲染进程的 `ClipboardItem` 支持。无需权限。
+- `PluginUiApi.setActivityPanelWidth(width)`：命令式设置活动面板宽度（像素或 `"max"`，宿主 clamp）。与 `openActivityTab(id, { width })` 只在首次 attach 生效不同，这个每次调用都生效，供插件在自己的标签卡被激活时按需占宽。需 `ui.slot.activity-tab` 权限。
+- `ConversationEvent` 的 `tool-call-start` 新增可选 `args` 透传（工具入参，如 Edit/Write 的目标路径），供插件做定向 UI（如设计画布的「修改中」态）。
+
+## [0.1.0] — 2026-07-31
+
+### Breaking Changes
+
+- Removed `pendingInstall` from `PluginOfficialUpdaterState`; the `ready` phase is now the single source of truth, and downloaded updates are installed by `electron-updater` when the app quits.
+- Replaced the image-specific `PluginContext.images` / `images.generate` surface with generic `PluginContext.network` and plugin-private `PluginContext.storage` capabilities and their `network.fetch`, `storage.read`, and `storage.write` permissions.
+- Replaced image-specific prompt attachment APIs with `PluginUiApi.setPromptAttachment()` and `usePromptAttachment()`.
+
+### Added
+
+- Added `PluginContext.fileExplorer` with context-menu, toolbar and decoration contributions; workspace/selection snapshots; reveal/refresh commands; selection and file-change events; and four independently grantable file-explorer permissions.
+- Added `PluginActivityTabContribution.initiallyVisible` (default `true`): a registered tab is in the tab bar by default; declare `false` to own its appearance condition and drive it with `setActivityTabVisible` / `openActivityTab`.
+- Added `PluginUiApi.setActivityTabVisible(tabId, visible)`: puts one of the plugin's own activity tabs into (or out of) the current conversation's tab bar without activating it or expanding the panel — the counterpart to `openActivityTab`, which is "the user wants to look at it now". Plugins own their tab's appearance condition with it (git only inside a work tree, the workbench following its input-action toggle).
+- `PluginConversationApi.on()` now replays one `conversation-changed` with the current state right after subscribing (in a microtask), so cwd-keyed logic runs without waiting for the next session switch.
+- Documented `PluginAgentToolRegistration.label` as host-only UI display name supporting `%catalogKey%` plugin i18n (not sent to the model).
+- Added hidden per-turn prompt instructions through `PluginPromptDecoration.instructions` and generic `PluginPromptAttachment.instructions`, allowing plugins to own intent guidance without coding-agent domain metadata.
+- Added `PluginFsApi.readBinaryFile()` for bounded, host-validated binary reads with MIME detection.
+- Added `PluginFsApi.watchDirectory()` and `PluginUiApi.captureRegion()` so plugins can watch approved directories and save captures without accessing the Desktop preload API directly.
+- Added `ok` and `statusText` to host-mediated network responses.
+
+## [0.0.4] — 2026-07-23
+
+### Changed
+
+- Split `src/index.ts` into domain modules (`scenario`, `permissions`, `ui`, `agent`, `official`, `hooks`, …); package public API is unchanged and still re-exported from `@vetta-org/plugin-sdk`.
+- Tightened Plugin API 1.1 contracts for official batch-task and scheduler mutations, required system-plugin metadata, and approval operation mappings with explicitly allowed alternative presentations.
+
+### Added
+
+- Added work-mode (`agent_mode`) support: `AgentMode` type, `ctx.getAgentMode()` / `ctx.onAgentModeChanged()`, optional `agent_mode` on `PluginAgentToolRegistration` and `PluginMcpServerConfig`, plus plugin-level `agent_mode` in the manifest (ADR-0046).
+- Added `ctx.appActions.register()` and its typed JSON Schema Action registration, trusted-official `publicId`, effect, handler, cancellation, and lifecycle contracts.
+- Added trust-gated `ctx.official.general.getSettings()` / `setSettings()` host capabilities and official-only host approval presentation mappings for the official Action plugin.
+- Added plugin Action `assertReady`, structured `PluginAppActionError`, and trusted official host capabilities for the agent, downloads, updater, and webhook migration domains.
+- Extended `ctx.official` with skills、shortcuts、im、mcp、models、projects、knowledge、plugins host capabilities for the next official App Action migration batch.
+- Extended `ctx.official` with batchTasks、scheduler、appearance、navigation host capabilities to finish migrating remaining Desktop App Action domains.
+
+## [0.0.2] — 2026-07-15
+
+### Added
+
+- **`PluginUiApi.notify` / `PluginNotifyOptions`**：插件可向宿主右下角全局 Toast 推送通知；传入 `error` 时宿主提供一键「复制堆栈」（含 pluginId@version）。无需权限。
+
+## [0.0.1] — 2026-07-14
+
+### Changed
+
+- **npm 包名**：由 `@vetta/plugin-sdk` 更名为 `@vetta-org/plugin-sdk`（发布 scope 与 org `vetta-org` 对齐）。
+- 会话页插槽（活动面板插件标签卡、AI 输入栏插件 toggle）现按 `scope_use` 随对话类型显隐，与工具 `scope_use` 同一套场景轴，**fail-closed**：未声明 / 空数组 = 任何会话都不显示。**行为破坏性变更**——既有不声明 `scope_use` 的活动面板标签卡 / 输入栏 toggle 将不再出现，需显式声明（如 `scope_use: ["project", "conversation"]`）。
+- `PluginAgentToolRegistration.scope_use` 类型由 `string[]` 收紧为 `readonly ConversationScenario[]`，声明工具可见场景时获得补全与拼写校验。
+
+### Added
+
+- **`PluginInputActionContribution.hardIsolation`**：为 true 时，宿主在 toggle 关闭期间剥离该插件的 agent 贡献与 Activity Tab（对齐 knowledgeMode 硬隔离，ADR-0041）。
+- **`agent.mcp.control` 权限**与 **`PluginAgentManifest.mcpServers`**（相对 `.mcp.json` 路径或内联 server map），供插件声明内聚 MCP（ADR-0040）。
+- 新增 `ui.slot.turn-card` 槽位与 `PluginContext.ui.registerTurnCard(contribution)`：插件可在消息列表底部（最新一轮）渲染一张**不绑定 tool 调用**的卡片，由插件组件自身决定可见性（不适用时 `return null`，借 `useActiveConversation` / `useConversationMessages` / `conversation.on("turn-end")` 读实时状态）。配套 `PluginTurnCardContribution` 类型与 `ui.slot.turn-card` 权限；`scope_use` 做 fail-closed 的会话场景门控。首个消费者是内置 Git 插件的「本轮变更卡」（turn-end 后列出本轮相对 turn-start 基线的变更）。
+- 新增插件 i18n 表面（ADR-0033）：`PluginContext.i18n`（`t(key, params?)` / `locale` / `onChange`）与响应式 React hook `useTranslation()`（返回 `{ t, locale }`，宿主切语言即重渲染），配套 `PluginI18nApi` / `PluginTranslation` / `PluginLocales` / `PluginLocaleCatalog` / `PluginTranslate` 类型与纯函数解析器 `resolvePluginText` / `resolveCatalogKey` / `interpolatePluginText`，以及内部 `__PluginI18nContext` 和 host bridge `useLocale()`。插件把译文放包内 `locales/<lang>.json`（扁平 key→译文），宿主加载后随 `InstalledPlugin` 下发；宿主渲染的插件串（`plugin.json` 的 name/description/settings/guidingWords 与 `ctx.ui.register*` 的 `label`）用 `%key%` 占位符标记（非 `%key%` 即字面量、向后兼容），插件自己组件内文字用 `t()`。fallback 链：当前 locale → 插件 `defaultLocale`（manifest 声明，缺省 zh）→ 裸 key。
+- 新增命令执行能力 `PluginContext.command.run(file, args?, opts?)`（execFile 语义、不走 shell、buffered 返回 `{ stdout, stderr, exitCode }`），配套 `PluginCommandApi` / `PluginCommandRunOptions` / `PluginCommandRunResult` 类型，门控既有占位权限 `agent.command.run`。插件须在 `plugin.json` 顶层 `commands: string[]`（二进制名）声明可执行的命令，未声明一律拒；用户可在插件设置里逐条开关，被关命令调用时被拦截并通知用户。详见 `docs/adr/0032`。
+- 新增 `ConversationScenario` 联合类型（`"im-claw" | "conversation" | "project" | "batch" | "automation" | "kb-processing" | "cli"`），并给 `PluginActivityTabContribution` 与 `PluginInputActionContribution` 新增 `scope_use?: readonly ConversationScenario[]`：插件可把会话页活动面板标签卡 / 输入栏 toggle 限定到特定对话类型（镜像 agent 工具的 `scope_use`）。输入栏 toggle 的 `scope_use` 与 `requiresActiveTool` 取「与」。
+- Added `PluginContext.agent.registerContinuationProvider()` and the `agent.continuation.register` permission so plugins can request another turn when the agent reaches a natural stopping point.
+- Added the initial trusted plugin SDK contract with plugin lifecycle, permissions, global UI slot types, and `definePlugin()`.
+- Added plugin agent tool and file API contracts: `PluginContext.agent.registerTool()`, TypeBox/JSON-Schema-friendly tool registration types, `PluginContext.fs`, and the `agent.tools.register`, `agent.toolHandler.execute`, `fs.read`, and `fs.write` permissions.
+- Added the file preview slot contract: `PluginUiApi.registerFilePreview`, `PluginFilePreviewContribution`, `PluginFilePreviewProps`, `PluginPreviewFile` (metadata + `readText`/`readBytes`/`getUrl` accessors), and the `ui.slot.file-preview` permission.
+- Added the conversation API: `PluginContext.conversation` (`sendPrompt` / `insertText` / `abort` / `on`), `ConversationState` / `ConversationMessage` / `ConversationEvent` types, and the `useActiveConversation()` / `useConversationMessages()` hooks (backed by a host bridge injected via `__setPluginHostBridge`).
+- Added the activity-tab slot contract: `PluginUiApi.registerActivityTab`, `PluginActivityTabContribution` (`id` / `label` / optional React-node `icon` / `component`), and the `ui.slot.activity-tab` permission. Registration only enters the addable pool — the tab renders after the user attaches it in the activity panel (attach records are keyed by session cwd).
+- Added `useActivityTab()` and `ActivityTabContextValue`: a React-context hook exposing the cwd scope of the activity panel the tab is rendered in (provided by the host via the internal `__ActivityTabContext`). Use this instead of `useActiveConversation().cwd`, which can point at another project on the project detail page.
+- Added the input-action slot: `PluginUiApi.registerInputAction`, `PluginInputActionContribution` (toggle with `label`/`icon`/`onToggle`/`decoratePrompt`), `PluginPromptDecoration`, and the `ui.slot.input-action` permission. While active, `decoratePrompt()` merges metadata into the next outgoing prompt (e.g. `{ imageMode: true }`).
+- Added the message card system (ADR-0030): `PluginUiApi.registerCardRenderer`, `PluginCardRendererContribution` (keyed by globally-unique `type`, with default `title`/`icon` and an optional `pendingFor` that synthesizes an in-flight skeleton descriptor), `CardDescriptor` (`{ type, key?, payload, title?, icon? }`), `PluginCardProps` (`{ descriptor, pending, message }`), `PluginPendingToolCall`, and the `ui.slot.message` permission. Cards are declarative descriptors a tool emits on its result's out-of-band `details.cards` (or that `pendingFor` produces for a pending tool); the host resolves each by `type` to a renderer, dedups by `key` (a lineage shows only under its latest turn), and renders only the cards a message actually has — replacing the prior "mount every slot, each self-hides" message-slot model.
+- Added `PluginUiApi.openActivityTab(tabId)`: programmatically attach + activate one of the plugin's own activity tabs in the current conversation's panel.
+- Added `PluginOpenActivityTabOptions` and the optional second argument `openActivityTab(tabId, { width })`: a plugin (or its tool's card) can size the activity panel as it opens — a pixel number or `"max"` for the widest the current window allows. The host clamps to its min/max bounds and auto-hides the sidebar when the panel gets wide. Omit to keep the user's current width.
+- Added `PluginImagesApi.sessionLineages(sessionId)` and the `useEditImageAttachment()` hook: list every edit lineage a session touched (newest first; each oldest→newest) for a "history" panel, and reactively read the current edit-attachment (single source of truth for the "selected for edit" highlight).
+- Added `PluginUiApi.setEditImageAttachment(ref | null)`: bind (or clear) an image as the next prompt's edit target. The host renders it as a thumbnail capsule in the AI input bar's top strip and injects `metadata.editImageId` at send time (one-shot). Added `PluginImageRef.rootId` (edit-lineage root, used as a card descriptor `key` for per-message preview dedup). The in-flight edit source now rides a card descriptor's `payload` (via the renderer's `pendingFor`), so the skeleton card renders the source lineage with a leading placeholder.
+- Added the images API: `PluginContext.images` (`generate` / `edit` / `lineage`), `PluginImagesApi`, `PluginImageRef`, `PluginGenerateImageInput` (with optional `size`), `PluginEditImageInput`, and the `images.generate` permission. Routed to the host's main-process image service; bytes are stored out-of-band and returned as media references.
+- Added the settings API: `PluginContext.settings` (`get` / `getAll` / `onChange`) and `PluginSettingsApi`, reading values configured against a plugin's declared `contributes.settings` schema.

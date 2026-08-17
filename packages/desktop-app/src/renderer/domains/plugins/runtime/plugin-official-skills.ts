@@ -1,0 +1,26 @@
+import type { PluginOfficialApi } from "@astravia-org/plugin-sdk";
+
+export function createOfficialSkillsApi(
+	assertOfficial: () => void,
+	capabilitySessionId: string,
+): PluginOfficialApi["skills"] {
+	const skills = window.astravia.plugins.internalCapabilities.skills;
+	return {
+		list: async (cwd) => {
+			assertOfficial();
+			return skills.list(capabilitySessionId, cwd);
+		},
+		getManifest: async () => {
+			assertOfficial();
+			return skills.listInstalled(capabilitySessionId);
+		},
+		setEnabled: async (name, enabled) => {
+			assertOfficial();
+			return skills.setEnabled(capabilitySessionId, name, enabled);
+		},
+		uninstall: async (name, type) => {
+			assertOfficial();
+			await skills.uninstall(capabilitySessionId, name, type);
+		},
+	};
+}

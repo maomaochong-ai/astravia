@@ -1,0 +1,20 @@
+{
+	"name": "@astravia/runtime-mcp",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"files": ["dist"],
+	"scripts": {
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json"
+	},
+	"dependencies": {
+		"@astravia/coding-agent": "workspace:*"
+	},
+	"devDependencies": {
+		"typescript": "^5.9.2",
+		"@types/node": "^22.10.5"
+	}
+}

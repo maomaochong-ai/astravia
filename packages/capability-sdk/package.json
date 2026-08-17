@@ -1,0 +1,49 @@
+{
+	"name": "@astravia/capability-sdk",
+	"version": "0.0.1",
+	"license": "Apache-2.0",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./access": {
+			"types": "./dist/access.d.ts",
+			"import": "./dist/access.js"
+		},
+		"./foundation": {
+			"types": "./dist/foundation.d.ts",
+			"import": "./dist/foundation.js"
+		},
+		"./domain": {
+			"types": "./dist/domain.d.ts",
+			"import": "./dist/domain.js"
+		},
+		"./internal/theme-adapter": {
+			"types": "./dist/adapters/theme.d.ts",
+			"import": "./dist/adapters/theme.js"
+		},
+		"./internal/plugin-adapter": {
+			"types": "./dist/adapters/plugin/index.d.ts",
+			"import": "./dist/adapters/plugin/index.js"
+		}
+	},
+	"files": ["dist"],
+	"scripts": {
+		"catalog:check": "bun run scripts/generate-catalog.ts --check",
+		"catalog:generate": "bun run scripts/generate-catalog.ts",
+		"clean": "rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json",
+		"test": "bunx vitest --run"
+	},
+	"dependencies": {
+		"@sinclair/typebox": "^0.34.41"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"typescript": "^5.9.2"
+	}
+}

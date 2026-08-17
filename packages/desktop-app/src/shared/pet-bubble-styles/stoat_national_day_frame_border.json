@@ -1,0 +1,26 @@
+{
+	"id": "stoat_national_day_frame_border",
+	"labelKey": "settings.bubble.styles.nationalDay.label",
+	"descriptionKey": "settings.bubble.styles.nationalDay.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF0E8",
+			"borderColor": "#C71512",
+			"color": "#5F100A"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_national_day_frame_border.png",
+		"cornerWidth": "4.75rem",
+		"cornerHeight": "4.75rem",
+		"backgroundSize": "9.5rem 9.5rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-14px", "top": "-25px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-13px", "top": "-31px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-27px", "left": "-13px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-26px", "right": "-31px" } }
+		]
+	}
+}

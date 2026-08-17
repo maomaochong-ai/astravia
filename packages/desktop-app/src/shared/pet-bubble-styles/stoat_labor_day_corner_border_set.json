@@ -1,0 +1,26 @@
+{
+	"id": "stoat_labor_day_corner_border_set",
+	"labelKey": "settings.bubble.styles.laborDay.label",
+	"descriptionKey": "settings.bubble.styles.laborDay.description",
+	"surface": {
+		"bodyClassName": "relative min-w-40 max-w-full break-words rounded-xl border px-12 py-3 text-center text-[12px] font-medium leading-5 shadow-lg",
+		"textClassName": "relative max-h-20 min-w-0 overflow-hidden",
+		"style": {
+			"backgroundColor": "#FFF5E6",
+			"borderColor": "#E4493A",
+			"color": "#5B1F22"
+		}
+	},
+	"decor": {
+		"fileName": "bubble/stoat_labor_day_corner_border_set.png",
+		"cornerWidth": "4.75rem",
+		"cornerHeight": "3.5625rem",
+		"backgroundSize": "9.5rem 7.125rem",
+		"corners": [
+			{ "id": "top-left", "backgroundPosition": "0% 0%", "position": { "left": "-20px", "top": "-23px" } },
+			{ "id": "top-right", "backgroundPosition": "100% 0%", "position": { "right": "-19px", "top": "-23px" } },
+			{ "id": "bottom-left", "backgroundPosition": "0% 100%", "position": { "bottom": "-18px", "left": "-14px" } },
+			{ "id": "bottom-right", "backgroundPosition": "100% 100%", "position": { "bottom": "-18px", "right": "-15px" } }
+		]
+	}
+}

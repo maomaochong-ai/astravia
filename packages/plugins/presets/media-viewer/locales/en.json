@@ -1,0 +1,23 @@
+{
+	"plugin.name": "Media Viewer",
+	"plugin.description": "Built-in preview for common image, audio and video files.",
+	"preview.unsupported": "Preview is not supported for this media format",
+	"image.error": "Unable to load this image",
+	"video.error": "Unable to play this video",
+	"audio.error": "Unable to play this audio",
+	"audio.coverAlt": "Album cover",
+	"audio.loopOn": "Loop",
+	"audio.loopOff": "Disable loop",
+	"audio.play": "Play",
+	"audio.pause": "Pause",
+	"audio.speed": "Playback speed",
+	"audio.mute": "Mute",
+	"audio.unmute": "Unmute",
+	"zoom.in": "Zoom in",
+	"zoom.out": "Zoom out",
+	"zoom.reset": "Fit to window",
+	"fullscreen.enter": "Fullscreen",
+	"fullscreen.exit": "Exit fullscreen",
+	"view.reset": "Fit",
+	"view.resetTitle": "Fit to window"
+}

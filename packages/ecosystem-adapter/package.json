@@ -1,0 +1,44 @@
+{
+	"name": "@astravia/ecosystem-adapter",
+	"version": "0.0.1",
+	"description": "Compatibility adapters for external agent ecosystems",
+	"type": "module",
+	"main": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./hooks": {
+			"types": "./dist/hooks/index.d.ts",
+			"import": "./dist/hooks/index.js"
+		},
+		"./codex/hooks": {
+			"types": "./dist/codex/hooks/index.d.ts",
+			"import": "./dist/codex/hooks/index.js"
+		},
+		"./claude-code/hooks": {
+			"types": "./dist/claude-code/hooks/index.d.ts",
+			"import": "./dist/claude-code/hooks/index.js"
+		}
+	},
+	"files": ["dist", "CHANGELOG.md", "README.md"],
+	"scripts": {
+		"clean": "shx rm -rf dist",
+		"build": "tsgo -p tsconfig.build.json",
+		"test": "vitest --run"
+	},
+	"dependencies": {
+		"zod": "^4.4.3"
+	},
+	"devDependencies": {
+		"@types/node": "^22.10.5",
+		"shx": "^0.4.0",
+		"typescript": "^5.9.2"
+	},
+	"license": "Apache-2.0",
+	"engines": {
+		"node": ">=20.0.0"
+	}
+}

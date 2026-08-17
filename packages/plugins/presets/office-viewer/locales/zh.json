@@ -1,0 +1,16 @@
+{
+	"plugin.name": "Office 查看器",
+	"plugin.description": "离线预览 PDF、DOCX、PPTX 和电子表格文件。",
+	"error.unsupportedFormat": "暂不支持此 Office 文件格式",
+	"docx.error": "无法渲染 DOCX 文件",
+	"pdf.error": "无法渲染 PDF 文件",
+	"pdf.pageLabel": "{{name}} 第 {{page}} 页",
+	"pptx.error": "无法预览此 PPTX 文件",
+	"pptx.slideLabel": "第 {{page}} 页幻灯片",
+	"pptx.thumbPrev": "上一组缩略图",
+	"pptx.thumbNext": "下一组缩略图",
+	"spreadsheet.error": "无法读取电子表格文件",
+	"toolbar.fitWidth": "适应宽度",
+	"state.loading": "加载中…",
+	"state.errorHint": "文件可能已损坏、受密码保护或包含暂不支持的内容"
+}

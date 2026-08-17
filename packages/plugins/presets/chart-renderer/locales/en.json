@@ -1,0 +1,15 @@
+{
+	"plugin.name": "Chart Renderer",
+	"plugin.description": "Render agent-generated Chart.js charts below the conversation message.",
+	"guiding.chart": "Chart",
+	"guiding.bar": "Bar chart",
+	"guiding.line": "Line chart",
+	"guiding.pie": "Pie chart",
+	"guiding.dataviz": "Data visualization",
+	"chart.defaultTitle": "Chart",
+	"action.downloadPng": "Download PNG",
+	"state.preparing": "Preparing chart…",
+	"error.invalidArgs": "Invalid chart arguments. The agent can fix them per the chart-renderer skill and retry.",
+	"error.unavailable": "Chart data unavailable",
+	"error.renderFailed": "Chart rendering failed. Ask the agent to retry per the chart-renderer skill."
+}

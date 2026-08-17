@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@source "./**/*.{ts,tsx}";
+
+/*
+ * 覆盖 docx-preview 运行时注入的默认样式。
+ * 库注入的是未分层 <style>，会压过 Tailwind 的 @layer utilities，
+ * 因此这里用未分层、更高优先级的规则覆盖（而非 Tailwind 工具类）。
+ */
+.docx-host .docx-wrapper {
+	background: transparent;
+	padding: 0;
+}
+
+.docx-host .docx-wrapper > section.docx {
+	margin-bottom: 1.5rem;
+	border-radius: 2px;
+	box-shadow: 0 2px 12px rgba(0, 0, 0, 0.18);
+}
