@@ -22,6 +22,7 @@ import { useParams } from "@tanstack/react-router";
 import { useAtomValue, useSetAtom } from "jotai";
 import { startTransition, useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useChatHeaderActions } from "../../hooks/useChatHeaderActions";
 import { useSessionManager } from "../../hooks/useSessionManager";
 import { useSkillList } from "../../hooks/useSkillList";
 import { PANEL_SHIFT_MIN_ITEMS } from "./constants";
@@ -44,6 +45,8 @@ interface NewSessionPageModel {
 	onCommandPanelExpandedChange: (expanded: boolean) => void;
 	onSend: () => Promise<void>;
 	subtitle: string;
+	/** 顶部栏「置顶 + 活动面板」按钮状态（与对话页共用同一 hook）。 */
+	winHeader: ReturnType<typeof useChatHeaderActions>;
 }
 
 export function useNewSessionPageModel(): NewSessionPageModel {
@@ -75,6 +78,7 @@ export function useNewSessionPageModel(): NewSessionPageModel {
 	const setActiveToolNames = useSetAtom(activeToolNamesAtom);
 	const executionMode = useAtomValue(sessionExecutionModeAtom);
 	const { openSession, sendMessage, abortMessage } = useSessionManager();
+	const winHeader = useChatHeaderActions();
 	const isShort = useShortViewport();
 	// 不带过滤词：要的是面板刚展开时那份完整列表的条目数，不能随用户打字过滤而抖。
 	// 数据与命令区共用模块级缓存（InputBar 里的 CommandPanel 挂载即预取），命中即立即可用。
@@ -171,5 +175,6 @@ export function useNewSessionPageModel(): NewSessionPageModel {
 		onCommandPanelExpandedChange: setCommandPanelExpanded,
 		onSend: handleSend,
 		subtitle: i18n.t("chat:newSession.subtitle"),
+		winHeader,
 	};
 }
