@@ -1,3 +1,4 @@
+import { ActivityPanel } from "@domains/activity-panel/components/ActivityPanel";
 import { motion, useReducedMotion } from "motion/react";
 import { cn } from "@shared/lib/utils";
 import { useThemeComponent } from "@astravia/theme-sdk";
@@ -58,55 +59,60 @@ export function NewSessionPageView({
 		: { duration: PANEL_REVEAL_DURATION * 0.6, ease: PANEL_REVEAL_EASE };
 
 	return (
-		<NewSessionPageLayoutView
-			isShort={isShort}
-			background={<KineticGrid />}
-			themedBackground={<ThemedNewSessionBackground />}
-			dropZone={(children) => (
-				<div
-					className={cn("relative flex h-full flex-1 flex-col overflow-hidden bg-background", className)}
-				>
-					{children}
-				</div>
-			)}
-			hero={
-				// 命令区向上生长会盖到 hero 上，模式切换与吉祥物会浮在面板前面挡住内容，
-				// 因此展开期间把 hero 整块淡出并禁用命中。
-				<motion.div
-					animate={{ opacity: commandPanelExpanded ? 0 : 1 }}
-					transition={heroTransition}
-					// hero 是渐变标题 + 吉祥物的大块区域，不提层的话这段 opacity 动画每帧都要
-					// 重绘整块。will-change 必须在动画开始前就位才有用，因此常驻。
-					style={{ willChange: "opacity" }}
-					className={cn(
-						"relative z-20 flex w-full flex-col items-center",
-						commandPanelExpanded && "pointer-events-none",
-					)}
-				>
-					<NewSessionHero
-						avatarAutoplay={avatarAutoplay}
-						greetingTitle={greetingTitle}
-						mounted={mounted}
-						subtitle={subtitle}
-					/>
-				</motion.div>
-			}
-			inputBar={
-				<motion.div
-					className="relative"
-					animate={{ y: commandPanelShift ? PANEL_SHIFT_Y : 0 }}
-					transition={shiftTransition}
-				>
-					{/* Drop target is the input card; cwdOverride enables drop before a session exists. */}
-					<InputBar
-						onSend={onSend}
-						onAbort={onAbort}
-						cwdOverride={cwd}
-						onExpandedChange={onCommandPanelExpandedChange}
-					/>
-				</motion.div>
-			}
-		/>
+		<div className="flex h-full min-w-0 flex-1 gap-2 overflow-visible">
+			<NewSessionPageLayoutView
+				isShort={isShort}
+				background={<KineticGrid />}
+				themedBackground={<ThemedNewSessionBackground />}
+				dropZone={(children) => (
+					<div
+						className={cn("relative flex h-full flex-1 flex-col overflow-hidden bg-background", className)}
+					>
+						{children}
+					</div>
+				)}
+				hero={
+					// 命令区向上生长会盖到 hero 上，模式切换与吉祥物会浮在面板前面挡住内容，
+					// 因此展开期间把 hero 整块淡出并禁用命中。
+					<motion.div
+						animate={{ opacity: commandPanelExpanded ? 0 : 1 }}
+						transition={heroTransition}
+						// hero 是渐变标题 + 吉祥物的大块区域，不提层的话这段 opacity 动画每帧都要
+						// 重绘整块。will-change 必须在动画开始前就位才有用，因此常驻。
+						style={{ willChange: "opacity" }}
+						className={cn(
+							"relative z-20 flex w-full flex-col items-center",
+							commandPanelExpanded && "pointer-events-none",
+						)}
+					>
+						<NewSessionHero
+							avatarAutoplay={avatarAutoplay}
+							greetingTitle={greetingTitle}
+							mounted={mounted}
+							subtitle={subtitle}
+						/>
+					</motion.div>
+				}
+				inputBar={
+					<motion.div
+						className="relative"
+						animate={{ y: commandPanelShift ? PANEL_SHIFT_Y : 0 }}
+						transition={shiftTransition}
+					>
+						{/* Drop target is the input card; cwdOverride enables drop before a session exists. */}
+						<InputBar
+							onSend={onSend}
+							onAbort={onAbort}
+							cwdOverride={cwd}
+							onExpandedChange={onCommandPanelExpandedChange}
+						/>
+					</motion.div>
+				}
+			/>
+			{/* 新建会话页与聊天页一致：活动面板常驻挂载，顶栏「活动面板」按钮切换其开合。
+			    cwd 用路由参数（activeSession 在新建会话页被清空），保证 tab 记忆与数据库标签可用。 */}
+			<ActivityPanel cwd={cwd} />
+		</div>
 	);
 }
 

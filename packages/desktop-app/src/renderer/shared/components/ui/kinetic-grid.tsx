@@ -355,7 +355,7 @@ export function KineticGrid({
 		<div
 			ref={containerRef}
 			aria-hidden="true"
-			className={cn("absolute inset-0 overflow-hidden", className)}
+			className={cn("pointer-events-none absolute inset-0 overflow-hidden", className)}
 			style={{
 				maskImage:
 					"radial-gradient(ellipse 80% 75% at 50% 45%, rgba(0,0,0,0.9) 20%, rgba(0,0,0,0.45) 55%, transparent 100%)",
