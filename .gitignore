@@ -38,7 +38,10 @@ deploy/logs/
 
 # Local runtime SQLite (accidental empty DBs at repo root)
 /applog.db
+/applog.db
 /hr-applog.db
+# 本地数据库测试脚本（含本机绝对路径，不入库）
+test-db/
 
 # Package specific
 .npm/
