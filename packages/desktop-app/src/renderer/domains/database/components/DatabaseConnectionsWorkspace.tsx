@@ -1,14 +1,17 @@
 import type { JSX } from "react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { Button, cn, Spin } from "@astravia/ui";
-import { useAtomValue, useSetAtom } from "jotai";
+import { getDefaultStore, useAtomValue, useSetAtom } from "jotai";
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { ActivityTabKey } from "@shared/lib/project-profile";
 import {
 	activeSessionAtom,
+	activityPanelDatabaseWidth,
 	activityPanelOpenAtom,
 	activityPanelTabByProjectAtom,
+	defaultConversationCwdAtom,
+	openSessionFnRef,
 	setActivityPanelWidthAtom,
 } from "@shared/store/atoms";
 import { SettingsAiAssist } from "../../settings/ai-assist";
@@ -39,6 +42,7 @@ export function DatabaseConnectionsWorkspace(): JSX.Element {
 	const selected = model.selected;
 
 	const activeSession = useAtomValue(activeSessionAtom);
+	const defaultConversationCwd = useAtomValue(defaultConversationCwdAtom);
 	const setPanelOpen = useSetAtom(activityPanelOpenAtom);
 	const setTabByProject = useSetAtom(activityPanelTabByProjectAtom);
 	const setPanelWidth = useSetAtom(setActivityPanelWidthAtom);
@@ -49,35 +53,48 @@ export function DatabaseConnectionsWorkspace(): JSX.Element {
 	// 复用 B2.7 对话→界面的 atom 机制；目标连接/表不传递（仅打开工作台）。
 	// B2.6-W 反馈 1：ActivityPanel 仅挂载于聊天/项目/查看器路由，设置页与 /database 路由
 	// 无组件消费面板 atom → 先导航到聊天视图再激活，否则视觉无反应。
-	// B2.6-W 复测修复：导航是异步的，且设置页可能没有 activeSession（直接启动进设置）；
-	// 点击瞬间预写的 cwd（activeSession?.cwd ?? defaultConversationCwd）与导航完成后
-	// ActivityPanel 实际读取的 cwd（导航后恢复的 activeSession?.cwd）可能不一致，
-	// defaultConversationCwd 未就绪时甚至是空串导致完全不写入 → 改为先导航/开面板，
-	// 待会话 cwd 就绪（与面板同源）后再写入目标 tab。
-	const [pendingOpen, setPendingOpen] = useState(false);
+	// 2026-08 反馈 3 修复：无活动会话时先建默认「对话」会话再导航，避免路由守卫重定向到
+	// 新建会话页；目标 tab 键用「会话创建后的生效 cwd」（与 ActivityPanel 读取同源），
+	// 不再依赖组件存活期的 pendingOpen 写入（跨路由导航中组件会卸载，写入会丢失）。
 	const openWorkbench = useCallback(() => {
 		const hasActivityPanel =
 			location.pathname === "/" ||
 			location.pathname.startsWith("/project/") ||
 			location.pathname.startsWith("/viewer/");
-		if (!hasActivityPanel) void navigate({ to: "/" });
-		setPendingOpen(true);
-		setPanelWidth("max");
+		const setDatabaseTab = (cwd: string) => {
+			setTabByProject((prev) => {
+				const map = new Map(prev);
+				map.set(cwd, "database" as ActivityTabKey);
+				return map;
+			});
+		};
+		if (activeSession) {
+			// 已有会话：导航后 cwd 不变，直接以其 cwd 为目标 tab 键。
+			setDatabaseTab(activeSession.cwd);
+			if (!hasActivityPanel) void navigate({ to: "/" });
+		} else {
+			// 无会话：先建默认「对话」会话（navigate 到聊天视图），再以生效 cwd 写入目标 tab。
+			const open = openSessionFnRef.current;
+			const cwd = defaultConversationCwd?.trim() ?? "";
+			if (open && cwd) {
+				void (async () => {
+					try {
+						await open(cwd);
+						const effectiveCwd = getDefaultStore().get(activeSessionAtom)?.cwd;
+						if (effectiveCwd) setDatabaseTab(effectiveCwd);
+					} catch {
+						if (!hasActivityPanel) void navigate({ to: "/" });
+					}
+				})();
+			} else if (!hasActivityPanel) {
+				void navigate({ to: "/" });
+			}
+		}
+		// 数据库工作台按推荐宽度展开，保留对话面板可见，避免占满全屏。
+		setPanelWidth(activityPanelDatabaseWidth(window.innerWidth));
 		setPanelOpen(true);
 		recordSettingsUsage({ tab: "database", action: "selected", target: "workbench-entry" });
-	}, [location.pathname, navigate, setPanelOpen, setPanelWidth]);
-
-	useEffect(() => {
-		if (!pendingOpen) return;
-		const cwd = activeSession?.cwd;
-		if (!cwd) return; // 会话未就绪（跨路由导航恢复中），等 cwd 出现后再写入。
-		setPendingOpen(false);
-		setTabByProject((prev) => {
-			const map = new Map(prev);
-			map.set(cwd, "database" as ActivityTabKey);
-			return map;
-		});
-	}, [activeSession?.cwd, pendingOpen, setTabByProject]);
+	}, [activeSession, defaultConversationCwd, location.pathname, navigate, setPanelOpen, setPanelWidth, setTabByProject]);
 
 	return (
 		<div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-background">

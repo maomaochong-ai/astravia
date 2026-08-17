@@ -5,6 +5,7 @@
 			"automation": "Automation",
 			"batchTasks": "Batch Tasks",
 			"knowledge": "Knowledge",
+			"database": "Database",
 			"skills": "Capabilities",
 			"plugins": "Plugins",
 			"modelSettings": "Model Settings",

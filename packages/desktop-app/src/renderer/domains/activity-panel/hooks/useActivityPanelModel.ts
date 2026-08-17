@@ -5,6 +5,7 @@ import { type ActivityTabKey, useProjectProfile } from "@shared/lib/project-prof
 import {
 	ACTIVITY_PANEL_MIN_CHAT_AREA,
 	ACTIVITY_PANEL_MIN_WIDTH,
+	activityPanelDatabaseWidth,
 	activityPanelMaxWidth,
 	activityPanelOpenAtom,
 	activityPanelResizingAtom,
@@ -173,12 +174,19 @@ export function useActivityPanelModel({
 		return tabItems[0]?.key ?? fallback;
 	}, [knowledgeHistory, cwd, tabByProject, profile, tabItems]);
 
-	// 数据库工作台是横向工具（三栏布局），切到「数据库」tab 时把活动面板默认拉到最大宽度；
-	// 用户可随后手动拖窄，再次切回时重新拉满。
+	// 数据库工作台是横向工具（三栏布局），切到「数据库」tab 时把活动面板拉到推荐宽度
+	//（保留对话面板可见，不拉满全屏）；用户可随后手动拖宽/窄，再次切回时回到推荐宽度。
+	// 只在「切到数据库 tab」这一动作时重置宽度：停留在该 tab 期间窗口尺寸变化或
+	// 用户手动拖拽都不覆盖（拖拽宽度在切走再切回后回到推荐宽度）。
 	const setPanelWidth = useSetAtom(setActivityPanelWidthAtom);
+	const prevActiveTabRef = useRef(activeTab);
 	useEffect(() => {
-		if (activeTab === "database") setPanelWidth("max");
-	}, [activeTab, setPanelWidth]);
+		const prev = prevActiveTabRef.current;
+		prevActiveTabRef.current = activeTab;
+		if (activeTab === "database" && prev !== "database") {
+			setPanelWidth(activityPanelDatabaseWidth(windowWidth));
+		}
+	}, [activeTab, setPanelWidth, windowWidth]);
 
 	// 程序切到某 tab 时若它在 hidden 列表，自动恢复（与旧行为一致）。
 	useEffect(() => {

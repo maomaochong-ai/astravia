@@ -7,7 +7,7 @@ import {
 	PANEL_REVEAL_EASE,
 	PANEL_REVEAL_TRANSITION,
 } from "../command-panel/constants";
-import { NewSessionBackground } from "./NewSessionBackground";
+import { KineticGrid } from "@shared/components/ui/kinetic-grid";
 import { NewSessionHero } from "./NewSessionHero";
 import { InputBar } from "../InputBar";
 
@@ -60,7 +60,7 @@ export function NewSessionPageView({
 	return (
 		<NewSessionPageLayoutView
 			isShort={isShort}
-			background={<NewSessionBackground />}
+			background={<KineticGrid />}
 			themedBackground={<ThemedNewSessionBackground />}
 			dropZone={(children) => (
 				<div

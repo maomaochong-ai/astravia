@@ -4,6 +4,8 @@ import { ChatExportHost } from "../ChatExportHost";
 import { InputBar } from "../InputBar";
 import { MessageList } from "../MessageList";
 import type { ChatViewActions, ChatViewModel, ChatViewProps } from "./types";
+import { useChatBackgroundRipple } from "../../hooks/useChatBackgroundRipple";
+import "../chat-background-ripple.css";
 
 interface DefaultChatViewProps extends ChatViewProps {
 	actions: ChatViewActions;
@@ -17,13 +19,22 @@ export function DefaultChatView({
 	onSend,
 	onSendQueued,
 }: DefaultChatViewProps): JSX.Element {
+	const { onPointerDown, ripples } = useChatBackgroundRipple();
 	return (
 		<div className={cn("flex h-full min-w-0 flex-1 flex-col bg-background", model.rootClassName)}>
 			{model.exporting && (
 				<ChatExportHost messages={model.messages} title={model.exportTitle} onFinished={actions.finishExport} />
 			)}
-			<div className="flex min-h-0 flex-1 gap-2 overflow-visible">
-				<div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+			<div className="flex min-h-0 flex-1 gap-2 overflow-visible" onPointerDown={onPointerDown}>
+				<div className="relative z-0 flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+					{ripples.map((ripple) => (
+						<span
+							key={ripple.id}
+							aria-hidden="true"
+							className="chat-bg-ripple -z-10"
+							style={{ left: ripple.x, top: ripple.y }}
+						/>
+					))}
 					<MessageList
 						messages={model.messages}
 						isStreaming={model.isStreaming}

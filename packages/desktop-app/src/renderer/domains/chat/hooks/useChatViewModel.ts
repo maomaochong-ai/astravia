@@ -1,15 +1,12 @@
 import { useThemeSurface } from "@astravia/theme-sdk/appearance";
 import {
 	activeSessionAtom,
-	activityPanelOpenAtom,
 	applyInputActionWorkingState,
 	captureInputActionWorkingState,
 	chatMessagesAtom,
-	closeInlineFilePreviewAtom,
 	defaultConversationCwdAtom,
 	emptySessionInputActionState,
 	getProjectDisplayName,
-	inlineFilePreviewContextReadonlyAtom,
 	isStreamingAtom,
 	loadInputActionStateForSession,
 	pageHeaderTitleAtom,
@@ -20,10 +17,11 @@ import {
 	sessionsMapAtom,
 	syncHardIsolationContributionModes,
 } from "@shared/store/atoms";
-import { useAtom, useAtomValue, useSetAtom } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import type { ChatViewModelResult } from "../components/chat-view/types";
+import { useChatHeaderActions } from "./useChatHeaderActions";
 
 export function useChatViewModel(): ChatViewModelResult {
 	const { t } = useTranslation("chat");
@@ -31,10 +29,8 @@ export function useChatViewModel(): ChatViewModelResult {
 	const activeSession = useAtomValue(activeSessionAtom);
 	const messages = useAtomValue(chatMessagesAtom);
 	const isStreaming = useAtomValue(isStreamingAtom);
-	const [panelOpen, setPanelOpen] = useAtom(activityPanelOpenAtom);
+	const headerActions = useChatHeaderActions();
 	const setHeaderTitle = useSetAtom(pageHeaderTitleAtom);
-	const inlinePreviewActive = useAtomValue(inlineFilePreviewContextReadonlyAtom) !== null;
-	const closeInlinePreview = useSetAtom(closeInlineFilePreviewAtom);
 	const defaultCwd = useAtomValue(defaultConversationCwdAtom);
 	const sessionsMap = useAtomValue(sessionsMapAtom);
 	const setPromptAttachment = useSetAtom(promptAttachmentAtom);
@@ -89,26 +85,10 @@ export function useChatViewModel(): ChatViewModelResult {
 		prevSessionPathRef.current = nextPath;
 	}, [activeSession?.sessionPath, setPromptAttachment]);
 
-	const [pinned, setPinned] = useState(false);
 	const [exporting, setExporting] = useState(false);
-	useEffect(() => {
-		void window.astravia.window.isAlwaysOnTop().then(setPinned);
-	}, []);
 
-	const togglePin = useCallback(async () => {
-		const next = await window.astravia.window.toggleAlwaysOnTop();
-		setPinned(next);
-	}, []);
 	const finishExport = useCallback(() => setExporting(false), []);
 	const openExport = useCallback(() => setExporting(true), []);
-	const togglePanel = useCallback(() => {
-		if (inlinePreviewActive) {
-			closeInlinePreview();
-			setPanelOpen(false);
-			return;
-		}
-		setPanelOpen((open) => !open);
-	}, [closeInlinePreview, inlinePreviewActive, setPanelOpen]);
 
 	const sessionTitle = useMemo(() => {
 		if (!activeSession) return null;
@@ -128,8 +108,8 @@ export function useChatViewModel(): ChatViewModelResult {
 		actions: {
 			finishExport,
 			openExport,
-			togglePanel,
-			togglePin,
+			togglePanel: headerActions.panel.onTogglePanel,
+			togglePin: headerActions.pin.onTogglePin,
 		},
 		model: {
 			exporting,
@@ -138,10 +118,10 @@ export function useChatViewModel(): ChatViewModelResult {
 				exportDisabled: messages.length === 0 || isStreaming || exporting,
 				exporting,
 				exportTitle: t("chatView.exportButton.title"),
-				panelOpen,
-				panelTitle: panelOpen ? t("chatView.panelButton.open") : t("chatView.panelButton.closed"),
-				pinTitle: pinned ? t("chatView.pinButton.pinned") : t("chatView.pinButton.unpinned"),
-				pinned,
+				panelOpen: headerActions.panel.panelOpen,
+				panelTitle: headerActions.panel.panelTitle,
+				pinTitle: headerActions.pin.pinTitle,
+				pinned: headerActions.pin.pinned,
 			},
 			isStreaming,
 			messages,

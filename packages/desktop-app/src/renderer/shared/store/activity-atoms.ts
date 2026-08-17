@@ -81,6 +81,14 @@ export function activityPanelMaxWidth(windowWidth: number): number {
 	return Math.max(ACTIVITY_PANEL_MIN_WIDTH, windowWidth - ACTIVITY_PANEL_MIN_CHAT_AREA);
 }
 
+/** 数据库工作台的推荐宽度：三栏工具需要较宽面板，但保留足够的对话面板（不拉满全屏）。 */
+export const ACTIVITY_PANEL_DATABASE_WIDTH = 720;
+
+/** 数据库工作台的目标宽度：min(推荐宽度, 当前窗口最大宽度)，保证对话面板始终可见。 */
+export function activityPanelDatabaseWidth(windowWidth: number): number {
+	return Math.min(ACTIVITY_PANEL_DATABASE_WIDTH, activityPanelMaxWidth(windowWidth));
+}
+
 /**
  * 写入活动面板宽度并夹到 [MIN, max] 内。传 "max" 表示拉到当前窗口下的最大宽度。
  * 供插件 API（openActivityTab 的 width 选项）与 ResizeHandle 复用同一套约束。
