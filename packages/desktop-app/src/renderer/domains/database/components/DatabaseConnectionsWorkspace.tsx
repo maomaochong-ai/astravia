@@ -7,6 +7,7 @@ import { useLocation, useNavigate } from "@tanstack/react-router";
 import type { ActivityTabKey } from "@shared/lib/project-profile";
 import {
 	activeSessionAtom,
+	activityPanelDatabaseWidth,
 	activityPanelOpenAtom,
 	activityPanelTabByProjectAtom,
 	setActivityPanelWidthAtom,
@@ -62,7 +63,8 @@ export function DatabaseConnectionsWorkspace(): JSX.Element {
 			location.pathname.startsWith("/viewer/");
 		if (!hasActivityPanel) void navigate({ to: "/" });
 		setPendingOpen(true);
-		setPanelWidth("max");
+		// 数据库工作台按推荐宽度展开，保留对话面板可见，避免占满全屏。
+		setPanelWidth(activityPanelDatabaseWidth(window.innerWidth));
 		setPanelOpen(true);
 		recordSettingsUsage({ tab: "database", action: "selected", target: "workbench-entry" });
 	}, [location.pathname, navigate, setPanelOpen, setPanelWidth]);
