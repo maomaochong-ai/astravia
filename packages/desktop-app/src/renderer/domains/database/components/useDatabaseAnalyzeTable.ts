@@ -62,6 +62,7 @@ export function useDatabaseAnalyzeTable(): (connection: DbConnection, table: str
 				store.set(inputValueAtom, prefilledText);
 				// schema 指令与表目标暂存，等用户真正发送时随 prompt 带上（不自动直发）。
 				store.set(pendingAssistSendAtom, {
+					kind: "analyze-table",
 					settingsAssistTabId: "database",
 					databaseTable: { connection: connection.name, table },
 					metadata: {

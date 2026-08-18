@@ -1073,8 +1073,9 @@ export function useSessionManager(): SessionManagerResult {
 				: options;
 			if (pendingAssist) {
 				getDefaultStore().set(pendingAssistSendAtom, null);
-				// B2.9-W3 埋点：预填的可编辑开场白经用户确认后发出（分析表漏斗完成）。
-				recordSettingsUsage({ tab: "database", action: "selected", target: "analyze-table-send" });
+				// B2.9-W3 埋点：预填的可编辑开场白经用户确认后发出（分析表 / 解读查询漏斗完成）。
+				const assistTarget = pendingAssist.kind === "analyze-result" ? "analyze-result-send" : "analyze-table-send";
+				recordSettingsUsage({ tab: "database", action: "selected", target: assistTarget });
 			}
 			if (pendingAssist) getDefaultStore().set(pendingAssistSendAtom, null);
 			const images = !hasOverride && attachedImages.length > 0 ? attachedImages : undefined;
