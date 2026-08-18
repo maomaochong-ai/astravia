@@ -26,6 +26,7 @@ import { SettingsAiAssist } from "../../settings/ai-assist";
 import { recordSettingsUsage } from "../../settings/components/recordSettingsUsage";
 import { getSchemaContext } from "../lib/database-api";
 import { resolveDatabaseLayout } from "./database-layout";
+import { useDatabaseAnalyzeResult } from "./useDatabaseAnalyzeResult";
 import { useDatabaseAnalyzeTable } from "./useDatabaseAnalyzeTable";
 import { useDatabaseExplorerModel } from "./useDatabaseExplorerModel";
 import { useDatabaseQueryModel } from "./useDatabaseQueryModel";
@@ -68,8 +69,13 @@ export function DatabaseWorkspace({
 	const { t } = useTranslation("settings");
 	const model = useDatabaseWorkspaceModel();
 	const analyzeTable = useDatabaseAnalyzeTable();
-	const explorer = useDatabaseExplorerModel();
+	const analyzeResult = useDatabaseAnalyzeResult();
 	const query = useDatabaseQueryModel();
+	// B2.9-W1 反向：结果网格「让 AI 解读此查询」需要当前 SQL + 结果。提取 const 局部变量，
+	// 闭包内捕获 const 局部变量可保留 TS 收窄（直接读 query.result / 对象属性会丢失收窄）。
+	const lastResult = query.result;
+	const lastResultSql = query.resultSql;
+	const explorer = useDatabaseExplorerModel();
 	const selected = model.selected;
 
 	// B2.6-W 反馈 3：工作台「问数」入口 —— 复用 SettingsAiAssist 弹层形态，提交时把
@@ -404,6 +410,15 @@ export function DatabaseWorkspace({
 									recordSettingsUsage({ tab: "database", action: "selected", target: "result-load-more" });
 									void query.actions.loadMore(selected);
 								}}
+								onAnalyzeResult={
+									lastResult && lastResultSql
+										? () => analyzeResult({
+												connection: selected,
+												sql: lastResultSql,
+												result: lastResult,
+										  })
+										: undefined
+								}
 							/>
 						</>
 					) : (

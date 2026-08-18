@@ -238,7 +238,7 @@ export function DatabaseSettings() {
 2. 参照 dbx-main `apps/desktop/src/components/` 对应组件，每阶段收尾执行双视角代码审查 + `bun run check`。
 
 ### 阶段 5：双向联动增强 v2（B2.9，2–4 人天）✅ 已完成（W1–W3，2026-08-16，`bun run check` 全绿）
-1. ✅ **W1 查询同步通道**（核心）：监听 dbx 工具调用 → 激活工作台 → `databaseTabTargetAtom` 扩展传递 `{ connection, sql, result }` → 查询面板回填 SQL + 结果网格显示结果；反向「让 AI 解读此查询」为 v2（未实施，随 V2–V6 排期）。
+1. ✅ **W1 查询同步通道**（核心）：监听 dbx 工具调用 → 激活工作台 → `databaseTabTargetAtom` 扩展传递 `{ connection, sql, result }` → 查询面板回填 SQL + 结果网格显示结果；反向「让 AI 解读此查询」**已实施（2026-08-18，结果网格工具栏按钮 → 打开后台会话 + 预填开场白 + SQL/结果摘要经 pendingAssistSendAtom 注入，`lib/result-summary.ts` 摘要纯函数 + 单测 6 例，`bun run check` 全绿，详见任务清单 B2.9 反向实施记录）**。
 2. ✅ **W2 AI 开场白重设计**：预填可编辑开场白（`inputValueAtom` + 聚焦）+ 自然问句文案（i18n zh/en）+ `pendingAssistSendAtom` 待发注入；「直接发送」配置项未实施（保持预填制）。
 3. ✅ **W3 触发补全**：dbx 工具调用自动上栏（W1 顺带）；工作台「问数」入口（B2.6-W4）；埋点 4 事件点；「+」菜单 UI 实测待排。
 

@@ -37,6 +37,8 @@ interface DatabaseResultGridProps {
 	loadedLimit?: number | null;
 	loadingMore?: boolean;
 	onLoadMore?: () => void;
+	/** B2.9-W1 反向：结果工具栏「让 AI 解读此查询」入口（携带当前 SQL + 结果摘要跳转对话）。 */
+	onAnalyzeResult?: () => void;
 }
 
 function CenterState({ icon, text, spin }: { icon: string; text: string; spin?: boolean }): JSX.Element {
@@ -77,6 +79,7 @@ export function DatabaseResultGrid({
 	loadedLimit = null,
 	loadingMore = false,
 	onLoadMore,
+	onAnalyzeResult,
 }: DatabaseResultGridProps): JSX.Element {
 	const { t } = useTranslation("settings");
 
@@ -202,6 +205,19 @@ export function DatabaseResultGrid({
 							<span className="icon-[mdi--content-copy] h-3.5 w-3.5" />
 							{t("databaseCopyResult")}
 						</Button>
+						{onAnalyzeResult ? (
+							<Button
+								variant="ghost"
+								size="sm"
+								className="h-6 gap-1 px-1.5 text-[11px] text-muted-foreground"
+								aria-label={t("databaseAnalyzeResult.label")}
+								title={t("databaseAnalyzeResult.label")}
+								onClick={onAnalyzeResult}
+							>
+								<span className="icon-[mdi--chat-question-outline] h-3.5 w-3.5" />
+								{t("databaseAnalyzeResult.label")}
+							</Button>
+						) : null}
 					</div>
 				) : null}
 			</div>

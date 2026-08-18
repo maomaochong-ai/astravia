@@ -1359,6 +1359,11 @@
     "instruction": "The user launched \"Ask AI to analyze this table\" from the database UI for table \"{{table}}\" (connection {{connection}}).\nRead the schema below first, then verify data quality with SQL (null rates, primary keys, duplicates, obvious anomalies), and finish with findings and recommendations.\nUse the app's database tools for queries; never assume data content.\n\n{{schema}}",
     "noSchema": "(Schema summary unavailable for this connection — inspect the table structure with the database tools first.)"
   },
+  "databaseAnalyzeResult": {
+    "label": "Ask AI to interpret this query",
+    "intent": "Could you interpret this query (connection {{connection}}) and its results, and point out anything notable?",
+    "instruction": "The user launched \"Ask AI to interpret this query\" from the database workbench (connection: {{connection}}).\nBelow are the SQL the user ran and a summary of the real query results. Explain what the SQL does, what the results mean, and point out anomalies or notable details; to verify further, run queries through the app's database tools — never fabricate data.\n\nSQL that was run:\n```sql\n{{sql}}\n```\n\n{{summary}}"
+  },
   "databaseAskData": {
     "label": "Ask data",
     "instruction": "The user asked from the database workbench (connection: {{connection}}).\nAnswer based on the real table structure below; run SQL through the app's database tools when needed — never assume data content.\n\n{{schema}}",
