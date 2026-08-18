@@ -710,7 +710,12 @@ export type HistoryEntry =
 	 * (model-only instruction custom message precedes it). UI-only; not LLM content.
 	 * tabId identifies the settings page for the badge label (e.g. "mcp" →「MCP配置协助」).
 	 */
-	| { type: "settings_assist_marker"; tabId?: string; timestamp: string }
+	| {
+			type: "settings_assist_marker";
+			tabId?: string;
+			timestamp: string;
+			databaseTable?: { connection?: string; table?: string };
+	  }
 	/** Marker that the next user message was sent with a structured Skill / Scene reference. */
 	| { type: "prompt_ref_marker"; promptRef: PromptResourceRef; timestamp: string }
 	/** Marker that the next user message was sent with structured filesystem attachments. */

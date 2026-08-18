@@ -1346,7 +1346,7 @@
   "databaseSchemaInjection": "AI database awareness",
   "databaseSchemaInjectionDescription": "When enabled, new chat sessions get the table schemas of your configured connections injected, so the AI can write SQL based on the real structure; running queries also requires the \"AI database access\" switch.",
   "databaseDbxToolAccess": "AI database access",
-  "databaseDbxToolAccessDescription": "When enabled, AI chats can call the database tool to run read-only SQL; when off, the AI cannot access your databases. Independent of \"AI database awareness\".",
+  "databaseDbxToolAccessDescription": "When enabled, AI chats can call the database tool to run read-only SQL; when off, the AI cannot access your databases. Independent of \"AI database awareness\". Applies immediately to new sessions; existing conversations pick it up automatically on their next message.",
   "databaseConnectionAssistant": "Connection manager assistant",
   "databaseTables": "Tables",
   "databaseTables": "Tables",

@@ -1346,7 +1346,7 @@
   "databaseSchemaInjection": "AI 数据库感知",
   "databaseSchemaInjectionDescription": "开启后，新对话会话会注入已配置连接的数据库表结构，AI 可据此编写 SQL；执行查询需另行开启「AI 访问数据库」。",
   "databaseDbxToolAccess": "AI 访问数据库",
-  "databaseDbxToolAccessDescription": "开启后，AI 对话才能调用数据库工具执行 SQL（只读查询）；关闭后 AI 无法访问数据库。与「AI 数据库感知」相互独立。",
+  "databaseDbxToolAccessDescription": "开启后，AI 对话才能调用数据库工具执行 SQL（只读查询）；关闭后 AI 无法访问数据库。与「AI 数据库感知」相互独立。切换后立即对新会话生效；已在进行的对话会在发送下一条消息时自动生效。",
   "databaseConnectionAssistant": "连接管理助手",
   "databaseTables": "表",
   "databaseNoTables": "该连接下没有表",

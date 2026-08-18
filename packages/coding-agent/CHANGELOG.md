@@ -32,6 +32,7 @@
 
 - **外部生态 Hook `SessionEnd` / `PostToolUseFailure` 宿主接线**：`newSession` / `switchSession` / `fork` 在切换会话 id 前 `await runSessionEnd`（Astravia cause：`new_session` / `switch_session` / `fork_session`）；`dispose` best-effort `runSessionEnd("dispose")`（同步捕获 session 元数据）。Claude wire `reason` 仅在 ecosystem-adapter Claude profile 映射。工具 wrapper 在真实 `execute` 抛错后触发 `PostToolUseFailure`（`error` / `is_interrupt` / `duration_ms`），Pre/Post 阻断不计入失败；失败 hook 的 `additionalContext` / exit 2 反馈可进入模型上下文或错误消息。
 - **外部生态 Hook `PermissionRequest` / `SubagentStart` / `SubagentStop` 宿主接线**：沙箱权限 UI 弹出前经 `ExtensionContext.requestEcosystemPermission` 跑 `PermissionRequest`（allow/deny 短路、否则回落用户 UI；会话 grant 缓存命中时不触发）。`SubagentCoordinator` 在子会话创建后首轮 prompt 前 `runSubagentStart`（可阻断 spawn、additionalContext 注入任务消息），正常结束可 `SubagentStop` 续跑（≤8 次），interrupt/failed 终态 best-effort `SubagentStop`（不续跑）。
+- **`settings_assist_instruction` 的 details 携带 `databaseTable`**：宿主经 metadata 传入 `{ connection, table }` 时随 details 落盘（UI-only，不进 LLM 上下文），供 desktop 历史回放恢复「在界面打开」目标（P7 B2.7 链路补齐）。
 
 ### Changed
 - **品牌更名 Astravia**：全库由 Vetta 更名为 Astravia（`@vetta/*` → `@astravia/*`；应用名、窗口标题、协议、数据目录与 UI 文案同步更新）。

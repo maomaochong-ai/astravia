@@ -1,5 +1,5 @@
 import { EditorState } from "@codemirror/state";
-import { EditorView } from "@codemirror/view";
+import { EditorView, placeholder } from "@codemirror/view";
 import { basicSetup } from "codemirror";
 import { useEffect, useRef, type JSX } from "react";
 import { textCodeEditorTheme } from "./text-code-editor-theme";
@@ -19,6 +19,15 @@ export interface TextCodeEditorViewProps {
 	 * Becoming true again remeasures layout and restores focus without wiping undo history.
 	 */
 	active?: boolean;
+	/**
+	 * Optional controlled value: when the external content differs from the
+	 * editor doc, the editor is updated via dispatch (undo history preserved,
+	 * onChange not re-fired). Used e.g. by the database query panel to sync
+	 * history replay / AI backfill into the editor.
+	 */
+	value?: string;
+	/** Shown when the document is empty. */
+	placeholder?: string;
 }
 
 export function TextCodeEditorView({
@@ -28,6 +37,8 @@ export function TextCodeEditorView({
 	lineEnding,
 	onChange,
 	active = true,
+	value,
+	placeholder: placeholderText,
 }: TextCodeEditorViewProps): JSX.Element {
 	const hostRef = useRef<HTMLDivElement>(null);
 	const viewRef = useRef<EditorView | null>(null);
@@ -47,6 +58,7 @@ export function TextCodeEditorView({
 				EditorState.lineSeparator.of(lineEnding === "crlf" ? "\r\n" : "\n"),
 				getTextEditorLanguageExtension(languageKey),
 				textCodeEditorTheme,
+				placeholderText ? placeholder(placeholderText) : [],
 				EditorView.updateListener.of((update) => {
 					if (update.docChanged) onChangeRef.current(update.state.doc.toString());
 				}),
@@ -59,6 +71,19 @@ export function TextCodeEditorView({
 			viewRef.current = null;
 		};
 	}, [documentKey, languageKey, lineEnding]);
+
+	// Controlled value sync: external programmatic changes (history replay, AI
+	// backfill) are dispatched into the editor; typing does not loop because
+	// onChange already kept the parent value equal to the doc.
+	useEffect(() => {
+		const view = viewRef.current;
+		if (!view || value === undefined) return;
+		const current = view.state.doc.toString();
+		if (value === current) return;
+		view.dispatch({
+			changes: { from: 0, to: current.length, insert: value },
+		});
+	}, [value, documentKey]);
 
 	useEffect(() => {
 		const view = viewRef.current;
