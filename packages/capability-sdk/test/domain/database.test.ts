@@ -12,6 +12,13 @@ describe("database domain capabilities", () => {
 		]);
 	});
 
+	it("validates the empty list input", () => {
+		expect(() => DOMAIN_DATABASE_CAPABILITIES.LIST_CONNECTIONS.parseInput({})).not.toThrow();
+		expect(() => DOMAIN_DATABASE_CAPABILITIES.LIST_CONNECTIONS.parseInput({ ignored: true })).toThrowError(
+			expect.objectContaining({ code: CAPABILITY_ERROR_CODES.INVALID_INPUT }),
+		);
+	});
+
 	it("validates database connection mutations", () => {
 		expect(() =>
 			DOMAIN_DATABASE_CAPABILITIES.ADD_CONNECTION.parseInput({

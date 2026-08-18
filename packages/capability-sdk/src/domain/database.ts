@@ -7,10 +7,9 @@ import {
 	defineCapabilityOutputSchema,
 } from "../schema.js";
 
-const databaseEmptyInputType = Type.Unsafe<Record<string, never>>({
-	type: "object",
-	additionalProperties: false,
-});
+// 注意：不能用 Type.Unsafe 构造空对象 input——TypeBox 的 Value.Decode 无法识别
+// 无 [Kind] 标记的 schema，parseInput 会在运行时抛 "Unknown type"。
+const databaseEmptyInputType = Type.Object({}, { additionalProperties: false });
 
 /** 数据库连接（与 desktop preload api-types/database.ts 的 DbConnection 语义对齐）。 */
 const databaseConnectionType = Type.Object(
