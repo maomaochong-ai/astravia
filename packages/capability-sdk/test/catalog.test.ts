@@ -48,8 +48,8 @@ describe("capability catalog", () => {
 		const catalog = [...FOUNDATION_CAPABILITY_CATALOG, ...DOMAIN_CAPABILITY_CATALOG];
 
 		expect(FOUNDATION_CAPABILITY_CATALOG).toHaveLength(23);
-		expect(DOMAIN_CAPABILITY_CATALOG).toHaveLength(98);
-		expect(new Set(catalog.map(({ id }) => id)).size).toBe(121);
+		expect(DOMAIN_CAPABILITY_CATALOG).toHaveLength(102);
+		expect(new Set(catalog.map(({ id }) => id)).size).toBe(125);
 		expect(() => JSON.stringify(catalog)).not.toThrow();
 	});
 });

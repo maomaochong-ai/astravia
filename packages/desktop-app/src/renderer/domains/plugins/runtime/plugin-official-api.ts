@@ -2,6 +2,7 @@ import type { PluginOfficialApi } from "@astravia-org/plugin-sdk";
 import { createOfficialAgentApi } from "./plugin-official-agent";
 import { createOfficialAppearanceApi } from "./plugin-official-appearance";
 import { createOfficialBatchTasksApi } from "./plugin-official-batch-tasks";
+import { createOfficialDatabaseApi } from "./plugin-official-database";
 import { createOfficialDownloadsApi } from "./plugin-official-downloads";
 import { createOfficialGeneralApi } from "./plugin-official-general";
 import { createOfficialImApi } from "./plugin-official-im";
@@ -37,6 +38,7 @@ export function createPluginOfficialApi(capabilitySessionId: string): PluginOffi
 		projects: createOfficialProjectsApi(assertOfficial, capabilitySessionId),
 		plugins: createOfficialPluginsApi(assertOfficial, capabilitySessionId),
 		knowledge: createOfficialKnowledgeApi(assertOfficial, capabilitySessionId),
+		database: createOfficialDatabaseApi(assertOfficial, capabilitySessionId),
 		batchTasks: createOfficialBatchTasksApi(assertOfficial, capabilitySessionId),
 		scheduler: createOfficialSchedulerApi(assertOfficial, capabilitySessionId),
 		appearance: createOfficialAppearanceApi(capabilitySessionId),

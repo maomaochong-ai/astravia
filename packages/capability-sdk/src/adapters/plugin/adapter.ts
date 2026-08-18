@@ -3,6 +3,7 @@ import type { CapabilityAccessHandle, CapabilityAccessSessionFactory } from "../
 import { CAPABILITY_ERROR_CODES, CapabilityError } from "../../contracts.js";
 import { type PluginAgentSettingsMethods, pluginAgentSettingsMethods } from "./domain/agent-settings.js";
 import { type PluginBatchTaskMethods, pluginBatchTaskMethods } from "./domain/batch-task.js";
+import { type PluginDatabaseMethods, pluginDatabaseMethods } from "./domain/database.js";
 import { type PluginDownloadMethods, pluginDownloadMethods } from "./domain/download.js";
 import { type PluginGeneralSettingsMethods, pluginGeneralSettingsMethods } from "./domain/general-settings.js";
 import { type PluginImMethods, pluginImMethods } from "./domain/im.js";
@@ -44,6 +45,7 @@ export interface PluginCapabilityAdapter
 		PluginDownloadMethods,
 		PluginUpdaterMethods,
 		PluginBatchTaskMethods,
+		PluginDatabaseMethods,
 		PluginSchedulerMethods,
 		PluginWebhookMethods,
 		PluginKnowledgeMethods {}
@@ -142,4 +144,5 @@ Object.assign(
 	pluginSchedulerMethods,
 	pluginWebhookMethods,
 	pluginKnowledgeMethods,
+	pluginDatabaseMethods,
 );

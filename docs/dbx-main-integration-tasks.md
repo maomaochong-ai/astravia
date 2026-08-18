@@ -226,18 +226,20 @@ B1 MVP ──→ B2 自有化 ──→ B3 增强
 - **B2.7 落地记录（2026-08-15，代码核查 + 单测）**：链路两端均已实现。**界面→对话**：`DatabaseExplorerTree` 表行 hover「魔法棒」按钮 → `useDatabaseAnalyzeTable` 打开后台会话（`navigate:false`，不跳页），经 `getSchemaContext`（B2.5，6KB/连接截断 + 60s TTL）拉取 schema 摘要后，把指令经 `metadata.settingsAssistInstruction` 以 display:false 注入（模型可见、用户不可见），用户气泡只显示一句话意图；`databaseTable: { connection, table }` 随 metadata 持久化到会话（`runtime-core/history.ts` 的 `settings_assist_marker` entry）。**对话→界面**：`useUserMessageModel` 气泡尾部渲染「在界面打开」徽标按钮 → `navigate({ to: "/database", search: { connection, table } })`；`databaseRoute` 已支持 `?connection=&table=` search 校验；`DatabaseWorkspace` 用 `initialConnection`/`initialTable` 在连接加载完成后自动选中连接、展开表树并 `openTable`（`SELECT *`）。i18n zh/en 齐全（`databaseAnalyzeTable.*` / `messageList.userMessage.openInDatabase`）；新增单测 `chat-service.b2-7.test.ts`（3 例：marker→user 消息透传 connection/table、无 table 只透传 tabId、透传后自动清空）；`bun run check` 全绿。
   - **B2.7 方向调整（2026-08-15 用户确认）**：上述 `navigate({ to: "/database", search: { connection, table } })` 实现为 v1 已落地（经 `/database` 路由 search 参数传递，`databaseRoute` 校验 + `DatabaseWorkspace` initialConnection/initialTable 消费）；按 B2.6-R 职责分离，对话→界面改为**激活活动面板数据库标签页**（写 activityPanelTabByProjectAtom + activityPanelOpenAtom，宽度按需 setActivityPanelWidthAtom，目标连接/表经临时 target atom 一次性传递，与「点击文件打开预览」流程一致）；**旧深链 `/database?connection=X&table=Y` 不保留兼容**（产品未发布无存量用户），B2.6 阶段的 search 参数处理逻辑一并移除。
 
-### B2.8 数据库应用能力链（agent 直接管理连接；独立任务排期，未启动）
+### B2.8 数据库应用能力链（agent 直接管理连接）✅ 已完成（W1–W4 落地 + 集成验证，2026-08-19）
 **背景**：数据库页已有与知识库同款的「AI 协助配置」入口（SettingsAiAssist，B2.4+ 落地），但 agent 目前只能经**通用应用能力**引导用户手动配置，无法像知识库的 `knowledge.query` / `knowledge.manage` 专属 app action 那样**直接**增删/测试连接。本任务补齐这条能力链，让 AI 协助会话里的 agent 能直接管理数据库连接（写操作走应用审批弹窗）。
 **链路（对照知识库同构，模板已全部摸清）**：
-- [ ] capability-sdk：新增 `src/domain/database.ts` 领域能力（list / add / test / remove connection）+ domain-catalog + `adapters/plugin/domain/database.ts` adapter 方法 + official grants
-- [ ] desktop main：`domain-providers.ts` 注册 database provider（接 `databaseService`，解包 `DatabaseResult` 失败转 CapabilityError）；`plugin-capability-ipc.ts` 新增 DATABASE 通道 + `plugin-capabilities.ts` handler
-- [ ] preload：plugins `internalCapabilities.database`（`api-types/plugins.ts` 类型 + `apis/plugins.ts` 透传）
-- [ ] plugin-sdk：`official.ts` 的 `PluginOfficialApi` 新增 `database` 类型
-- [ ] desktop renderer：新增 `plugin-official-database.ts` 并接 `plugin-official-api.ts`（+ 对应 test）
-- [ ] 官方插件 astravia-actions：新增 `src/domains/database.ts`（`database.query` / `database.manage`，写操作审批）并在 `index.ts` 注册；locales zh/en
-- [ ] capability-sdk / renderer 补对应单测
+- [x] capability-sdk：新增 `src/domain/database.ts` 领域能力（list / add / test / remove connection）+ domain-catalog + `adapters/plugin/domain/database.ts` adapter 方法 + official grants
+- [x] desktop main：`domain-providers.ts` 注册 database provider（接 `databaseService`，解包 `DatabaseResult` 失败转 CapabilityError）；`plugin-capability-ipc.ts` 新增 DATABASE 通道 + `plugin-capabilities.ts` handler
+- [x] preload：plugins `internalCapabilities.database`（`api-types/plugins.ts` 类型 + `apis/plugins.ts` 透传）
+- [x] plugin-sdk：`official.ts` 的 `PluginOfficialApi` 新增 `database` 类型
+- [x] desktop renderer：新增 `plugin-official-database.ts` 并接 `plugin-official-api.ts`（+ 对应 test）
+- [x] 官方插件 astravia-actions：新增 `src/domains/database.ts`（`database.query` / `database.manage`，写操作审批）并在 `index.ts` 注册；locales zh/en（确认 action 文案走既有硬编码中文模式，无需新增 key）
+- [x] capability-sdk / renderer 补对应单测
 **验证**：`astravia action search` 能列出 `database.query` / `database.manage`；AI 协助会话中 agent 调 `database.manage add` 弹审批、确认后连接落库并可 `test`；`bun run check` 全绿。
 **预估**：3–5 人天（与知识库链路同构，逐层有现成模板）。**依赖**：B2.1 抽象层、B2.4 数据库页（均已完成）。**安全**：凭据仅 IPC 传递，审批 presentation 复用既有样式，不新注入审批组件。
+
+**实施记录（2026-08-19，W1–W4 并行落地 + 集成验证）**：W1 = capability-sdk 新增 `src/domain/database.ts`（`LIST_CONNECTIONS` / `ADD_CONNECTION` / `TEST_CONNECTION` / `REMOVE_CONNECTION`，id `cap.domain.astravia.database.connection.*`）+ `adapters/plugin/domain/database.ts` adapter（list/add/test/remove，official 会话）+ grants 4 项 + domain-catalog 注册；单测新增 `test/domain/database.test.ts` 5 例 + `official-domain.test.ts` 补 4 项断言。W2 = desktop main：`domain-providers.ts` 注册 database provider（接 `databaseService`，`DatabaseResult` 失败转 CapabilityError）+ `plugin-capability-ipc.ts` DATABASE 通道 + `plugin-capabilities.ts` handler。W3 = plugin-sdk `official.ts` 新增 `database`（list/add/test/remove，5 个类型接口）；preload `internalCapabilities.database`（api-types 类型 + apis 透传 4 通道）；renderer 新增 `plugin-official-database.ts`（每方法 assertOfficial）+ 单测 1 例 + `plugin-official-api.ts` 注册 `database:` 前缀。W4 = astravia-actions 新增 `src/domains/database.ts`（`database.query`：help/list，effect read；`database.manage`：add/test/remove，effect write，timeoutMs 120s，approval presentation `database.add/test/remove`，remove 时 assertReady 校验 id 不存在抛 EntityNotFound）+ `index.ts` 注册。验证：本次改动 21 文件 biome 0 错误、desktop-app tsc 零错误、capability-sdk 单测 68/69 通过（唯一失败为 skill.test.ts 预存在 SCENE 断言，与本次无关）、renderer 新单测 1/1 通过；全仓 `bun run check` 中 check:lint 因其他包预存在 FIXABLE 问题 exit 1（非本次引入，建议单独排期）。运行时验证（`astravia action search` 列出 database.query/manage、审批弹窗、连接落库 test）待 app 启动后确认。
 
 ### B2.9 界面 ⇄ 对话双向联动增强 v2（查询同步通道 + AI 开场白重设计 + 触发补全）（2–4 人天）✅ 已完成（W1–W3 落地 + `bun run check` 全绿，2026-08-16）
 

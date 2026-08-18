@@ -1,3 +1,4 @@
+import type { DatabaseAddConnectionInput, DatabaseTestConnectionInput } from "@astravia/capability-sdk";
 import { ipcMain } from "electron";
 import { PLUGIN_CAPABILITY_CHANNELS } from "../../shared/plugin-capability-ipc.js";
 import { getDesktopCapabilityHost } from "../capabilities/capability-host.js";
@@ -519,6 +520,18 @@ export function registerPluginCapabilitiesIpc(): () => void {
 		PLUGIN_CAPABILITY_CHANNELS.KNOWLEDGE_PROCESSING_SETTINGS_SET,
 		(_event, sessionId: unknown, data: unknown) =>
 			adapter.setKnowledgeProcessing(requireString(sessionId, "sessionId"), data),
+	);
+	ipcMain.handle(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_LIST, (_event, sessionId: unknown) =>
+		adapter.listDatabaseConnections(requireString(sessionId, "sessionId")),
+	);
+	ipcMain.handle(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_ADD, (_event, sessionId: unknown, data: unknown) =>
+		adapter.addDatabaseConnection(requireString(sessionId, "sessionId"), data as DatabaseAddConnectionInput),
+	);
+	ipcMain.handle(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_TEST, (_event, sessionId: unknown, input: unknown) =>
+		adapter.testDatabaseConnection(requireString(sessionId, "sessionId"), input as DatabaseTestConnectionInput),
+	);
+	ipcMain.handle(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_REMOVE, (_event, sessionId: unknown, id: unknown) =>
+		adapter.removeDatabaseConnection(requireString(sessionId, "sessionId"), requireString(id, "id")),
 	);
 	ipcMain.handle(PLUGIN_CAPABILITY_CHANNELS.SCHEDULER_TASK_LIST, (_event, sessionId: unknown) =>
 		adapter.listScheduledTasks(requireString(sessionId, "sessionId")),

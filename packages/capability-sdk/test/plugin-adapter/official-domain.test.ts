@@ -4,6 +4,7 @@ import { CAPABILITY_ERROR_CODES } from "../../src/contracts.js";
 import {
 	DOMAIN_AGENT_SETTINGS_CAPABILITIES,
 	DOMAIN_BATCH_TASK_CAPABILITIES,
+	DOMAIN_DATABASE_CAPABILITIES,
 	DOMAIN_DOWNLOAD_CAPABILITIES,
 	DOMAIN_GENERAL_SETTINGS_CAPABILITIES,
 	DOMAIN_IM_CAPABILITIES,
@@ -42,6 +43,7 @@ describe("PluginCapabilityAdapter official domain capabilities", () => {
 			...Object.values(DOMAIN_DOWNLOAD_CAPABILITIES).map((capability) => capability.id),
 			...Object.values(DOMAIN_UPDATER_CAPABILITIES).map((capability) => capability.id),
 			...Object.values(DOMAIN_KNOWLEDGE_CAPABILITIES).map((capability) => capability.id),
+			...Object.values(DOMAIN_DATABASE_CAPABILITIES).map((capability) => capability.id),
 			...Object.values(DOMAIN_PROJECT_CAPABILITIES).map((capability) => capability.id),
 			...Object.values(DOMAIN_SESSION_CAPABILITIES).map((capability) => capability.id),
 			...Object.values(DOMAIN_SKILL_CAPABILITIES).map((capability) => capability.id),
@@ -167,6 +169,25 @@ describe("PluginCapabilityAdapter official domain capabilities", () => {
 			agentConcurrency: 3,
 			ocrConcurrency: 1,
 		});
+		await expect(adapter.listDatabaseConnections(sessionId)).resolves.toEqual([
+			{
+				id: "conn",
+				name: "conn",
+				groupPath: "",
+				type: "sqlite",
+				host: "C:/data.db",
+				port: 0,
+				database: "",
+			},
+		]);
+		await expect(
+			adapter.addDatabaseConnection(sessionId, { name: "conn", dbType: "sqlite", host: "C:/data.db" }),
+		).resolves.toEqual({ id: "conn", name: "conn" });
+		await expect(adapter.testDatabaseConnection(sessionId, { connectionName: "conn" })).resolves.toEqual({
+			tableCount: 3,
+			detail: "3 tables",
+		});
+		await expect(adapter.removeDatabaseConnection(sessionId, "conn")).resolves.toBeUndefined();
 		await expect(adapter.listScheduledTasks(sessionId)).resolves.toHaveLength(1);
 		await expect(adapter.runScheduledTask(sessionId, "task")).resolves.toEqual({
 			status: "accepted",
@@ -212,6 +233,9 @@ describe("PluginCapabilityAdapter official domain capabilities", () => {
 			expect.objectContaining({ code: CAPABILITY_ERROR_CODES.ACCESS_DENIED }),
 		);
 		expect(() => adapter.listKnowledgeBases(sessionId)).toThrowError(
+			expect.objectContaining({ code: CAPABILITY_ERROR_CODES.ACCESS_DENIED }),
+		);
+		expect(() => adapter.listDatabaseConnections(sessionId)).toThrowError(
 			expect.objectContaining({ code: CAPABILITY_ERROR_CODES.ACCESS_DENIED }),
 		);
 		expect(() => adapter.getUpdaterState(sessionId)).toThrowError(

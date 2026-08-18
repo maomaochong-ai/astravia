@@ -34,6 +34,16 @@ export {
 	DOMAIN_BATCH_TASK_CAPABILITY_CATALOG,
 } from "./domain/batch-task.js";
 export {
+	type DatabaseAddConnectionInput,
+	type DatabaseConnection,
+	type DatabaseConnectionSummary,
+	type DatabaseConnectionTestResult,
+	type DatabaseRemoveConnectionInput,
+	type DatabaseTestConnectionInput,
+	DOMAIN_DATABASE_CAPABILITIES,
+	DOMAIN_DATABASE_CAPABILITY_CATALOG,
+} from "./domain/database.js";
+export {
 	DOMAIN_DOWNLOAD_CAPABILITIES,
 	DOMAIN_DOWNLOAD_CAPABILITY_CATALOG,
 	DOWNLOAD_STATUSES,

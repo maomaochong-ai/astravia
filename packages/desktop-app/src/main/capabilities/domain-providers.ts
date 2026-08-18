@@ -5,6 +5,7 @@ import {
 	type Disposable,
 	DOMAIN_AGENT_SETTINGS_CAPABILITIES,
 	DOMAIN_BATCH_TASK_CAPABILITIES,
+	DOMAIN_DATABASE_CAPABILITIES,
 	DOMAIN_DOWNLOAD_CAPABILITIES,
 	DOMAIN_GENERAL_SETTINGS_CAPABILITIES,
 	DOMAIN_IM_CAPABILITIES,
@@ -18,10 +19,12 @@ import {
 	DOMAIN_UPDATER_CAPABILITIES,
 	DOMAIN_WEBHOOK_CAPABILITIES,
 } from "@astravia/capability-sdk";
+import type { DatabaseResult } from "../../preload/api-types/database.js";
 import { getDesktopAgentSettingsService } from "../agent-settings/agent-settings-service.js";
 import { getDesktopBatchTaskService } from "../batch-tasks/batch-task-service.js";
 import { readDesktopConfig, writeDesktopConfig } from "../config/desktop-config-store.js";
 import { listRuntimeSessionProjects, listSessionHistory } from "../conversations/session-query-service.js";
+import { databaseService } from "../database/database-service.js";
 import { getDesktopDownloadService } from "../downloads/download-service.js";
 import { allowProjectRoot, createFilesystemDirectory } from "../filesystem/filesystem-service.js";
 import { getDesktopGeneralSettingsService } from "../general-settings/general-settings-service.js";
@@ -48,6 +51,7 @@ const DOMAIN_QUICK_PANEL_PROVIDER_OWNER = "astravia.domain.quick-panel";
 const DOMAIN_DOWNLOAD_PROVIDER_OWNER = "astravia.domain.download";
 const DOMAIN_UPDATER_PROVIDER_OWNER = "astravia.domain.updater";
 const DOMAIN_KNOWLEDGE_PROVIDER_OWNER = "astravia.domain.knowledge";
+const DOMAIN_DATABASE_PROVIDER_OWNER = "astravia.domain.database";
 const DOMAIN_SCHEDULER_PROVIDER_OWNER = "astravia.domain.scheduler";
 const DOMAIN_WEBHOOK_PROVIDER_OWNER = "astravia.domain.webhook";
 
@@ -55,6 +59,13 @@ function assertNotAborted(signal: AbortSignal): void {
 	if (signal.aborted) {
 		throw new CapabilityError(CAPABILITY_ERROR_CODES.ABORTED, "Capability invocation was aborted");
 	}
+}
+
+function unwrapDatabaseResult<T>(result: DatabaseResult<T>): T {
+	if (!result.ok) {
+		throw new CapabilityError(CAPABILITY_ERROR_CODES.PROVIDER_FAILED, result.error.detail);
+	}
+	return result.data;
 }
 
 export function registerDesktopDomainProviders(registry: CapabilityRegistry): Disposable {
@@ -530,6 +541,34 @@ export function registerDesktopDomainProviders(registry: CapabilityRegistry): Di
 			},
 		}),
 	]);
+	const databaseRegistration = registry.registerOwner(DOMAIN_DATABASE_PROVIDER_OWNER, [
+		bindCapability(DOMAIN_DATABASE_CAPABILITIES.LIST_CONNECTIONS, {
+			execute: async (_input, context) => {
+				assertNotAborted(context.signal);
+				return unwrapDatabaseResult(await databaseService.listConnections());
+			},
+		}),
+		bindCapability(DOMAIN_DATABASE_CAPABILITIES.ADD_CONNECTION, {
+			execute: async ({ name, dbType, host, port, username, password, database, ssl }, context) => {
+				assertNotAborted(context.signal);
+				return unwrapDatabaseResult(
+					await databaseService.addConnection({ name, dbType, host, port, username, password, database, ssl }),
+				);
+			},
+		}),
+		bindCapability(DOMAIN_DATABASE_CAPABILITIES.TEST_CONNECTION, {
+			execute: async ({ connectionName, draft }, context) => {
+				assertNotAborted(context.signal);
+				return unwrapDatabaseResult(await databaseService.testConnection({ connectionName, draft }));
+			},
+		}),
+		bindCapability(DOMAIN_DATABASE_CAPABILITIES.REMOVE_CONNECTION, {
+			execute: async ({ id }, context) => {
+				assertNotAborted(context.signal);
+				await unwrapDatabaseResult(await databaseService.removeConnection(id));
+			},
+		}),
+	]);
 	const schedulerRegistration = registry.registerOwner(DOMAIN_SCHEDULER_PROVIDER_OWNER, [
 		bindCapability(DOMAIN_SCHEDULER_CAPABILITIES.LIST_TASKS, {
 			execute: async (_input, context) => {
@@ -643,6 +682,7 @@ export function registerDesktopDomainProviders(registry: CapabilityRegistry): Di
 			webhookRegistration.dispose();
 			schedulerRegistration.dispose();
 			knowledgeRegistration.dispose();
+			databaseRegistration.dispose();
 			updaterRegistration.dispose();
 			downloadRegistration.dispose();
 			batchTaskRegistration.dispose();

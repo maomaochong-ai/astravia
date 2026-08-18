@@ -156,6 +156,16 @@ export function createPluginsApi(ipc: IpcRenderer): Pick<DesktopApi, "plugins"> 
 					setProcessing: (sessionId, data) =>
 						ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.KNOWLEDGE_PROCESSING_SETTINGS_SET, sessionId, data),
 				},
+				database: {
+					listConnections: (sessionId) =>
+						ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_LIST, sessionId),
+					addConnection: (sessionId, data) =>
+						ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_ADD, sessionId, data),
+					testConnection: (sessionId, input) =>
+						ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_TEST, sessionId, input),
+					removeConnection: (sessionId, id) =>
+						ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.DATABASE_CONNECTION_REMOVE, sessionId, id),
+				},
 				projects: {
 					list: (sessionId) => ipc.invoke(PLUGIN_CAPABILITY_CHANNELS.PROJECT_LIST, sessionId),
 					create: (sessionId, name, path) =>

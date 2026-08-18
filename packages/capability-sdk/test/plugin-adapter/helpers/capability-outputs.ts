@@ -2,6 +2,7 @@ import type { CapabilityId } from "../../../src/contracts.js";
 import {
 	DOMAIN_AGENT_SETTINGS_CAPABILITIES,
 	DOMAIN_BATCH_TASK_CAPABILITIES,
+	DOMAIN_DATABASE_CAPABILITIES,
 	DOMAIN_DOWNLOAD_CAPABILITIES,
 	DOMAIN_GENERAL_SETTINGS_CAPABILITIES,
 	DOMAIN_IM_CAPABILITIES,
@@ -266,6 +267,28 @@ function domainOutput(capabilityId: CapabilityId): unknown {
 		capabilityId === DOMAIN_KNOWLEDGE_CAPABILITIES.RETRY_FAILED.id
 	) {
 		return { skipped: true, reason: "no-model" };
+	}
+	if (capabilityId === DOMAIN_DATABASE_CAPABILITIES.LIST_CONNECTIONS.id) {
+		return [
+			{
+				id: "conn",
+				name: "conn",
+				groupPath: "",
+				type: "sqlite",
+				host: "C:/data.db",
+				port: 0,
+				database: "",
+			},
+		];
+	}
+	if (capabilityId === DOMAIN_DATABASE_CAPABILITIES.ADD_CONNECTION.id) {
+		return { id: "conn", name: "conn" };
+	}
+	if (capabilityId === DOMAIN_DATABASE_CAPABILITIES.TEST_CONNECTION.id) {
+		return { tableCount: 3, detail: "3 tables" };
+	}
+	if (capabilityId === DOMAIN_DATABASE_CAPABILITIES.REMOVE_CONNECTION.id) {
+		return undefined;
 	}
 	if (
 		capabilityId === DOMAIN_SCHEDULER_CAPABILITIES.LIST_TASKS.id ||

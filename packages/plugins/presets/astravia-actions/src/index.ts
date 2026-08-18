@@ -5,6 +5,7 @@ import { registerBatchTasksActions } from "./domains/batch-tasks";
 import { registerDownloadsActions } from "./domains/downloads";
 import { registerGeneralActions } from "./domains/general";
 import { registerImActions } from "./domains/im";
+import { registerDatabaseActions } from "./domains/database";
 import { registerKnowledgeActions } from "./domains/knowledge";
 import { registerMcpActions } from "./domains/mcp";
 import { registerModelsActions } from "./domains/models";
@@ -31,6 +32,7 @@ export default definePlugin({
 		registerModelsActions(ctx);
 		registerProjectsActions(ctx);
 		registerKnowledgeActions(ctx);
+		registerDatabaseActions(ctx);
 		registerPluginsActions(ctx);
 		registerBatchTasksActions(ctx);
 		registerSchedulerActions(ctx);
