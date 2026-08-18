@@ -6,6 +6,11 @@ import type {
 	BatchProjectUpdateData,
 	BatchTaskCommandResult,
 	DownloadItem as CapabilityDownloadItem,
+	DatabaseAddConnectionInput,
+	DatabaseConnection,
+	DatabaseConnectionSummary,
+	DatabaseConnectionTestResult,
+	DatabaseTestConnectionInput,
 	DefaultExecutionModeSettingInput,
 	GeneralExecutionMode,
 	GeneralSettingsSnapshot,
@@ -611,6 +616,13 @@ export interface DesktopPluginCapabilityUpdaterApi {
 	cancel(sessionId: string): Promise<void>;
 }
 
+export interface DesktopPluginCapabilityDatabaseApi {
+	listConnections(sessionId: string): Promise<DatabaseConnection[]>;
+	addConnection(sessionId: string, data: DatabaseAddConnectionInput): Promise<DatabaseConnectionSummary>;
+	testConnection(sessionId: string, input: DatabaseTestConnectionInput): Promise<DatabaseConnectionTestResult>;
+	removeConnection(sessionId: string, id: string): Promise<void>;
+}
+
 export interface DesktopPluginCapabilityKnowledgeApi {
 	listBases(sessionId: string): Promise<KnowledgeBase[]>;
 	listFileStatuses(sessionId: string): Promise<KnowledgeFileStatuses>;
@@ -675,6 +687,7 @@ export interface DesktopPluginInternalCapabilitiesApi {
 	models: DesktopPluginCapabilityModelsApi;
 	downloads: DesktopPluginCapabilityDownloadsApi;
 	knowledge: DesktopPluginCapabilityKnowledgeApi;
+	database: DesktopPluginCapabilityDatabaseApi;
 	projects: DesktopPluginCapabilityProjectsApi;
 	scheduler: DesktopPluginCapabilitySchedulerApi;
 	sessions: DesktopPluginCapabilitySessionsApi;

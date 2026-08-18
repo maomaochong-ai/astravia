@@ -324,6 +324,42 @@ export interface PluginOfficialKnowledgeProcessingSettings {
 	ocrConcurrency?: number;
 }
 
+export interface PluginOfficialDatabaseConnection {
+	id: string;
+	name: string;
+	groupPath: string;
+	type: string;
+	host: string;
+	port: number;
+	database: string;
+}
+
+export interface PluginOfficialDatabaseConnectionSummary {
+	id: string;
+	name: string;
+}
+
+export interface PluginOfficialDatabaseTestResult {
+	tableCount: number;
+	detail: string;
+}
+
+export interface PluginOfficialDatabaseAddInput {
+	name: string;
+	dbType: string;
+	host: string;
+	port?: number;
+	username?: string;
+	password?: string;
+	database?: string;
+	ssl?: boolean;
+}
+
+export interface PluginOfficialDatabaseTestInput {
+	connectionName?: string;
+	draft?: PluginOfficialDatabaseAddInput;
+}
+
 /** 仅宿主验证为官方来源的插件可以调用；普通插件调用时由宿主拒绝。 */
 export interface PluginOfficialApi {
 	general: {
@@ -452,6 +488,12 @@ export interface PluginOfficialApi {
 				ocrConcurrency: number;
 			}>,
 		): Promise<PluginOfficialKnowledgeProcessingSettings>;
+	};
+	database: {
+		list(): Promise<PluginOfficialDatabaseConnection[]>;
+		add(input: PluginOfficialDatabaseAddInput): Promise<PluginOfficialDatabaseConnectionSummary>;
+		test(input: PluginOfficialDatabaseTestInput): Promise<PluginOfficialDatabaseTestResult>;
+		remove(id: string): Promise<void>;
 	};
 	batchTasks: {
 		listProjects(): Promise<unknown[]>;

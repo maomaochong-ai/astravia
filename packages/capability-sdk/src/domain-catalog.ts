@@ -1,6 +1,7 @@
 import { createCapabilityCatalog } from "./catalog.js";
 import { DOMAIN_AGENT_SETTINGS_CAPABILITIES } from "./domain/agent-settings.js";
 import { DOMAIN_BATCH_TASK_CAPABILITIES } from "./domain/batch-task.js";
+import { DOMAIN_DATABASE_CAPABILITIES } from "./domain/database.js";
 import { DOMAIN_DOWNLOAD_CAPABILITIES } from "./domain/download.js";
 import { DOMAIN_GENERAL_SETTINGS_CAPABILITIES } from "./domain/general-settings.js";
 import { DOMAIN_IM_CAPABILITIES } from "./domain/im.js";
@@ -21,6 +22,7 @@ export const DOMAIN_CAPABILITY_CATALOG = createCapabilityCatalog([
 	...Object.values(DOMAIN_DOWNLOAD_CAPABILITIES),
 	...Object.values(DOMAIN_GENERAL_SETTINGS_CAPABILITIES),
 	...Object.values(DOMAIN_IM_CAPABILITIES),
+	...Object.values(DOMAIN_DATABASE_CAPABILITIES),
 	...Object.values(DOMAIN_KNOWLEDGE_CAPABILITIES),
 	...Object.values(DOMAIN_MCP_CAPABILITIES),
 	...Object.values(DOMAIN_MODEL_CAPABILITIES),
