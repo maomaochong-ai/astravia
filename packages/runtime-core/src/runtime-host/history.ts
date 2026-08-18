@@ -263,9 +263,28 @@ export function entriesToHistory(branch: CodingSessionEntry[], options?: Entries
 				typeof (details as { tabId?: unknown }).tabId === "string"
 					? (details as { tabId: string }).tabId.trim() || undefined
 					: undefined;
+			// B2.7：databaseTable 随 details 落盘（connection/table 均为非空 string 才提取），
+			// 供历史回放恢复「在界面打开」目标。
+			const rawDatabaseTable =
+				details && typeof details === "object" && !Array.isArray(details)
+					? (details as { databaseTable?: unknown }).databaseTable
+					: undefined;
+			const hasDatabaseTable =
+				rawDatabaseTable !== null &&
+				typeof rawDatabaseTable === "object" &&
+				!Array.isArray(rawDatabaseTable) &&
+				typeof (rawDatabaseTable as { connection?: unknown }).connection === "string" &&
+				typeof (rawDatabaseTable as { table?: unknown }).table === "string";
+			const databaseTable = hasDatabaseTable
+				? {
+						connection: (rawDatabaseTable as { connection: string }).connection,
+						table: (rawDatabaseTable as { table: string }).table,
+					}
+				: undefined;
 			entries.push({
 				type: "settings_assist_marker",
 				tabId,
+				databaseTable,
 				timestamp: entry.timestamp,
 			});
 		} else if (

@@ -286,13 +286,28 @@ export class InputPipeline {
 				typeof options?.metadata?.settingsAssistTabId === "string"
 					? options.metadata.settingsAssistTabId.trim()
 					: "";
+			// B2.7：databaseTable 随 details 落盘（UI 目标，仅用于历史回放恢复「在界面打开」）。
+			const rawDatabaseTable = options?.metadata?.databaseTable;
+			const hasDatabaseTable =
+				rawDatabaseTable !== null &&
+				typeof rawDatabaseTable === "object" &&
+				!Array.isArray(rawDatabaseTable) &&
+				typeof (rawDatabaseTable as { connection?: unknown }).connection === "string" &&
+				typeof (rawDatabaseTable as { table?: unknown }).table === "string";
 			messages.push({
 				role: "custom",
 				customType: "settings_assist_instruction",
 				content: settingsAssistInstruction,
 				display: false,
-				// tabId is UI-only (badge label); not sent to the LLM as content.
-				details: settingsAssistTabId ? { tabId: settingsAssistTabId } : undefined,
+				// tabId / databaseTable are UI-only (badge label / open-in-interface target);
+				// not sent to the LLM as content.
+				details:
+					settingsAssistTabId || hasDatabaseTable
+						? {
+								...(settingsAssistTabId ? { tabId: settingsAssistTabId } : {}),
+								...(hasDatabaseTable ? { databaseTable: rawDatabaseTable } : {}),
+							}
+						: undefined,
 				timestamp: Date.now(),
 			});
 		}

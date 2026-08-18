@@ -30,6 +30,7 @@ export type SidebarLabelKey =
 	| "sidebar.nav.knowledge"
 	| "sidebar.nav.skills"
 	| "sidebar.nav.plugins"
+	| "sidebar.nav.database"
 	| "sidebar.nav.modelSettings"
 	| "sidebar.nav.agentSettings"
 	| "sidebar.nav.appearance"
@@ -58,7 +59,7 @@ export interface SidebarNavItem {
 	readonly label?: string;
 	readonly labelKey?: SidebarLabelKey;
 	/** `/skills` 与 `/plugins` 为旧入口，现已重定向到 `/abilities`（ADR-0049）。 */
-	readonly path?: "/automation" | "/batch-tasks" | "/knowledge" | "/abilities" | "/skills" | "/plugins";
+	readonly path?: "/automation" | "/batch-tasks" | "/knowledge" | "/database" | "/abilities" | "/skills" | "/plugins";
 	/** 直达设置页某个 tab（`/settings/$tab`）；与 `path` 互斥。 */
 	readonly settingsTab?: string;
 	readonly title?: string;
