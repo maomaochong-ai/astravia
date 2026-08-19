@@ -59,10 +59,15 @@ export async function resolveDesktopSessionConfig(
 	// 追加到 appendSystemPrompt（失败静默，不阻塞会话创建）。
 	// B2.10-W2 权限分离：感知开关只管注入；AI 访问由 database.dbxToolEnabled → mcp.json dbx.disabled
 	// 控制（关闭即 dbx 工具不注册，AI 无法执行 SQL），见 main/ipc/fs.ts syncDbxToolAccessGate。
-	const dbxToolEnabled = desktopConfig.database?.dbxToolEnabled === true;
+	const database = desktopConfig.database;
+	const dbxToolEnabled = database?.dbxToolEnabled === true;
 	const schemaPrompt =
-		isConversation && desktopConfig.database?.schemaInjection === true
-			? await buildDatabaseSchemaPrompt(databaseSchemaContextIo, { executeToolAvailable: dbxToolEnabled })
+		isConversation && database?.schemaInjection === true
+			? await buildDatabaseSchemaPrompt(databaseSchemaContextIo, {
+					executeToolAvailable: dbxToolEnabled,
+					// B2.10-W4-① 感知范围：缺省 all（全部连接全表）；undefined 由注入层按 all 处理。
+					scope: database?.schemaInjectionScope,
+				})
 			: undefined;
 	// B2.10-W2：AI 访问未开启（缺省）时，若未注入 schema 块，补一条简短提示，避免模型臆造 dbx 工具名
 	// 触发 “Tool dbx_execute_query not found”。schema 注入场景由 schema 块内的不可用说明覆盖，不重复追加。

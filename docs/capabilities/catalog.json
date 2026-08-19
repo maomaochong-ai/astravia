@@ -3628,6 +3628,207 @@
       "version": 1
     },
     {
+      "id": "cap.domain.astravia.database.connection.list",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {}
+      },
+      "kind": "query",
+      "layer": "domain",
+      "outputSchema": {
+        "type": "array",
+        "items": {
+          "additionalProperties": false,
+          "type": "object",
+          "required": [
+            "id",
+            "name",
+            "groupPath",
+            "type",
+            "host",
+            "port",
+            "database"
+          ],
+          "properties": {
+            "id": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "groupPath": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "host": {
+              "type": "string"
+            },
+            "port": {
+              "type": "number"
+            },
+            "database": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.database.connection.add",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "name",
+          "dbType",
+          "host"
+        ],
+        "properties": {
+          "name": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "dbType": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "host": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "port": {
+            "type": "number"
+          },
+          "username": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "database": {
+            "type": "string"
+          },
+          "ssl": {
+            "type": "boolean"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.database.connection.test",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "properties": {
+          "connectionName": {
+            "pattern": "\\S",
+            "type": "string"
+          },
+          "draft": {
+            "additionalProperties": false,
+            "type": "object",
+            "required": [
+              "name",
+              "dbType",
+              "host"
+            ],
+            "properties": {
+              "name": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "dbType": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "host": {
+                "pattern": "\\S",
+                "type": "string"
+              },
+              "port": {
+                "type": "number"
+              },
+              "username": {
+                "type": "string"
+              },
+              "password": {
+                "type": "string"
+              },
+              "database": {
+                "type": "string"
+              },
+              "ssl": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "tableCount",
+          "detail"
+        ],
+        "properties": {
+          "tableCount": {
+            "minimum": 0,
+            "type": "number"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      },
+      "version": 1
+    },
+    {
+      "id": "cap.domain.astravia.database.connection.remove",
+      "inputSchema": {
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "pattern": "\\S",
+            "type": "string"
+          }
+        }
+      },
+      "kind": "command",
+      "layer": "domain",
+      "outputSchema": false,
+      "version": 1
+    },
+    {
       "id": "cap.domain.astravia.knowledge.base.list",
       "inputSchema": {
         "type": "object",

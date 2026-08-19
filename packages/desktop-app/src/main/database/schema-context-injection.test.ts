@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	buildDatabaseSchemaPrompt,
 	clearSchemaContextCache,
+	formatTableSchema,
 	renderSchemaContextBlock,
 	SCHEMA_CONTEXT_CHAR_LIMIT_PER_CONNECTION,
 	type SchemaContextIo,
@@ -11,10 +12,14 @@ import {
 function makeIo(overrides: Partial<SchemaContextIo> = {}): SchemaContextIo & {
 	listConnections: ReturnType<typeof vi.fn>;
 	getSchemaContext: ReturnType<typeof vi.fn>;
+	getTableSchemaContext: ReturnType<typeof vi.fn>;
 } {
 	return {
 		listConnections: vi.fn(async () => [{ name: "astravia-test" }]),
 		getSchemaContext: vi.fn(async () => "users (id INTEGER PK, name TEXT)\ndepartments (id INTEGER PK, name TEXT)"),
+		getTableSchemaContext: vi.fn(
+			async (_connection: string, table: string) => `${table} (\n  id INTEGER PRIMARY KEY\n)`,
+		),
 		...overrides,
 	} as never;
 }
@@ -33,6 +38,50 @@ describe("summarizeSchema", () => {
 	});
 });
 
+describe("formatTableSchema", () => {
+	it("格式化列结构（类型/主键/非空/默认/注释）", () => {
+		const text = formatTableSchema("users", [
+			{
+				name: "id",
+				type: "INTEGER",
+				nullable: false,
+				hasDefault: false,
+				defaultValue: "",
+				comment: "",
+				isPrimaryKey: true,
+			},
+			{
+				name: "name",
+				type: "TEXT",
+				nullable: true,
+				hasDefault: false,
+				defaultValue: "",
+				comment: "用户名",
+				isPrimaryKey: false,
+			},
+			{
+				name: "created_at",
+				type: "TEXT",
+				nullable: false,
+				hasDefault: true,
+				defaultValue: "CURRENT_TIMESTAMP",
+				comment: "",
+				isPrimaryKey: false,
+			},
+		]);
+		expect(text).toBe(
+			"users (\n  id INTEGER PRIMARY KEY NOT NULL\n  name TEXT -- 用户名\n  created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP\n)",
+		);
+	});
+
+	it("缺类型的列回退 unknown", () => {
+		const text = formatTableSchema("t", [
+			{ name: "x", type: "", nullable: true, hasDefault: false, defaultValue: "", comment: "", isPrimaryKey: false },
+		]);
+		expect(text).toContain("x unknown");
+	});
+});
+
 describe("renderSchemaContextBlock", () => {
 	it("空条目返回空串", () => {
 		expect(renderSchemaContextBlock([])).toBe("");
@@ -47,6 +96,14 @@ describe("renderSchemaContextBlock", () => {
 		expect(block).toContain("连接「b」");
 		expect(block).toContain("dbx_execute_query");
 		expect(block).toContain("connection_name");
+	});
+
+	it("表级条目渲染为「连接 x 表 y」标题（B2.10-W4-①）", () => {
+		const block = renderSchemaContextBlock([
+			{ connectionName: "a", tableName: "users", schema: "users (\n  id INTEGER\n)" },
+		]);
+		expect(block).toContain("连接「a」表「users」");
+		expect(block).not.toContain("连接「a」\n");
 	});
 
 	it("executeToolAvailable=false 时不指示调用 dbx 工具（B2.10-W3）", () => {
@@ -131,5 +188,130 @@ describe("buildDatabaseSchemaPrompt", () => {
 			getSchemaContext: vi.fn(async () => "   "),
 		});
 		await expect(buildDatabaseSchemaPrompt(io)).resolves.toBeUndefined();
+	});
+
+	// ---- B2.10-W4-① 感知范围 ----
+
+	it("scope=connections 只注入白名单连接", async () => {
+		const io = makeIo({
+			listConnections: vi.fn(async () => [{ name: "a" }, { name: "b" }, { name: "c" }]),
+			getSchemaContext: vi.fn(async (name: string) => `${name} (id INTEGER)`),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: { scope: "connections", connections: ["a", "c"], tables: [] },
+		});
+		expect(prompt).toContain("连接「a」");
+		expect(prompt).toContain("连接「c」");
+		expect(prompt).not.toContain("连接「b」");
+		expect(io.getSchemaContext).toHaveBeenCalledTimes(2);
+	});
+
+	it("scope=connections 白名单为空时不注入任何内容", async () => {
+		const io = makeIo({
+			listConnections: vi.fn(async () => [{ name: "a" }]),
+			getSchemaContext: vi.fn(async () => "a (id INTEGER)"),
+		});
+		await expect(
+			buildDatabaseSchemaPrompt(io, { scope: { scope: "connections", connections: [], tables: [] } }),
+		).resolves.toBeUndefined();
+		expect(io.getSchemaContext).not.toHaveBeenCalled();
+	});
+
+	it("scope=connections 白名单含不存在连接时忽略", async () => {
+		const io = makeIo({
+			listConnections: vi.fn(async () => [{ name: "a" }]),
+			getSchemaContext: vi.fn(async () => "a (id INTEGER)"),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: { scope: "connections", connections: ["a", "ghost"], tables: [] },
+		});
+		expect(prompt).toContain("连接「a」");
+		expect(prompt).not.toContain("ghost");
+	});
+
+	it("scope=tables 只注入白名单表的表级 schema", async () => {
+		const io = makeIo({
+			getTableSchemaContext: vi.fn(async (_connection: string, table: string) => `${table} (\n  id INTEGER\n)`),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: { scope: "tables", connections: [], tables: [{ connection: "a", table: "users" }] },
+		});
+		expect(prompt).toContain("连接「a」表「users」");
+		expect(prompt).toContain("id INTEGER");
+		expect(io.getTableSchemaContext).toHaveBeenCalledWith("a", "users");
+		// 表级注入不经过连接级 IO
+		expect(io.getSchemaContext).not.toHaveBeenCalled();
+	});
+
+	it("scope=tables 多表注入并各自独立", async () => {
+		const io = makeIo({
+			getTableSchemaContext: vi.fn(async (_connection: string, table: string) => `${table} (\n  id INTEGER\n)`),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: {
+				scope: "tables",
+				connections: [],
+				tables: [
+					{ connection: "a", table: "users" },
+					{ connection: "b", table: "orders" },
+				],
+			},
+		});
+		expect(prompt).toContain("连接「a」表「users」");
+		expect(prompt).toContain("连接「b」表「orders」");
+		expect(io.getTableSchemaContext).toHaveBeenCalledTimes(2);
+	});
+
+	it("scope=tables 空白名单返回 undefined", async () => {
+		const io = makeIo();
+		await expect(
+			buildDatabaseSchemaPrompt(io, { scope: { scope: "tables", connections: [], tables: [] } }),
+		).resolves.toBeUndefined();
+		expect(io.getTableSchemaContext).not.toHaveBeenCalled();
+	});
+
+	it("scope=tables 单表失败静默跳过其余表", async () => {
+		const io = makeIo({
+			getTableSchemaContext: vi.fn(async (_connection: string, table: string) => {
+				if (table === "bad") throw new Error("CONNECTION_NOT_FOUND");
+				return `${table} (\n  id INTEGER\n)`;
+			}),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: {
+				scope: "tables",
+				connections: [],
+				tables: [
+					{ connection: "a", table: "ok" },
+					{ connection: "a", table: "bad" },
+				],
+			},
+		});
+		expect(prompt).toContain("连接「a」表「ok」");
+		expect(prompt).not.toContain("bad");
+	});
+
+	it("scope=tables 表级 schema 走独立缓存 key", async () => {
+		const io = makeIo({
+			getTableSchemaContext: vi.fn(async () => "t (\n  id INTEGER\n)"),
+		});
+		const opts: Parameters<typeof buildDatabaseSchemaPrompt>[1] = {
+			scope: { scope: "tables", connections: [], tables: [{ connection: "a", table: "t" }] },
+		};
+		await buildDatabaseSchemaPrompt(io, opts);
+		await buildDatabaseSchemaPrompt(io, opts);
+		expect(io.getTableSchemaContext).toHaveBeenCalledTimes(1);
+	});
+
+	it("scope=all 与缺省行为一致", async () => {
+		const io = makeIo({
+			listConnections: vi.fn(async () => [{ name: "a" }, { name: "b" }]),
+			getSchemaContext: vi.fn(async (name: string) => `${name} (id INTEGER)`),
+		});
+		const prompt = await buildDatabaseSchemaPrompt(io, {
+			scope: { scope: "all", connections: [], tables: [] },
+		});
+		expect(prompt).toContain("连接「a」");
+		expect(prompt).toContain("连接「b」");
 	});
 });

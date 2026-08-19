@@ -23,17 +23,35 @@ export interface ExperimentalConfig {
 }
 
 /**
+ * 感知范围类型（B2.10-W4-①）。
+ * all：全部连接全表注入（现状默认）；connections：仅白名单连接；tables：仅白名单「连接.表」。
+ */
+export type SchemaInjectionScopeKind = "all" | "connections" | "tables";
+
+/** 感知范围配置（schemaInjection 开启时生效；缺省 all）。 */
+export interface SchemaInjectionScopeConfig {
+	scope: SchemaInjectionScopeKind;
+	/** scope=connections 时生效：允许注入的连接名白名单。 */
+	connections: string[];
+	/** scope=tables 时生效：允许注入的「连接.表」白名单。 */
+	tables: Array<{ connection: string; table: string }>;
+}
+
+/**
  * 数据库能力配置（B2.5/B2.10）。
  * schemaInjection：AI 对话会话创建时注入连接 schema 上下文（感知）。缺省关。
+ * schemaInjectionScope：感知范围（B2.10-W4-①），缺省 all（全部连接全表）。
  * dbxToolEnabled：AI 访问开关——控制 dbx MCP 工具是否注册进对话工具集（访问）。缺省关；
  * 关闭时 AI 无法调用 dbx 工具执行 SQL，与感知开关相互独立（B2.10-W2 权限分离）。
  */
 export interface DatabaseConfig {
 	schemaInjection?: boolean;
+	schemaInjectionScope?: SchemaInjectionScopeConfig;
 	dbxToolEnabled?: boolean;
-}
-export interface DatabaseConfig {
-	schemaInjection?: boolean;
+	/** 连接环境标记（W4-②）：连接名 → "prod" | "dev"（缺省 dev）。 */
+	connectionEnv?: Record<string, "prod" | "dev">;
+	/** 生产写授权（W4-②）：连接名 → 已显式授权允许生产写操作。 */
+	prodWriteApproved?: Record<string, boolean>;
 }
 
 export interface DesktopConfig {
@@ -98,7 +116,7 @@ const DEFAULT_CONFIG: DesktopConfig = {
 	shortcuts: { bindings: {} },
 	quickPanel: { trigger: "none", postSendBehavior: "foreground" },
 	appshot: { enabled: false, gesture: "both-shift" },
-	database: { schemaInjection: false, dbxToolEnabled: false },
+	database: { schemaInjection: false, dbxToolEnabled: false, connectionEnv: {}, prodWriteApproved: {} },
 };
 
 function migrateProjectEntries(entries: unknown): ProjectEntry[] {
@@ -186,12 +204,60 @@ export function normalizeExperimental(value: unknown): ExperimentalConfig {
 	};
 }
 
+/** 归一化感知范围配置；非法/缺失返回 undefined（调用方按 all 处理）。 */
+export function normalizeSchemaInjectionScope(value: unknown): SchemaInjectionScopeConfig | undefined {
+	if (typeof value !== "object" || value === null) return undefined;
+	const input = value as Record<string, unknown>;
+	const scope: SchemaInjectionScopeKind =
+		input.scope === "connections" || input.scope === "tables" ? input.scope : "all";
+	const connections = Array.isArray(input.connections)
+		? [...new Set(input.connections.filter((c): c is string => typeof c === "string" && c.length > 0))].slice(0, 200)
+		: [];
+	const tables = Array.isArray(input.tables)
+		? input.tables
+				.filter(
+					(t): t is { connection: string; table: string } =>
+						typeof t === "object" &&
+						t !== null &&
+						typeof (t as { connection?: unknown }).connection === "string" &&
+						typeof (t as { table?: unknown }).table === "string",
+				)
+				.slice(0, 500)
+		: [];
+	return { scope, connections, tables };
+}
+
+/** 归一化连接环境标记：只保留合法连接名与 prod/dev 值。 */
+export function normalizeConnectionEnv(value: unknown): Record<string, "prod" | "dev"> {
+	if (typeof value !== "object" || value === null) return {};
+	const out: Record<string, "prod" | "dev"> = {};
+	for (const [name, env] of Object.entries(value as Record<string, unknown>)) {
+		if (name.length > 0 && (env === "prod" || env === "dev")) out[name] = env;
+	}
+	return out;
+}
+
+/** 归一化生产写授权：只保留合法连接名与 true 值。 */
+export function normalizeProdWriteApproved(value: unknown): Record<string, boolean> {
+	if (typeof value !== "object" || value === null) return {};
+	const out: Record<string, boolean> = {};
+	for (const [name, ok] of Object.entries(value as Record<string, unknown>)) {
+		if (name.length > 0 && ok === true) out[name] = true;
+	}
+	return out;
+}
+
 export function normalizeDatabase(value: unknown): DatabaseConfig {
-	if (typeof value !== "object" || value === null) return { schemaInjection: false, dbxToolEnabled: false };
+	if (typeof value !== "object" || value === null) {
+		return { schemaInjection: false, dbxToolEnabled: false, connectionEnv: {}, prodWriteApproved: {} };
+	}
 	const input = value as Record<string, unknown>;
 	return {
 		schemaInjection: input.schemaInjection === true,
+		schemaInjectionScope: normalizeSchemaInjectionScope(input.schemaInjectionScope),
 		dbxToolEnabled: input.dbxToolEnabled === true,
+		connectionEnv: normalizeConnectionEnv(input.connectionEnv),
+		prodWriteApproved: normalizeProdWriteApproved(input.prodWriteApproved),
 	};
 }
 

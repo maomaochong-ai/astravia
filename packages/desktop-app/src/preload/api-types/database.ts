@@ -5,6 +5,9 @@
  * renderer（抽象层消费）三方共用同一套类型，保证跨进程契约一致。
  */
 
+/** 连接环境标记（W4-②）：生产连接默认禁止写操作。 */
+export type ConnectionEnv = "prod" | "dev";
+
 /** 数据库连接（来自 dbx_list_connections）。 */
 export interface DbConnection {
 	id: string;
@@ -14,6 +17,8 @@ export interface DbConnection {
 	host: string;
 	port: number;
 	database: string;
+	/** 环境标记（W4-②，Astravia 产品层维护，缺省 dev）。 */
+	env: ConnectionEnv;
 }
 
 /** 数据表信息（来自 dbx_list_tables）。 */
@@ -47,13 +52,22 @@ export interface DbQueryResult {
 /** 数据库操作的稳定错误码（对 dbx 原始错误归类后的产物）。 */
 export type DatabaseErrorCode =
 	| "SQL_BLOCKED"
+	| "READ_ONLY"
+	| "PROD_WRITE_BLOCKED"
+	| "TIMEOUT"
 	| "CONNECTION_NOT_FOUND"
 	| "CONNECTION_FAILED"
 	| "CONNECTION_EXISTS"
 	| "INVALID_PARAMS"
 	| "DBX_NOT_RUNNING"
 	| "READ_ONLY"
+	| "PROD_WRITE_BLOCKED"
 	| "TIMEOUT"
+	| "CONNECTION_NOT_FOUND"
+	| "CONNECTION_FAILED"
+	| "CONNECTION_EXISTS"
+	| "INVALID_PARAMS"
+	| "DBX_NOT_RUNNING"
 	| "UNKNOWN";
 
 /**
@@ -82,6 +96,8 @@ export interface DbAddConnectionParams {
 	password?: string;
 	database?: string;
 	ssl?: boolean;
+	/** 环境标记（W4-②）；缺省 dev。 */
+	env?: ConnectionEnv;
 }
 
 /** 连接测试输入：已保存连接按名称测试，未保存的表单按草稿参数测试。 */

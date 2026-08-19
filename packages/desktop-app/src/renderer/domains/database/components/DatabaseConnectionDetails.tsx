@@ -1,5 +1,5 @@
 import type { JSX } from "react";
-import { Button, Spin } from "@astravia/ui";
+import { Button, Spin, Switch } from "@astravia/ui";
 import { useTranslation } from "react-i18next";
 import type { DbConnection } from "../../../../preload/api-types/database";
 import { DatabaseDetail } from "./DatabaseDetail";
@@ -67,6 +67,11 @@ export function DatabaseConnectionDetails({
 						value={selected.database || t("databaseNotSet")}
 						empty={!selected.database}
 					/>
+					<InfoItem
+						icon="icon-[mdi--layers-triple-outline]"
+						label={t("databaseEnvironment")}
+						value={t(selected.env === "prod" ? "databaseEnvProd" : "databaseEnvDev")}
+					/>
 				</InfoSection>
 
 				<InfoSection icon="icon-[mdi--cog-outline]" title={t("databaseSectionManagement")}>
@@ -77,6 +82,24 @@ export function DatabaseConnectionDetails({
 						value={selected.groupPath || t("databaseNotSet")}
 						empty={!selected.groupPath}
 					/>
+					{selected.env === "prod" ? (
+						<div className="flex items-center justify-between gap-3 rounded-lg bg-muted/40 px-3 py-2">
+							<div className="min-w-0">
+								<p className="flex items-center gap-1.5 text-[12px] font-medium text-foreground">
+									<span className="icon-[mdi--shield-alert-outline] h-3.5 w-3.5 text-muted-foreground" />
+									{t("databaseProdWriteApproved")}
+								</p>
+								<p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">
+									{t("databaseProdWriteApprovedDescription")}
+								</p>
+							</div>
+							<Switch
+								checked={model.prodWriteApproved[selected.name] === true}
+								disabled={model.prodWriteApprovedBusy}
+								onCheckedChange={() => model.actions.toggleProdWriteApproved(selected.name)}
+							/>
+						</div>
+					) : null}
 				</InfoSection>
 
 				{selectedStatus === "ok" || selectedStatus === "failed" ? (

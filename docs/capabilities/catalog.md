@@ -58,6 +58,10 @@
 | `cap.domain.astravia.im.enabled.set` | domain | command | 1 |
 | `cap.domain.astravia.im.restart` | domain | command | 1 |
 | `cap.domain.astravia.im.agent-model.set` | domain | command | 1 |
+| `cap.domain.astravia.database.connection.list` | domain | query | 1 |
+| `cap.domain.astravia.database.connection.add` | domain | command | 1 |
+| `cap.domain.astravia.database.connection.test` | domain | command | 1 |
+| `cap.domain.astravia.database.connection.remove` | domain | command | 1 |
 | `cap.domain.astravia.knowledge.base.list` | domain | query | 1 |
 | `cap.domain.astravia.knowledge.file-status.list` | domain | query | 1 |
 | `cap.domain.astravia.knowledge.processing.status.get` | domain | query | 1 |
