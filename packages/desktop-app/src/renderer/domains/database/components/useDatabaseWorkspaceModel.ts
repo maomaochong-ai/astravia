@@ -2,13 +2,16 @@ import { confirmDialogAtom } from "@shared/store/atoms";
 import { useSetAtom } from "jotai";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import type { SchemaInjectionScopeData } from "../../../../preload/api-types/config";
 import type {
+	ConnectionEnv,
 	DbAddConnectionParams,
 	DbConnection,
 	DbConnectionTestResult,
+	DbTableInfo,
 } from "../../../../preload/api-types/database";
 import { recordSettingsUsage } from "../../settings/components/recordSettingsUsage";
-import { addConnection, listConnections, removeConnection, testConnection } from "../lib/database-api";
+import { addConnection, listConnections, listTables, removeConnection, testConnection } from "../lib/database-api";
 import { formatDatabaseError as formatError } from "../lib/database-error-labels";
 import { getDatabaseTypeMeta } from "./database-type-catalog";
 
@@ -21,6 +24,8 @@ export interface DatabaseConnectionFormState {
 	readonly username: string;
 	readonly password: string;
 	readonly ssl: boolean;
+	/** W4-② 环境标记（缺省 dev）。 */
+	readonly env: ConnectionEnv;
 }
 
 export type DatabaseConnectionTestStatus = "untested" | "testing" | "ok" | "failed";
@@ -31,7 +36,22 @@ export interface DatabaseConnectionTestSnapshot {
 	readonly tableCount: number;
 }
 
-export type DatabaseFormFieldKey = "dbType" | "name" | "host" | "port" | "database" | "username" | "password" | "ssl";
+/** 感知范围类型（B2.10-W4-①）。 */
+export type SchemaInjectionScopeKind = SchemaInjectionScopeData["scope"];
+
+/** 感知范围缺省值：all（全部连接全表）。 */
+const DEFAULT_SCHEMA_INJECTION_SCOPE: SchemaInjectionScopeData = { scope: "all", connections: [], tables: [] };
+
+export type DatabaseFormFieldKey =
+	| "dbType"
+	| "name"
+	| "host"
+	| "port"
+	| "database"
+	| "username"
+	| "password"
+	| "ssl"
+	| "env";
 
 export interface DatabaseWorkspaceModel {
 	readonly addOpen: boolean;
@@ -47,8 +67,16 @@ export interface DatabaseWorkspaceModel {
 	readonly loading: boolean;
 	readonly schemaInjection: boolean;
 	readonly schemaInjectionBusy: boolean;
+	readonly schemaInjectionScope: SchemaInjectionScopeData;
+	readonly schemaInjectionScopeBusy: boolean;
+	/** 表级选择用：按连接名缓存的表清单（懒加载）。 */
+	readonly connectionTables: Readonly<Record<string, readonly DbTableInfo[]>>;
+	readonly loadingTablesFor: string | null;
 	readonly dbxToolEnabled: boolean;
 	readonly dbxToolBusy: boolean;
+	/** W4-② 生产写授权：连接名 → 已显式授权（生产连接默认禁写）。 */
+	readonly prodWriteApproved: Readonly<Record<string, boolean>>;
+	readonly prodWriteApprovedBusy: boolean;
 	readonly selected: DbConnection | null;
 	readonly testSnapshots: Readonly<Record<string, DatabaseConnectionTestSnapshot>>;
 	readonly testingName: string | null;
@@ -64,7 +92,13 @@ export interface DatabaseWorkspaceModel {
 		readonly testDraft: () => Promise<void>;
 		readonly testSaved: (name: string) => Promise<void>;
 		readonly toggleSchemaInjection: () => Promise<void>;
+		readonly setSchemaInjectionScopeKind: (scope: SchemaInjectionScopeKind) => void;
+		readonly toggleScopeConnection: (name: string) => void;
+		readonly toggleScopeTable: (connection: string, table: string) => void;
+		readonly loadConnectionTables: (connection: string) => Promise<void>;
 		readonly toggleDbxToolAccess: () => Promise<void>;
+		/** W4-② 显式授权/撤销生产写操作（授权前弹确认）。 */
+		readonly toggleProdWriteApproved: (name: string) => void;
 	};
 }
 
@@ -79,6 +113,7 @@ function emptyForm(dbType = "postgres"): DatabaseConnectionFormState {
 		username: "",
 		password: "",
 		ssl: false,
+		env: "dev",
 	};
 }
 
@@ -93,6 +128,7 @@ function toParams(form: DatabaseConnectionFormState, name = form.name.trim()): D
 		...(form.username.trim() !== "" ? { username: form.username.trim() } : {}),
 		...(form.password !== "" ? { password: form.password } : {}),
 		ssl: form.ssl,
+		env: form.env,
 	};
 }
 
@@ -116,8 +152,16 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 	const [testSnapshots, setTestSnapshots] = useState<Record<string, DatabaseConnectionTestSnapshot>>({});
 	const [schemaInjection, setSchemaInjection] = useState(false);
 	const [schemaInjectionBusy, setSchemaInjectionBusy] = useState(false);
+	const [schemaInjectionScope, setSchemaInjectionScope] =
+		useState<SchemaInjectionScopeData>(DEFAULT_SCHEMA_INJECTION_SCOPE);
+	const [schemaInjectionScopeBusy, setSchemaInjectionScopeBusy] = useState(false);
+	const [connectionTables, setConnectionTables] = useState<Record<string, DbTableInfo[]>>({});
+	const [loadingTablesFor, setLoadingTablesFor] = useState<string | null>(null);
 	const [dbxToolEnabled, setDbxToolEnabled] = useState(false);
 	const [dbxToolBusy, setDbxToolBusy] = useState(false);
+	// W4-② 生产写授权状态（desktop-config database.prodWriteApproved，缺省无授权）。
+	const [prodWriteApproved, setProdWriteApproved] = useState<Record<string, boolean>>({});
+	const [prodWriteApprovedBusy, setProdWriteApprovedBusy] = useState(false);
 
 	const refresh = useCallback(async () => {
 		try {
@@ -142,7 +186,9 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 	useEffect(() => {
 		void window.astravia.config.get().then((config) => {
 			setSchemaInjection(config.database?.schemaInjection === true);
+			setSchemaInjectionScope(config.database?.schemaInjectionScope ?? DEFAULT_SCHEMA_INJECTION_SCOPE);
 			setDbxToolEnabled(config.database?.dbxToolEnabled === true);
+			setProdWriteApproved(config.database?.prodWriteApproved ?? {});
 		});
 	}, []);
 
@@ -170,6 +216,11 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 				host: meta.fileBased ? "" : "localhost",
 				port: meta.fileBased ? "" : meta.defaultPort,
 			}));
+			return;
+		}
+		if (field === "env") {
+			const env: ConnectionEnv = value === "prod" ? "prod" : "dev";
+			setForm((prev) => ({ ...prev, env }));
 			return;
 		}
 		setForm((prev) => ({ ...prev, [field]: value }));
@@ -302,6 +353,69 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 		}
 	}, [schemaInjection]);
 
+	// B2.10-W4-① 感知范围：任何范围变更即时持久化 + 埋点（value 为范围摘要，非用户可见文案）。
+	const saveSchemaInjectionScope = useCallback(async (next: SchemaInjectionScopeData) => {
+		setSchemaInjectionScopeBusy(true);
+		try {
+			await window.astravia.config.set({ database: { schemaInjectionScope: next } });
+			setSchemaInjectionScope(next);
+			const label =
+				next.scope === "all"
+					? "all"
+					: next.scope === "connections"
+						? `connections:${next.connections.length}`
+						: `tables:${next.tables.length}`;
+			recordSettingsUsage({ tab: "database", action: "changed", target: "schema-injection-scope", value: label });
+		} finally {
+			setSchemaInjectionScopeBusy(false);
+		}
+	}, []);
+
+	const setSchemaInjectionScopeKind = useCallback(
+		(scope: SchemaInjectionScopeKind) => {
+			void saveSchemaInjectionScope({ ...schemaInjectionScope, scope });
+		},
+		[saveSchemaInjectionScope, schemaInjectionScope],
+	);
+
+	const toggleScopeConnection = useCallback(
+		(name: string) => {
+			const has = schemaInjectionScope.connections.includes(name);
+			const connections = has
+				? schemaInjectionScope.connections.filter((c) => c !== name)
+				: [...schemaInjectionScope.connections, name];
+			void saveSchemaInjectionScope({ ...schemaInjectionScope, connections });
+		},
+		[saveSchemaInjectionScope, schemaInjectionScope],
+	);
+
+	const toggleScopeTable = useCallback(
+		(connection: string, table: string) => {
+			const has = schemaInjectionScope.tables.some((t) => t.connection === connection && t.table === table);
+			const tables = has
+				? schemaInjectionScope.tables.filter((t) => !(t.connection === connection && t.table === table))
+				: [...schemaInjectionScope.tables, { connection, table }];
+			void saveSchemaInjectionScope({ ...schemaInjectionScope, tables });
+		},
+		[saveSchemaInjectionScope, schemaInjectionScope],
+	);
+
+	const loadConnectionTables = useCallback(
+		async (connection: string) => {
+			if (connectionTables[connection] || loadingTablesFor) return;
+			setLoadingTablesFor(connection);
+			try {
+				const tables = await listTables(connection);
+				setConnectionTables((prev) => ({ ...prev, [connection]: tables }));
+			} catch {
+				// 表清单加载失败静默：chips 区保持未加载态，用户可再次点击重试。
+			} finally {
+				setLoadingTablesFor(null);
+			}
+		},
+		[connectionTables, loadingTablesFor],
+	);
+
 	const toggleDbxToolAccess = useCallback(async () => {
 		setDbxToolBusy(true);
 		try {
@@ -314,6 +428,44 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 		}
 	}, [dbxToolEnabled]);
 
+	// W4-② 显式授权/撤销生产写操作：开启需确认弹窗（敏感操作），关闭直接撤销并持久化 + 埋点。
+	const toggleProdWriteApproved = useCallback(
+		(name: string) => {
+			const next = !prodWriteApproved[name];
+			const persist = async (): Promise<void> => {
+				setProdWriteApprovedBusy(true);
+				try {
+					await window.astravia.config.set({
+						database: { prodWriteApproved: { ...prodWriteApproved, [name]: next } },
+					});
+					setProdWriteApproved((prev) => ({ ...prev, [name]: next }));
+					recordSettingsUsage({
+						tab: "database",
+						action: next ? "enabled" : "disabled",
+						target: "prod-write-approved",
+						value: name,
+					});
+				} finally {
+					setProdWriteApprovedBusy(false);
+				}
+			};
+			if (next) {
+				setConfirm({
+					title: t("databaseProdWriteConfirm"),
+					message: t("databaseProdWriteConfirmMessage", { name }),
+					confirmLabel: t("databaseProdWriteApprove"),
+					variant: "danger",
+					onConfirm: () => {
+						void persist();
+					},
+				});
+			} else {
+				void persist();
+			}
+		},
+		[prodWriteApproved, setConfirm, t],
+	);
+
 	const selected = useMemo(
 		() => connections.find((connection) => connection.name === selectedName) ?? null,
 		[connections, selectedName],
@@ -322,8 +474,14 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 	return {
 		schemaInjection,
 		schemaInjectionBusy,
+		schemaInjectionScope,
+		schemaInjectionScopeBusy,
+		connectionTables,
+		loadingTablesFor,
 		dbxToolEnabled,
 		dbxToolBusy,
+		prodWriteApproved,
+		prodWriteApprovedBusy,
 		addOpen,
 		connections,
 		error,
@@ -350,7 +508,12 @@ export function useDatabaseWorkspaceModel(): DatabaseWorkspaceModel {
 			testDraft,
 			testSaved,
 			toggleSchemaInjection,
+			setSchemaInjectionScopeKind,
+			toggleScopeConnection,
+			toggleScopeTable,
+			loadConnectionTables,
 			toggleDbxToolAccess,
+			toggleProdWriteApproved,
 		},
 	};
 }

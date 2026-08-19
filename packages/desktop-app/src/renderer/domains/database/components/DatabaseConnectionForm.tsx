@@ -7,6 +7,11 @@ import {
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
 	Spin,
 	Switch,
 } from "@astravia/ui";
@@ -140,6 +145,28 @@ export function DatabaseConnectionForm({
 							<Switch checked={form.ssl} onCheckedChange={(value) => onChange("ssl", value)} />
 						</div>
 					)}
+
+					{/* W4-② 环境标记：生产连接默认禁止写操作，需在连接详情中显式授权。 */}
+					<div className="col-span-2 flex items-center justify-between gap-3 rounded-lg bg-muted/40 px-3 py-2">
+						<label className="flex cursor-pointer items-center gap-2 text-[12px] font-medium text-foreground">
+							<span className="icon-[mdi--layers-triple-outline] h-3.5 w-3.5 text-muted-foreground" />
+							{t("databaseEnvironment")}
+						</label>
+						<Select value={form.env} onValueChange={(value) => onChange("env", value === "prod" ? "prod" : "dev")}>
+							<SelectTrigger size="sm" className="w-[132px]">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
+								<SelectItem value="dev">{t("databaseEnvDev")}</SelectItem>
+								<SelectItem value="prod">{t("databaseEnvProd")}</SelectItem>
+							</SelectContent>
+						</Select>
+					</div>
+					{form.env === "prod" ? (
+						<div className="col-span-2">
+							<DatabaseNotice tone="info" icon="icon-[mdi--shield-alert-outline]" title={t("databaseEnvProdNotice")} />
+						</div>
+					) : null}
 
 					<FormSectionLabel label={t("databaseSectionCredentials")} />
 

@@ -10,6 +10,7 @@ export const ERROR_LABEL_KEYS = {
 	INVALID_PARAMS: "databaseError.invalidParams",
 	DBX_NOT_RUNNING: "databaseError.engineNotRunning",
 	READ_ONLY: "databaseError.readOnly",
+	PROD_WRITE_BLOCKED: "databaseError.prodWriteBlocked",
 	TIMEOUT: "databaseError.timeout",
 	UNKNOWN: "databaseError.unknown",
 } as const;

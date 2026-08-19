@@ -1,3 +1,5 @@
+import type { DbColumnInfo } from "../../preload/api-types/database.js";
+import type { SchemaInjectionScopeConfig } from "../config/desktop-config-store.js";
 import { databaseService } from "./database-service.js";
 
 /**
@@ -8,10 +10,14 @@ import { databaseService } from "./database-service.js";
  * 与 dbx MCP 工具（dbx_execute_query）配合使用：schema 帮助 AI 写 SQL，
  * MCP 工具负责实际执行。
  *
+ * B2.10-W4-① 感知范围：opts.scope 决定注入范围——all（默认）= 全部连接全表；
+ * connections = 仅白名单连接（连接级）；tables = 仅白名单「连接.表」（表级，
+ * 经 dbx_describe_table 拼装）。
+ *
  * 设计要点：
- * - 纯函数（renderSchemaContextBlock / summarizeSchema）与 IO（SchemaContextIo）
- *   分离，便于单测；
- * - 每连接 schema 截断到字符上限，控制 token 开销；
+ * - 纯函数（renderSchemaContextBlock / summarizeSchema / formatTableSchema）与 IO
+ *   （SchemaContextIo）分离，便于单测；
+ * - 每连接/每表 schema 截断到字符上限，控制 token 开销；
  * - 任意失败静默跳过（不阻塞会话创建），进程级 TTL 缓存避免每次建会话
  *   都重复打 dbx MCP。
  */
@@ -22,9 +28,11 @@ export const SCHEMA_CONTEXT_CHAR_LIMIT_PER_CONNECTION = 6_000;
 /** 缓存有效期：连接/schema 变更后最多延迟该时长生效。 */
 export const SCHEMA_CONTEXT_CACHE_TTL_MS = 60_000;
 
-/** 组装后的单个连接条目。 */
+/** 组装后的单个注入条目。 */
 export interface SchemaContextEntry {
 	connectionName: string;
+	/** 表级注入（B2.10-W4-①）：仅白名单表时携带表名，渲染为「连接 x 表 y」。 */
+	tableName?: string;
 	schema: string;
 }
 
@@ -33,6 +41,8 @@ export interface SchemaContextIo {
 	listConnections(): Promise<Array<{ name: string }>>;
 	/** 返回连接 schema 文本；失败时抛错（调用方静默跳过）。 */
 	getSchemaContext(connectionName: string): Promise<string>;
+	/** 返回单表 schema 文本（B2.10-W4-① 表级注入）；失败时抛错（调用方静默跳过）。 */
+	getTableSchemaContext(connectionName: string, table: string): Promise<string>;
 }
 
 /** 摘要化：超限截断，保留开头并标注截断信息。 */
@@ -45,6 +55,8 @@ export function summarizeSchema(schema: string, limit = SCHEMA_CONTEXT_CHAR_LIMI
 export interface SchemaContextRenderOptions {
 	/** dbx MCP 工具（dbx_execute_query 等）是否可用（AI 访问开关 database.dbxToolEnabled）。缺省 true。 */
 	readonly executeToolAvailable?: boolean;
+	/** 感知范围（B2.10-W4-①）：缺省 all（全部连接全表）。 */
+	readonly scope?: SchemaInjectionScopeConfig;
 }
 
 /** 组装可注入的 schema 提示词块（纯函数）。无条目时返回空串。 */
@@ -52,7 +64,12 @@ export function renderSchemaContextBlock(entries: SchemaContextEntry[], opts?: S
 	if (entries.length === 0) return "";
 	const executeToolAvailable = opts?.executeToolAvailable !== false;
 	const body = entries
-		.map((entry) => `### 连接「${entry.connectionName}」\n${summarizeSchema(entry.schema)}`)
+		.map((entry) => {
+			const title = entry.tableName
+				? `### 连接「${entry.connectionName}」表「${entry.tableName}」`
+				: `### 连接「${entry.connectionName}」`;
+			return `${title}\n${summarizeSchema(entry.schema)}`;
+		})
 		.join("\n\n");
 	// B2.10-W2：感知开关只管注入；工具可用性由「AI 访问」开关决定。工具不可用时不再指示调用 dbx 工具，
 	// 避免模型在对话里调用不存在的工具（Tool dbx_execute_query not found）。
@@ -67,7 +84,7 @@ export function renderSchemaContextBlock(entries: SchemaContextEntry[], opts?: S
 	].join("\n\n");
 }
 
-/** 进程级缓存：connectionName → { schema, fetchedAt }。 */
+/** 进程级缓存：连接级 key = connectionName，表级 key = tableCacheKey(...)。 */
 const schemaCache = new Map<string, { schema: string; fetchedAt: number }>();
 
 function cachedSchema(io: SchemaContextIo, connectionName: string): Promise<string> {
@@ -86,6 +103,23 @@ export function clearSchemaContextCache(): void {
 	schemaCache.clear();
 }
 
+/** 表级 schema 缓存 key（与连接级区分）。 */
+function tableCacheKey(connectionName: string, table: string): string {
+	return `table\u0000${connectionName}\u0000${table}`;
+}
+
+function cachedTableSchema(io: SchemaContextIo, connectionName: string, table: string): Promise<string> {
+	const key = tableCacheKey(connectionName, table);
+	const hit = schemaCache.get(key);
+	if (hit && Date.now() - hit.fetchedAt < SCHEMA_CONTEXT_CACHE_TTL_MS) {
+		return Promise.resolve(hit.schema);
+	}
+	return io.getTableSchemaContext(connectionName, table).then((schema) => {
+		schemaCache.set(key, { schema, fetchedAt: Date.now() });
+		return schema;
+	});
+}
+
 /**
  * 构建注入用的 schema 提示词块。
  * 失败（引擎未运行 / 无连接 / 单连接读 schema 失败）一律返回 undefined，不抛错。
@@ -95,10 +129,30 @@ export async function buildDatabaseSchemaPrompt(
 	opts?: SchemaContextRenderOptions,
 ): Promise<string | undefined> {
 	try {
+		const scope = opts?.scope;
+		// B2.10-W4-① 感知范围：tables = 仅白名单「连接.表」；connections = 仅白名单连接；其余 = 全部连接全表。
+		if (scope?.scope === "tables") {
+			if (scope.tables.length === 0) return undefined;
+			const entries: SchemaContextEntry[] = [];
+			for (const target of scope.tables) {
+				try {
+					const schema = await cachedTableSchema(io, target.connection, target.table);
+					if (schema.trim()) entries.push({ connectionName: target.connection, tableName: target.table, schema });
+				} catch {
+					// 单表失败静默跳过：不影响其它表与会话创建。
+				}
+			}
+			if (entries.length === 0) return undefined;
+			return renderSchemaContextBlock(entries, opts);
+		}
+
 		const connections = await io.listConnections();
 		if (connections.length === 0) return undefined;
+		const allow = scope?.scope === "connections" ? new Set(scope.connections) : null;
+		const targets = allow ? connections.filter((connection) => allow.has(connection.name)) : connections;
+		if (targets.length === 0) return undefined;
 		const entries: SchemaContextEntry[] = [];
-		for (const connection of connections) {
+		for (const connection of targets) {
 			try {
 				const schema = await cachedSchema(io, connection.name);
 				if (schema.trim()) entries.push({ connectionName: connection.name, schema });
@@ -124,4 +178,25 @@ export const databaseSchemaContextIo: SchemaContextIo = {
 		if (!result.ok) throw new Error(result.error.detail);
 		return result.data;
 	},
+	async getTableSchemaContext(connectionName, table) {
+		const result = await databaseService.describeTable(connectionName, table);
+		if (!result.ok) throw new Error(result.error.detail);
+		return formatTableSchema(table, result.data);
+	},
 };
+
+/**
+ * 把单表列结构格式化为 schema 文本（B2.10-W4-① 表级注入）。
+ * 列名/类型/主键/非空/默认值/注释，对齐 dbx_get_schema_context 的信息粒度。
+ */
+export function formatTableSchema(table: string, columns: DbColumnInfo[]): string {
+	const lines = columns.map((column) => {
+		const parts = [column.name, column.type || "unknown"];
+		if (column.isPrimaryKey) parts.push("PRIMARY KEY");
+		if (!column.nullable) parts.push("NOT NULL");
+		if (column.hasDefault && column.defaultValue) parts.push(`DEFAULT ${column.defaultValue}`);
+		if (column.comment) parts.push(`-- ${column.comment}`);
+		return `  ${parts.join(" ")}`;
+	});
+	return `${table} (\n${lines.join("\n")}\n)`;
+}

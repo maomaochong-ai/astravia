@@ -26,6 +26,7 @@ import { DatabaseStatusDot } from "./DatabaseStatus";
 import { DatabaseTypeBadge } from "./DatabaseTypeBadge";
 import { DatabaseWorkspaceHeader } from "./DatabaseWorkspaceHeader";
 import { DbxToolAccessRow, SchemaInjectionRow } from "./database-details-shared";
+import { SchemaInjectionScopePanel } from "./SchemaInjectionScopePanel";
 import { useDatabaseWorkspaceModel } from "./useDatabaseWorkspaceModel";
 
 /**
@@ -126,6 +127,7 @@ export function DatabaseConnectionsWorkspace(): JSX.Element {
 					<DatabaseSectionLabel icon="icon-[mdi--cog-outline]">{t("databaseSectionGlobal")}</DatabaseSectionLabel>
 					<div className="mt-3 flex flex-col gap-3">
 						<SchemaInjectionRow model={model} />
+						{model.schemaInjection ? <SchemaInjectionScopePanel model={model} /> : null}
 						<DbxToolAccessRow model={model} />
 						<DatabaseNotice tone="info" icon="icon-[mdi--shield-lock-outline]" title={t("databaseEngineNote")} />
 					</div>

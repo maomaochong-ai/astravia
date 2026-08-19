@@ -12,7 +12,7 @@ import {
 const DEFAULT = "默认分组";
 
 function conn(name: string, groupPath = ""): DbConnection {
-	return { id: name, name, groupPath, type: "postgres", host: "h", port: 5432, database: "d" };
+	return { id: name, name, groupPath, type: "postgres", host: "h", port: 5432, database: "d", env: "dev" };
 }
 
 function table(name: string): DbTableInfo {

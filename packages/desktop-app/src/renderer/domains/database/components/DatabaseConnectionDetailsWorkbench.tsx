@@ -58,6 +58,11 @@ export function DatabaseConnectionDetailsWorkbench({
 						value={selected.database || t("databaseNotSet")}
 						empty={!selected.database}
 					/>
+					<InfoItem
+						icon="icon-[mdi--layers-triple-outline]"
+						label={t("databaseEnvironment")}
+						value={t(selected.env === "prod" ? "databaseEnvProd" : "databaseEnvDev")}
+					/>
 				</InfoSection>
 
 				{selectedStatus === "ok" || selectedStatus === "failed" ? (

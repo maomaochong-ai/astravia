@@ -94,9 +94,27 @@ export interface DesktopConfigData {
 	database?: {
 		/** AI 对话会话创建时注入连接 schema 上下文（感知）。缺省关。 */
 		schemaInjection?: boolean;
+		/** 感知范围（B2.10-W4-①）：schemaInjection 开启时按此范围过滤注入；缺省 all（全部连接全表）。 */
+		schemaInjectionScope?: SchemaInjectionScopeData;
 		/** AI 访问开关（访问）：控制 dbx MCP 工具是否注册进对话工具集。缺省关。 */
 		dbxToolEnabled?: boolean;
+		/** 连接环境标记（W4-②）：连接名 → "prod" | "dev"，缺省 dev。 */
+		connectionEnv?: Record<string, "prod" | "dev">;
+		/** 生产写授权（W4-②）：连接名 → 已显式授权允许生产写操作。 */
+		prodWriteApproved?: Record<string, boolean>;
 	};
+}
+
+/**
+ * 感知范围配置（B2.10-W4-①）：schemaInjection 开启时按此范围过滤注入；缺省 all（全部连接全表）。
+ * scope=connections 时 connections 生效；scope=tables 时 tables 生效。
+ */
+export interface SchemaInjectionScopeData {
+	scope: "all" | "connections" | "tables";
+	/** scope=connections 时生效：连接名白名单。 */
+	connections: string[];
+	/** scope=tables 时生效：「连接.表」白名单。 */
+	tables: Array<{ connection: string; table: string }>;
 }
 
 export interface ShortcutsBindingsChangedEvent {

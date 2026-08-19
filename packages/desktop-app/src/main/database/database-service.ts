@@ -10,7 +10,9 @@ import type {
 	DbTableInfo,
 	DbTestConnectionParams,
 } from "../../preload/api-types/database.js";
+import { readConfigSync, writeDesktopConfig } from "../config/desktop-config-store.js";
 import { getDbxMcpClient } from "./dbx-mcp-client.js";
+import { maybeBlockProdWrite } from "./sql-safety.js";
 
 /**
  * 数据库能力桥接服务（main 进程）。
@@ -155,6 +157,8 @@ export const databaseService = {
 			const text = textOf(result);
 			if (result.isError) return err(classifyError(text));
 
+			// W4-② 连接环境标记由 Astravia 产品层维护（desktop-config），缺省 dev。
+			const envMap = readConfigSync().database?.connectionEnv ?? {};
 			const { rows } = parseMarkdownTable(text);
 			const connections: DbConnection[] = rows.map((row) => ({
 				id: pick(row, ["ID", "Id", "id"]),
@@ -164,6 +168,7 @@ export const databaseService = {
 				host: pick(row, ["Host", "host"]),
 				port: Number(pick(row, ["Port", "port"])) || 0,
 				database: pick(row, ["Database", "database", "DB"]),
+				env: envMap[pick(row, ["Name", "name"])] ?? "dev",
 			}));
 			return ok(connections);
 		} catch (e) {
@@ -190,6 +195,18 @@ export const databaseService = {
 			const result = await client.callTool("dbx_add_connection", dbxArgs);
 			const text = textOf(result);
 			if (result.isError) return err(classifyError(text));
+
+			// W4-② 环境标记落 desktop-config（dev 为缺省值，仅 prod 需要显式写入）。
+			if (params.env === "prod") {
+				const config = readConfigSync();
+				await writeDesktopConfig({
+					...config,
+					database: {
+						...config.database,
+						connectionEnv: { ...(config.database?.connectionEnv ?? {}), [params.name]: "prod" },
+					},
+				});
+			}
 
 			// 返回的文本可能是 "Connection added" 之类的确认，也可能含 id
 			const idMatch = text.match(/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i);
@@ -237,6 +254,14 @@ export const databaseService = {
 			// dbx 按 name 删除（连接名全局唯一）
 			const result = await client.callTool("dbx_remove_connection", { connection_name: id });
 			if (result.isError) return err(classifyError(textOf(result)));
+
+			// W4-② 同步清理产品层维护的环境标记与生产写授权，避免悬空条目。
+			const config = readConfigSync();
+			const connectionEnv = { ...(config.database?.connectionEnv ?? {}) };
+			const prodWriteApproved = { ...(config.database?.prodWriteApproved ?? {}) };
+			delete connectionEnv[id];
+			delete prodWriteApproved[id];
+			await writeDesktopConfig({ ...config, database: { ...config.database, connectionEnv, prodWriteApproved } });
 			return ok(undefined);
 		} catch (e) {
 			return err(toDatabaseError(e));
@@ -290,6 +315,13 @@ export const databaseService = {
 	/** 执行查询（SELECT），返回结构化结果。 */
 	async executeQuery(connectionName: string, sql: string): Promise<DatabaseResult<DbQueryResult>> {
 		try {
+			// W4-② 生产连接写保护：env=prod 且未显式授权时，写语句直接拦截（不触达引擎）。
+			const dbConfig = readConfigSync().database;
+			const env = dbConfig?.connectionEnv?.[connectionName] ?? "dev";
+			const writeApproved = dbConfig?.prodWriteApproved?.[connectionName] === true;
+			const blocked = maybeBlockProdWrite({ env, writeApproved, sql });
+			if (blocked) return err(blocked);
+
 			const client = getDbxMcpClient();
 			const result = await client.callTool("dbx_execute_query", { connection_name: connectionName, sql });
 			const text = textOf(result);
