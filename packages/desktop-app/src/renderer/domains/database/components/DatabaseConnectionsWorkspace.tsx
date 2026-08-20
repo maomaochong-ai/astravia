@@ -164,7 +164,7 @@ export function DatabaseConnectionsWorkspace(): JSX.Element {
 										const active = connection.name === selected?.name;
 										return (
 											<button
-												key={connection.id}
+												key={connection.name}
 												type="button"
 												onClick={() => model.actions.select(connection.name)}
 												className={cn(
