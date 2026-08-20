@@ -21,6 +21,9 @@ import {
 } from "../lib/query-tabs";
 import { buildOpenTableSql } from "../lib/sql-dialect";
 
+/** V6-② 打开表浏览每页行数：dbx-mcp `dbx_execute_query` 最多返回 100 行，页大小取上限。 */
+export const OPEN_TABLE_PAGE_SIZE = 100;
+
 export type { DatabaseQueryStatus } from "../lib/query-tabs";
 
 export interface DatabaseQueryModel {
@@ -37,14 +40,16 @@ export interface DatabaseQueryModel {
 	readonly errorDetail: string | null;
 	/** V3-③ 查询历史（最近 N 条，localStorage 持久化，成功执行才记录，全局共享）。 */
 	readonly history: readonly QueryHistoryEntry[];
-	/** V4-② 是否可「加载更多」：结果来自「打开表」浏览（SQL 可控，可安全加大 limit 重取）。 */
-	readonly canLoadMore: boolean;
-	/** V4-② 当前已加载行数上限（打开表浏览时为 100/200/…；自由 SQL 为 null）。 */
-	readonly loadedLimit: number | null;
-	/** V4-② 当前打开表浏览元信息（B3.2 数据编辑据此定位表/方言）。 */
+	/** V6-② 是否可「下一页」：结果来自「打开表」浏览且当前页已满（满页假设还有更多，对齐 dbx-main canGoNextDataGridPage）。 */
+	readonly canGoNextPage: boolean;
+	/** V6-② 服务端分页当前页（1-based；自由 SQL / AI 回填为 null）。 */
+	readonly page: number | null;
+	/** V6-② 服务端分页每页行数（打开表浏览恒 ≤ 100，受 dbx-mcp `dbx_execute_query` 上限约束）。 */
+	readonly pageSize: number | null;
+	/** V6-② 当前打开表浏览元信息（B3.2 数据编辑据此定位表/方言）。 */
 	readonly openTableMeta: OpenTableMeta | null;
-	/** V4-② 加载更多进行中（保持现有结果显示，底部按钮转 loading）。 */
-	readonly loadingMore: boolean;
+	/** V6-② 服务端翻页进行中（保持现有结果显示，分页按钮转 loading）。 */
+	readonly loadingPage: boolean;
 	readonly actions: {
 		/** V5-③ 「+」新建空白标签（标题「查询 N」）并激活。 */
 		readonly addTab: () => void;
@@ -66,8 +71,8 @@ export interface DatabaseQueryModel {
 		readonly run: (connection: DbConnection) => Promise<void>;
 		/** V5-④ 双击打开表：新建标签并激活，自动生成方言 SQL 并执行。 */
 		readonly openTable: (connection: DbConnection, table: string) => Promise<void>;
-		/** V4-② 加载更多：对「打开表」结果用更大的 limit 重取（100 → 200 → 300 …）。 */
-		readonly loadMore: (connection: DbConnection) => Promise<void>;
+		/** V6-② 服务端分页翻页：对「打开表」结果按 `LIMIT pageSize OFFSET (page-1)*pageSize` 重查（自由 SQL 无此能力）。 */
+		readonly goToPage: (connection: DbConnection, page: number) => Promise<void>;
 		/** B3.2 数据编辑后刷新：用当前打开表元信息（type/table/limit）重取结果，不动标签与历史。 */
 		readonly reloadOpenTable: (connection: DbConnection) => Promise<void>;
 		/** B3.2-R 自由 SQL 结果写后刷新：重跑指定 SQL（不推历史）。 */
@@ -221,7 +226,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 				...prev,
 				createQueryTab(id, table, {
 					sql: sqlText,
-					openTableMeta: { type: connection.type, table, limit: 100 },
+					openTableMeta: { type: connection.type, table, pageSize: OPEN_TABLE_PAGE_SIZE, page: 1 },
 				}),
 			]);
 			setActiveTabId(id);
@@ -230,21 +235,22 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 		[runSql],
 	);
 
-	// V4-② 加载更多：保持现有结果显示，用更大 limit 的打开表 SQL 重取并替换结果（作用于激活标签）。
-	// V6-① 修复：limit 只在**成功后**推进 —— 加载中/失败时 loadedLimit 保持旧值，
-	// 避免底部「已加载前 N 行」与实际行数不一致；成功后再由结果网格跳转到新数据页。
-	const loadMore = useCallback(
-		async (connection: DbConnection) => {
+	// V6-② 服务端分页翻页：保持现有结果显示，按目标页 OFFSET 重查并替换结果（作用于激活标签）。
+	// 背景：dbx-mcp `dbx_execute_query` 最多返回 100 行（工具写死 limit=100），
+	// 旧的「加载更多」加大 LIMIT 重取永远拿不到第 101 行之后 —— 改为每页固定 pageSize（≤100）行，
+	// 翻页用 `LIMIT pageSize OFFSET (page-1)*pageSize`，MCP 截断前 100 行恰好是目标页内容（对齐 dbx-main 服务端分页）。
+	const goToPage = useCallback(
+		async (connection: DbConnection, page: number) => {
 			const tab = activeTab;
-			if (!tab?.openTableMeta || tab.loadingMore) return;
+			if (!tab?.openTableMeta || tab.loadingPage) return;
 			const meta = tab.openTableMeta;
-			const nextLimit = meta.limit + 100;
-			const sqlText = buildOpenTableSql(meta.type, meta.table, nextLimit);
+			const target = Math.max(1, page);
+			const sqlText = buildOpenTableSql(meta.type, meta.table, meta.pageSize, (target - 1) * meta.pageSize);
 			const tabId = tab.id;
 			setTabs((prev) =>
 				patchQueryTab(prev, tabId, {
 					sql: sqlText,
-					loadingMore: true,
+					loadingPage: true,
 				}),
 			);
 			try {
@@ -257,7 +263,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 						status: "success",
 						error: null,
 						errorDetail: null,
-						openTableMeta: { ...meta, limit: nextLimit },
+						openTableMeta: { ...meta, page: target },
 					}),
 				);
 				recordHistory(connection.name, sqlText);
@@ -265,19 +271,23 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 				const { message, detail } = formatDatabaseError(t, caught);
 				setTabs((prev) => patchQueryTab(prev, tabId, { error: message, errorDetail: detail, status: "error" }));
 			} finally {
-				setTabs((prev) => patchQueryTab(prev, tabId, { loadingMore: false }));
+				setTabs((prev) => patchQueryTab(prev, tabId, { loadingPage: false }));
 			}
 		},
 		[activeTab, recordHistory, t],
 	);
 
-	// B3.2 数据编辑后刷新：写操作成功后按当前 openTableMeta 重取（保持 limit 与标签不变，不记历史）。
+	// B3.2 数据编辑后刷新：写操作成功后按当前 openTableMeta 重取（保持 page/pageSize 与标签不变，不记历史）。
 	const reloadOpenTable = useCallback(
 		async (connection: DbConnection) => {
 			const tab = activeTab;
 			if (!tab?.openTableMeta) return;
 			const meta = tab.openTableMeta;
-			await runSql(connection, buildOpenTableSql(meta.type, meta.table, meta.limit), tab.id);
+			await runSql(
+				connection,
+				buildOpenTableSql(meta.type, meta.table, meta.pageSize, (meta.page - 1) * meta.pageSize),
+				tab.id,
+			);
 		},
 		[activeTab, runSql],
 	);
@@ -298,10 +308,14 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 		error: activeTab.error,
 		errorDetail: activeTab.errorDetail,
 		history,
-		canLoadMore: activeTab.openTableMeta !== null && activeTab.status === "success",
-		loadedLimit: activeTab.openTableMeta?.limit ?? null,
+		canGoNextPage:
+			activeTab.openTableMeta !== null &&
+			activeTab.status === "success" &&
+			(activeTab.result?.rows.length ?? 0) >= activeTab.openTableMeta.pageSize,
+		page: activeTab.openTableMeta?.page ?? null,
+		pageSize: activeTab.openTableMeta?.pageSize ?? null,
 		openTableMeta: activeTab.openTableMeta,
-		loadingMore: activeTab.loadingMore,
+		loadingPage: activeTab.loadingPage,
 		actions: {
 			addTab,
 			closeTab,
@@ -310,7 +324,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 			setSql,
 			run,
 			openTable,
-			loadMore,
+			goToPage,
 			reloadOpenTable,
 			rerun,
 			applyResult,

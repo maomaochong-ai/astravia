@@ -3,11 +3,14 @@ import type { DbQueryResult } from "../../../../preload/api-types/database";
 /** 查询 tab 的执行状态（V5 多查询标签后随每个 tab 独立）。 */
 export type DatabaseQueryStatus = "idle" | "running" | "success" | "error";
 
-/** V4-②「打开表」浏览元信息：结果来自打开表浏览时记录（type + table + 当前 limit），自由 SQL / AI 回填不设。 */
+/** V6-②「打开表」浏览元信息：结果来自打开表浏览时记录（type + table + 服务端分页 page/pageSize），自由 SQL / AI 回填不设。 */
 export interface OpenTableMeta {
 	readonly type: string;
 	readonly table: string;
-	readonly limit: number;
+	/** 每页行数（dbx-mcp `dbx_execute_query` 上限 100，页大小不应超过 100）。 */
+	readonly pageSize: number;
+	/** 当前页（1-based；翻页时用 `LIMIT pageSize OFFSET (page-1)*pageSize` 重查）。 */
+	readonly page: number;
 }
 
 /**
@@ -25,7 +28,8 @@ export interface QueryTabState {
 	readonly error: string | null;
 	readonly errorDetail: string | null;
 	readonly openTableMeta: OpenTableMeta | null;
-	readonly loadingMore: boolean;
+	/** V6-② 服务端翻页进行中（保持现有结果显示，分页按钮转 loading）。 */
+	readonly loadingPage: boolean;
 }
 
 /** 新建一个空白查询标签；initial 覆盖默认字段（如打开表时预填 sql + openTableMeta）。 */
@@ -45,7 +49,7 @@ export function createQueryTab(
 		error: null,
 		errorDetail: null,
 		openTableMeta: null,
-		loadingMore: false,
+		loadingPage: false,
 		...initial,
 	};
 }
