@@ -54,6 +54,7 @@ All notable changes to `@astravia/desktop-app` are documented in this file.
 - **连接环境标记与生产写保护（P7 B2.10-W4-②）**：连接表单新增「环境」选择（开发/生产，i18n zh/en；`database.connectionEnv` 配置，dev 缺省仅 prod 显式落盘），生产连接默认**禁止写操作**——执行前经 `sql-safety.ts` 保守分类（剥离注释后按首关键字判定，SELECT/SHOW/DESCRIBE/EXPLAIN/PRAGMA/USE 为只读，其余含未知关键字一律按写处理，WITH 开头退化全文扫描），写语句直接拦截（`PROD_WRITE_BLOCKED`，不触达引擎）。需在连接详情中显式勾选「允许生产写操作」（`database.prodWriteApproved`，二次确认弹窗）后才能执行；删除连接时同步清理两处标记。i18n zh/en（`databaseEnv*`/`databaseProdWrite*`/`prodWriteBlocked`）+ 埋点；单测 16 例（注释剥离/关键字分类/WITH 退化/未知关键字保守拦截/prod 拦截与授权放行）。
 
 ### Fixed
+- **数据库连接列表出现重复的连接信息**：`databaseService.listConnections()` 把 `dbx_list_connections` 的 Markdown 表格逐行 `map` 成 `DbConnection[]` 后直接返回，未做去重；同一连接被引擎列出多行（或同名连接持有不同 id，如引擎存储残留）时，设置页连接列表与工作台连接树会重复渲染同一个连接。新增纯函数 `dedupeConnections`（导出，便于单测），返回前按 **id 优先、name 兜底** 双键去重，首次出现的行胜出以保留引擎原始顺序；id 为空串时只按 name 判重（避免多条空 id 互相判重），id 与 name 皆空的异常行原样保留，不静默吞掉引擎异常输出。两处列表渲染 key 由可能为空的 `connection.id` 改为 `connection.name`（连接名是引擎的唯一标识，查询/删除/测试均以其为键），避免 key 重复或为空导致的列表错位。新增单测 `dedupe-connections.test.ts`（6 例，不依赖引擎）。
 - **Windows 下 `bun run dev` 启动失败**：`dev` / `dev:verify` 脚本硬编码 `bun ./node_modules/vite/bin/vite.js`，bun 安装时 vite 被提升到仓库根 `node_modules`，desktop-app 内解析不到该路径导致 renderer dev server 起不来。改为 `bunx vite`（自动沿目录向上解析），Windows 与 macOS/Linux 均可用。
 
 - **能力市场「我的」不再按工作模式过滤插件**：声明了 `agent_mode` 白名单的插件（如 `agent_mode: ["work"]`）在「编程」模式下会从「我的」里整条消失，看起来像能力丢了。能力页改用不过滤的 `plugins.listAll()` 取已装插件；插件详情页新增「适用工作场景」一栏，列出该插件声明的模式（未声明则为「全部场景」），当前模式不在白名单时给出提示。工作台列表与 UI 贡献的模式硬闸不变（ADR-0046）。

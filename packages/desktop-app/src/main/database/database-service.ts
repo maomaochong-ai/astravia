@@ -148,8 +148,38 @@ export function parseTableList(text: string): DbTableInfo[] {
 	return tables;
 }
 
+/**
+ * 连接列表去重（纯函数，便于单测）。
+ *
+ * 引擎返回的连接清单可能带重复行——同一连接被列多次（表格里 id 重复），
+ * 或同名连接持有不同 id（引擎存储残留、同名重复写入）。两种都会让 UI
+ * 出现「重复的连接信息」，故此处按 **id 优先、name 兜底** 双键去重：
+ * 首次出现的行胜出（保留引擎原始顺序），后续同 id 或同 name 的行丢弃。
+ *
+ * id 为空串时只按 name 去重（不能让多条空 id 互相判重）；name 也为空的
+ * 异常行一律保留，交由上层原样展示，避免静默吞掉引擎异常输出。
+ */
+export function dedupeConnections(connections: readonly DbConnection[]): DbConnection[] {
+	const seenIds = new Set<string>();
+	const seenNames = new Set<string>();
+	const unique: DbConnection[] = [];
+	for (const connection of connections) {
+		const id = connection.id.trim();
+		const name = connection.name.trim();
+		if (!id && !name) {
+			unique.push(connection);
+			continue;
+		}
+		if ((id && seenIds.has(id)) || (name && seenNames.has(name))) continue;
+		if (id) seenIds.add(id);
+		if (name) seenNames.add(name);
+		unique.push(connection);
+	}
+	return unique;
+}
+
 export const databaseService = {
-	/** 列出全部连接。 */
+	/** 列出全部连接（引擎重复行已去重，见 dedupeConnections）。 */
 	async listConnections(): Promise<DatabaseResult<DbConnection[]>> {
 		try {
 			const client = getDbxMcpClient();
@@ -170,7 +200,7 @@ export const databaseService = {
 				database: pick(row, ["Database", "database", "DB"]),
 				env: envMap[pick(row, ["Name", "name"])] ?? "dev",
 			}));
-			return ok(connections);
+			return ok(dedupeConnections(connections));
 		} catch (e) {
 			return err(toDatabaseError(e));
 		}
