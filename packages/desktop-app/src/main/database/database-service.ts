@@ -11,8 +11,9 @@ import type {
 	DbTestConnectionParams,
 } from "../../preload/api-types/database.js";
 import { readConfigSync, writeDesktopConfig } from "../config/desktop-config-store.js";
+import { getAppLogger } from "../logger.js";
 import { getDbxMcpClient } from "./dbx-mcp-client.js";
-import { maybeBlockProdWrite } from "./sql-safety.js";
+import { isWriteStatement, maybeBlockProdWrite } from "./sql-safety.js";
 
 /**
  * 数据库能力桥接服务（main 进程）。
@@ -34,6 +35,18 @@ function ok<T>(data: T): DatabaseResult<T> {
 
 function err<T>(error: DatabaseError): DatabaseResult<T> {
 	return { ok: false, error };
+}
+
+/**
+ * 写审计日志（尽力而为）：logger 未初始化 / 环境不支持时静默跳过，
+ * 绝不因日志失败破坏查询主链路（测试环境无 electron-log）。
+ */
+function auditWrite(level: "info" | "warn", message: string): void {
+	try {
+		getAppLogger("database")[level](message);
+	} catch {
+		// 静默：审计是辅助能力，查询执行不受影响。
+	}
 }
 
 /** 把 dbx 工具错误文本归类为稳定 DatabaseError。 */
@@ -146,6 +159,41 @@ export function parseTableList(text: string): DbTableInfo[] {
 		}
 	}
 	return tables;
+}
+
+/**
+ * 解析 dbx_describe_table 返回的行 → 列结构列表。纯函数，便于单测。
+ *
+ * 主键检测多格式兼容（B3.2 修复，PG/MySQL 未验证过 SQLite 的 `(PK)` 约定）：
+ * 1. 列名单元格带 `id (PK)` / `id (PRIMARY KEY)`（SQLite 实测格式）；
+ * 2. 独立 Key 列（MySQL `PRI` / `PRIMARY KEY` / `PK`）；
+ * 3. Comment 里的 `PRIMARY KEY` / `PK` 标记。
+ */
+export function parseDescribeColumns(rows: Array<Record<string, string>>): DbColumnInfo[] {
+	return rows.map((row) => {
+		const nameCell = pick(row, ["Column", "Name", "name"]);
+		const keyCell = pick(row, ["Key", "KeyType", "Key type", "keys"]);
+		const commentCell = pick(row, ["Comment", "comment"]);
+		const isPrimaryKey = isPkMarker([nameCell, keyCell, commentCell]);
+		// 清理列名内嵌的主键标记（`id (PK)` → `id`）。
+		const name = nameCell.replace(/\s*\((?:PK|PRIMARY KEY)\)\s*/gi, "").trim();
+		const defaultCell = pick(row, ["Default", "default"]);
+		return {
+			name,
+			type: pick(row, ["Type", "type"]),
+			nullable: (pick(row, ["Nullable", "nullable"]) || "YES").toUpperCase() !== "NO",
+			hasDefault: defaultCell.length > 0,
+			defaultValue: defaultCell,
+			comment: commentCell,
+			isPrimaryKey,
+		};
+	});
+}
+
+/** 主键标记检测：任一处出现 (PK) / 独立 PK / PRI / PRIMARY KEY 即视为主键列。 */
+function isPkMarker(cells: string[]): boolean {
+	const hay = cells.join(" ").toUpperCase();
+	return hay.includes("(PK)") || /\bPK\b/.test(hay) || /\bPRI\b/.test(hay) || /\bPRIMARY KEY\b/.test(hay);
 }
 
 export const databaseService = {
@@ -291,36 +339,31 @@ export const databaseService = {
 			if (result.isError) return err(classifyError(text));
 
 			const { rows } = parseMarkdownTable(text);
-			const columns: DbColumnInfo[] = rows.map((row) => {
-				const nameCell = pick(row, ["Column", "Name", "name"]);
-				const isPrimaryKey = nameCell.includes("(PK)");
-				const name = nameCell.replace(/\s*\(PK\)\s*/, "").trim();
-				const defaultCell = pick(row, ["Default", "default"]);
-				return {
-					name,
-					type: pick(row, ["Type", "type"]),
-					nullable: (pick(row, ["Nullable", "nullable"]) || "YES").toUpperCase() !== "NO",
-					hasDefault: defaultCell.length > 0,
-					defaultValue: defaultCell,
-					comment: pick(row, ["Comment", "comment"]),
-					isPrimaryKey,
-				};
-			});
+			const columns = parseDescribeColumns(rows);
 			return ok(columns);
 		} catch (e) {
 			return err(toDatabaseError(e));
 		}
 	},
 
-	/** 执行查询（SELECT），返回结构化结果。 */
+	/** 执行查询（SELECT），返回结构化结果。B3.2 起写语句（INSERT/UPDATE/DELETE）同样走此链路，并记录审计日志。 */
 	async executeQuery(connectionName: string, sql: string): Promise<DatabaseResult<DbQueryResult>> {
 		try {
 			// W4-② 生产连接写保护：env=prod 且未显式授权时，写语句直接拦截（不触达引擎）。
 			const dbConfig = readConfigSync().database;
 			const env = dbConfig?.connectionEnv?.[connectionName] ?? "dev";
 			const writeApproved = dbConfig?.prodWriteApproved?.[connectionName] === true;
+			const isWrite = isWriteStatement(sql);
+			if (isWrite) auditWrite("info", `[write-audit] start connection="${connectionName}" env=${env} sql=${sql}`);
 			const blocked = maybeBlockProdWrite({ env, writeApproved, sql });
-			if (blocked) return err(blocked);
+			if (blocked) {
+				if (isWrite)
+					auditWrite(
+						"warn",
+						`[write-audit] blocked connection="${connectionName}" env=${env} code=${blocked.code} sql=${sql}`,
+					);
+				return err(blocked);
+			}
 
 			const client = getDbxMcpClient();
 			const result = await client.callTool("dbx_execute_query", { connection_name: connectionName, sql });
@@ -329,6 +372,11 @@ export const databaseService = {
 
 			const { columns, rows } = parseMarkdownTable(text);
 			const durationMatch = text.match(/(\d+)\s*(ms|s)\b/i);
+			if (isWrite)
+				auditWrite(
+					"info",
+					`[write-audit] ok connection="${connectionName}" env=${env} rows=${rows.length} sql=${sql}`,
+				);
 			return ok({
 				columns,
 				rows,

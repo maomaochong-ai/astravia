@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { databaseService, parseTableList } from "./database-service.js";
+import { databaseService, parseDescribeColumns, parseTableList } from "./database-service.js";
 
 /**
  * database-service 集成测试（真实调用 dbx-mcp.exe）。
@@ -147,6 +147,48 @@ describe("databaseService 集成（真实 dbx-mcp）", () => {
 		expect(result.ok).toBe(false);
 		if (result.ok) return;
 		expect(result.error.code).toBe("CONNECTION_NOT_FOUND");
+	});
+});
+
+// B3.2-R parseDescribeColumns（纯函数）：主键检测多格式兼容（SQLite `(PK)` / 独立 Key 列 / Comment 标记）。
+describe("parseDescribeColumns（主键多格式检测）", () => {
+	it("SQLite 格式：列名内嵌 `(PK)` 识别并清理列名", () => {
+		const columns = parseDescribeColumns([
+			{ Column: "id (PK)", Type: "INTEGER" },
+			{ Column: "name", Type: "TEXT" },
+		]);
+		expect(columns.map((c) => [c.name, c.isPrimaryKey])).toEqual([
+			["id", true],
+			["name", false],
+		]);
+	});
+
+	it("MySQL 格式：独立 Key 列 PRI 识别为主键", () => {
+		const columns = parseDescribeColumns([
+			{ Column: "id", Type: "bigint", Key: "PRI" },
+			{ Column: "name", Type: "varchar", Key: "" },
+		]);
+		expect(columns.map((c) => c.isPrimaryKey)).toEqual([true, false]);
+	});
+
+	it("PostgreSQL 格式：KeyType PRIMARY KEY / Comment PRIMARY KEY 识别", () => {
+		const byKeyType = parseDescribeColumns([{ Column: "id", Type: "int8", KeyType: "PRIMARY KEY" }]);
+		expect(byKeyType[0]?.isPrimaryKey).toBe(true);
+		const byComment = parseDescribeColumns([{ Column: "id", Type: "int8", Comment: "PRIMARY KEY" }]);
+		expect(byComment[0]?.isPrimaryKey).toBe(true);
+	});
+
+	it("列名 `(PRIMARY KEY)` 内嵌标记清理列名", () => {
+		const columns = parseDescribeColumns([{ Column: "id (PRIMARY KEY)", Type: "int8" }]);
+		expect(columns[0]).toMatchObject({ name: "id", isPrimaryKey: true });
+	});
+
+	it("无任何主键标记 → 非主键（keyless 表退化为整行等值定位）", () => {
+		const columns = parseDescribeColumns([
+			{ Column: "a", Type: "int" },
+			{ Column: "b", Type: "text", Comment: "普通备注" },
+		]);
+		expect(columns.every((c) => !c.isPrimaryKey)).toBe(true);
 	});
 });
 

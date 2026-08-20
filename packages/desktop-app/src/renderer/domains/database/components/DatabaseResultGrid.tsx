@@ -24,22 +24,50 @@ import { DatabaseDetail } from "./DatabaseDetail";
 import { DatabaseNotice } from "./DatabaseNotice";
 import { DatabaseSectionLabel } from "./DatabaseSectionLabel";
 import type { DatabaseQueryStatus } from "./useDatabaseQueryModel";
+import type { QueryEditabilityReason } from "../lib/sql-editability";
 
-interface DatabaseResultGridProps {
-	status: DatabaseQueryStatus;
-	result: DbQueryResult | null;
-	connectionName: string | null;
-	error: string | null;
-	errorDetail: string | null;
-	/** V4-② 加载更多（仅「打开表」结果可用；自由 SQL 无此能力）。 */
-	canLoadMore?: boolean;
-	/** V4-② 当前已加载行数上限（100/200/…），用于上限提示文案。 */
-	loadedLimit?: number | null;
-	loadingMore?: boolean;
-	onLoadMore?: () => void;
-	/** B2.9-W1 反向：结果工具栏「让 AI 解读此查询」入口（携带当前 SQL + 结果摘要跳转对话）。 */
-	onAnalyzeResult?: () => void;
-}
+// B3.2-R 自动刷新：默认间隔与可选间隔（秒），对齐 dbx DataGridToolbar autoRefresh 间隔下拉。
+const AUTO_REFRESH_DEFAULT_SECONDS = 10;
+const AUTO_REFRESH_INTERVALS = [5, 10, 30, 60] as const;
+
+	interface DatabaseResultGridProps {
+		status: DatabaseQueryStatus;
+		result: DbQueryResult | null;
+		connectionName: string | null;
+		error: string | null;
+		errorDetail: string | null;
+		/** V4-② 加载更多（仅「打开表」结果可用；自由 SQL 无此能力）。 */
+		canLoadMore?: boolean;
+		/** V4-② 当前已加载行数上限（100/200/…），用于上限提示文案。 */
+		loadedLimit?: number | null;
+		loadingMore?: boolean;
+		onLoadMore?: () => void;
+		/** B2.9-W1 反向：结果工具栏「让 AI 解读此查询」入口（携带当前 SQL + 结果摘要跳转对话）。 */
+		onAnalyzeResult?: () => void;
+		/** B3.2-R 数据编辑：打开表浏览或可编辑自由 SQL（简单单表 SELECT）结果均可开启（Workspace 计算后传入）。 */
+		editable?: boolean;
+		/** B3.2 添加行独立于编辑模式（编辑目标存在即可添加，无需主键）。 */
+		canAddRow?: boolean;
+		/** B3.2 编辑按钮不可用时的原因（tooltip 展示）；null = 可用。 */
+		editDisabledReason?: string | null;
+		/** B3.2-R 自由 SQL 不可编辑查询的只读原因（非空时工具栏显示「只读结果」徽章 + 原因 tooltip）。 */
+		readOnlyReason?: QueryEditabilityReason | null;
+		/** B3.2-R 无主键/缺主键列定位警告（整行等值匹配生效时显示琥珀色徽章）。 */
+		showKeylessWarning?: boolean;
+		/** B3.2-R 刷新：重跑当前结果（打开表 reloadOpenTable / 自由 SQL rerun），自动刷新定时器复用。 */
+		onRefresh?: () => void;
+		/** B3.2 当前打开的表名（编辑提示/添加行时展示）。 */
+		tableName?: string | null;
+		/** B3.2 写操作失败的展示错误（Workspace 层执行写 SQL 后设置，网格底部提示）。 */
+		writeError?: string | null;
+		onDismissWriteError?: () => void;
+		/** B3.2 单元格保存：Workspace 负责确认弹窗 + 执行写 SQL + 刷新。 */
+		onSaveCell?: (input: { row: Record<string, string>; column: string; value: string }) => void;
+		/** B3.2 新增行：Workspace 负责确认 + 执行 INSERT + 刷新。 */
+		onAddRow?: (input: { values: Record<string, string> }) => void;
+		/** B3.2 删除行：Workspace 负责确认 + 执行 DELETE + 刷新。 */
+		onDeleteRow?: (input: { row: Record<string, string> }) => void;
+	}
 
 function CenterState({ icon, text, spin }: { icon: string; text: string; spin?: boolean }): JSX.Element {
 	return (
@@ -69,24 +97,59 @@ function downloadTextFile(filename: string, content: string, mime: string): void
  * 结果网格（B2.6 + V4）：列类型推断、单元格截断、行数 / 耗时 / 100 行上限提示；
  * V4-① 工具栏（导出 CSV/JSON + 复制）、V4-③ 列排序、V4-④ 长单元格详情对话框。
  */
-export function DatabaseResultGrid({
-	status,
-	result,
-	connectionName,
-	error,
-	errorDetail,
-	canLoadMore = false,
-	loadedLimit = null,
-	loadingMore = false,
-	onLoadMore,
-	onAnalyzeResult,
+	export function DatabaseResultGrid({
+		status,
+		result,
+		connectionName,
+		error,
+		errorDetail,
+		canLoadMore = false,
+		loadedLimit = null,
+		loadingMore = false,
+		onLoadMore,
+		onAnalyzeResult,
+		editable = false,
+		canAddRow = false,
+		editDisabledReason = null,
+		readOnlyReason = null,
+		showKeylessWarning = false,
+		onRefresh,
+		tableName = null,
+		writeError = null,
+		onDismissWriteError,
+		onSaveCell,
+		onAddRow,
+		onDeleteRow,
 }: DatabaseResultGridProps): JSX.Element {
 	const { t } = useTranslation("settings");
+
+	// B3.2-R 自动刷新：间隔秒数（null = 关闭）；onRefresh 经 ref 稳定，定时器只随间隔重建。
+	const [autoRefreshSeconds, setAutoRefreshSeconds] = useState<number | null>(null);
+	const onRefreshRef = useRef(onRefresh);
+	useEffect(() => {
+		onRefreshRef.current = onRefresh;
+	}, [onRefresh]);
+	useEffect(() => {
+		if (!autoRefreshSeconds) return;
+		const id = window.setInterval(() => onRefreshRef.current?.(), autoRefreshSeconds * 1000);
+		return () => window.clearInterval(id);
+	}, [autoRefreshSeconds]);
 
 	// V4-③ 列排序：点击表头循环 未排序 → 升序 → 降序 → 未排序。
 	const [sort, setSort] = useState<{ column: string; direction: SortDirection } | null>(null);
 	// V4-④ 长单元格详情对话框：记录被点击的单元格（列 + 行 + 原始值）。
-	const [detail, setDetail] = useState<{ column: string; rowIndex: number; value: string } | null>(null);
+		const [detail, setDetail] = useState<{ column: string; rowIndex: number; value: string } | null>(null);
+		// B3.2 编辑模式：仅 editable 时可用；开启后单元格可编辑、行可删除、可添加行。
+		const [editMode, setEditMode] = useState(false);
+		const [editingCell, setEditingCell] = useState<{ row: Record<string, string>; column: string; draft: string } | null>(null);
+		const [addingRow, setAddingRow] = useState(false);
+		const [rowDraft, setRowDraft] = useState<Record<string, string>>({});
+
+	// B3.2 数据编辑：可用性变化时复位编辑态（按钮禁用/不可添加行时不残留编辑 UI）。
+	useEffect(() => {
+		if (!editable) setEditMode(false);
+		if (!canAddRow) setAddingRow(false);
+	}, [canAddRow, editable]);
 
 	// 分页：作用于已加载结果集（客户端分页），新查询开始时回到第 1 页。
 	const [page, setPage] = useState(1);
@@ -159,6 +222,27 @@ export function DatabaseResultGrid({
 		void navigator.clipboard.writeText(detail.value).catch(() => {});
 	};
 
+	// B3.2 数据编辑：单元格编辑 / 添加行 / 删除行由 Workspace 层确认 + 执行写 SQL + 刷新。
+	const startEdit = (row: Record<string, string>, column: string) => {
+		if (!onSaveCell || !editMode) return;
+		setEditingCell({ row, column, draft: row[column] ?? "" });
+	};
+	const commitCell = (row: Record<string, string>, column: string, draft: string) => {
+		if (!onSaveCell) return;
+		setEditingCell(null);
+		onSaveCell({ row, column, value: draft });
+	};
+	const confirmAddRow = () => {
+		if (!onAddRow || !result) return;
+		setAddingRow(false);
+		onAddRow({ values: rowDraft });
+	};
+	const beginAddRow = () => {
+		if (!result || !canAddRow) return;
+		setRowDraft(Object.fromEntries(result.columns.map((column) => [column, ""])));
+		setAddingRow(true);
+	};
+
 	return (
 		<div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl bg-muted/35">
 			<div className="flex shrink-0 items-center justify-between gap-3 px-4 pb-2 pt-3">
@@ -168,7 +252,81 @@ export function DatabaseResultGrid({
 						<span className="truncate">{connectionName}</span>
 						<span className="shrink-0">{t("databaseResultRows", { count: result.rowCount })}</span>
 						{result.durationMs ? <span className="shrink-0">{result.durationMs}</span> : null}
-						{/* V4-① 工具栏：导出 CSV/JSON + 复制。 */}
+						{/* B3.2-R 工具栏：只读/无主键徽章 + 刷新 + 自动刷新 + 添加行；对齐 dbx DataGridToolbar。 */}
+						{readOnlyReason ? (
+							<span
+								title={t(`databaseEditReadOnlyReason.${readOnlyReason}` as `databaseEditReadOnlyReason.${QueryEditabilityReason}`)}
+								className="shrink-0 rounded-full border border-border/60 bg-muted px-2 py-0.5 text-[10.5px] text-muted-foreground"
+							>
+								{t("databaseEditReadOnly")}
+							</span>
+						) : null}
+						{showKeylessWarning ? (
+							<span
+								title={t("databaseEditNoPkWarning")}
+								className="shrink-0 rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[10.5px] text-amber-700 dark:text-amber-400"
+							>
+								{t("databaseEditKeylessWarning")}
+							</span>
+						) : null}
+						{onRefresh ? (
+							<Button
+								variant="ghost"
+								size="sm"
+								className="h-6 gap-1 px-1.5 text-[11px] text-muted-foreground"
+								aria-label={t("databaseRefresh")}
+								title={t("databaseRefresh")}
+								onClick={onRefresh}
+							>
+								<span className="icon-[mdi--refresh] h-3.5 w-3.5" />
+							</Button>
+						) : null}
+						{onRefresh ? (
+							<DropdownMenu>
+								<DropdownMenuTrigger asChild>
+									<Button
+										variant="ghost"
+										size="sm"
+										aria-pressed={autoRefreshSeconds !== null}
+										aria-label={t("databaseAutoRefresh")}
+										title={t("databaseAutoRefresh")}
+										className={cn(
+											"h-6 gap-1 px-1.5 text-[11px]",
+											autoRefreshSeconds !== null ? "bg-background text-foreground shadow-sm" : "text-muted-foreground",
+										)}
+									>
+										<span className="icon-[mdi--timer-outline] h-3.5 w-3.5" />
+										{autoRefreshSeconds !== null ? `${autoRefreshSeconds}s` : t("databaseAutoRefreshShort")}
+									</Button>
+								</DropdownMenuTrigger>
+								<DropdownMenuContent align="end" className="w-44">
+									<DropdownMenuItem onClick={() => setAutoRefreshSeconds(autoRefreshSeconds !== null ? null : AUTO_REFRESH_DEFAULT_SECONDS)}>
+										<span className="h-4 w-4" />
+										{autoRefreshSeconds !== null ? t("databaseAutoRefreshStop") : t("databaseAutoRefreshStart")}
+									</DropdownMenuItem>
+									{AUTO_REFRESH_INTERVALS.map((seconds) => (
+										<DropdownMenuItem key={seconds} onClick={() => setAutoRefreshSeconds(seconds)}>
+											<span className={cn("h-4 w-4", autoRefreshSeconds === seconds ? "icon-[mdi--check]" : "")} />
+											{t("databaseAutoRefreshEvery", { seconds })}
+										</DropdownMenuItem>
+									))}
+								</DropdownMenuContent>
+							</DropdownMenu>
+						) : null}
+						{canAddRow ? (
+							<Button
+								variant="ghost"
+								size="sm"
+								className="h-6 gap-1 px-1.5 text-[11px] text-muted-foreground"
+								aria-label={t("databaseEditAddRow")}
+								title={t("databaseEditAddRow")}
+								disabled={addingRow}
+								onClick={beginAddRow}
+							>
+								<span className="icon-[mdi--plus] h-3.5 w-3.5" />
+								{t("databaseEditAddRow")}
+							</Button>
+						) : null}
 						<span className="mx-1 h-3 w-px shrink-0 bg-border/60" />
 						<DropdownMenu>
 							<DropdownMenuTrigger asChild>
@@ -217,9 +375,32 @@ export function DatabaseResultGrid({
 								<span className="icon-[mdi--chat-question-outline] h-3.5 w-3.5" />
 								{t("databaseAnalyzeResult.label")}
 							</Button>
-						) : null}
-					</div>
-				) : null}
+							) : null}
+							<Button
+								variant="ghost"
+								size="sm"
+								aria-pressed={editable && editMode}
+								disabled={!editable}
+								className={cn(
+									"h-6 gap-1 px-1.5 text-[11px]",
+									editable && editMode ? "bg-background text-foreground shadow-sm" : "text-muted-foreground",
+									!editable && "cursor-not-allowed",
+								)}
+								aria-label={t("databaseEditMode")}
+								title={editable ? t("databaseEditMode") : (editDisabledReason ?? t("databaseEditMode"))}
+								onClick={() => {
+									if (!editable) return;
+									setEditMode((current) => !current);
+									setEditingCell(null);
+									setAddingRow(false);
+									recordSettingsUsage({ tab: "database", action: editMode ? "disabled" : "enabled", target: "data-edit-mode" });
+								}}
+							>
+								<span className="icon-[mdi--pencil-outline] h-3.5 w-3.5" />
+								{t("databaseEditMode")}
+							</Button>
+						</div>
+					) : null}
 			</div>
 
 			{status === "idle" ? (
@@ -231,6 +412,21 @@ export function DatabaseResultGrid({
 					<DatabaseNotice tone="error" title={error ?? t("databaseQueryFailed")}>
 						{errorDetail ? <DatabaseDetail>{errorDetail}</DatabaseDetail> : null}
 					</DatabaseNotice>
+					{onAnalyzeResult ? (
+						<div className="mt-2 flex justify-end">
+							<Button
+								variant="ghost"
+								size="sm"
+								className="h-6 gap-1 px-2 text-[11px] text-muted-foreground"
+								aria-label={t("databaseAnalyzeError.label")}
+								title={t("databaseAnalyzeError.label")}
+								onClick={onAnalyzeResult}
+							>
+								<span className="icon-[mdi--chat-question-outline] h-3.5 w-3.5" />
+								{t("databaseAnalyzeError.label")}
+							</Button>
+						</div>
+					) : null}
 				</div>
 			) : result && result.columns.length > 0 ? (
 				<>
@@ -277,29 +473,64 @@ export function DatabaseResultGrid({
 								{visibleRows.map((row, rowIndex) => (
 									<tr key={rowIndex} className="group">
 										<td className="border-b border-border/25 px-2 py-1 text-right text-[10.5px] text-muted-foreground/60">
-											{(safePage - 1) * pageSize + rowIndex + 1}
+											<span className="inline-flex items-center gap-1">
+												{(safePage - 1) * pageSize + rowIndex + 1}
+												{editMode && onDeleteRow ? (
+													<button
+														type="button"
+														aria-label={t("databaseEditDeleteRow")}
+														title={t("databaseEditDeleteRow")}
+														onClick={() => onDeleteRow({ row })}
+														className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded text-muted-foreground/50 opacity-0 transition-opacity hover:bg-destructive/10 hover:text-destructive group-hover:opacity-100"
+													>
+														<span className="icon-[mdi--trash-can-outline] h-3.5 w-3.5" />
+													</button>
+												) : null}
+											</span>
 										</td>
 										{result.columns.map((column, colIndex) => {
 											const raw = row[column];
 											const isNull = isNullCell(raw);
 											const truncated = !isNull && raw.length > RESULT_CELL_MAX_CHARS;
+											const editing = editMode && editingCell?.row === row && editingCell.column === column;
+											if (editing) {
+												return (
+													<td key={column} className="border-b border-border/25 px-1 py-0.5">
+														<input
+															autoFocus
+															value={editingCell.draft}
+															aria-label={column}
+															onChange={(event) => setEditingCell({ row, column, draft: event.target.value })}
+															onKeyDown={(event) => {
+																if (event.key === "Enter") commitCell(row, column, editingCell.draft);
+																if (event.key === "Escape") setEditingCell(null);
+															}}
+															onBlur={() => commitCell(row, column, editingCell.draft)}
+															className="h-7 w-full min-w-[88px] rounded-md border border-primary/50 bg-background px-2 text-[12px] text-foreground outline-none"
+														/>
+													</td>
+												);
+											}
 											return (
 												<td
 													key={column}
 													title={isNull ? undefined : raw}
 													onClick={
-														truncated
-															? () => {
-																	setDetail({ column, rowIndex, value: raw });
-																	recordSettingsUsage({ tab: "database", action: "selected", target: "cell-detail-open" });
-																}
-															: undefined
+														editMode && onSaveCell
+															? () => startEdit(row, column)
+															: truncated
+																? () => {
+																		setDetail({ column, rowIndex, value: raw });
+																		recordSettingsUsage({ tab: "database", action: "selected", target: "cell-detail-open" });
+																	}
+																: undefined
 													}
 													className={cn(
 														"max-w-[260px] truncate border-b border-border/25 px-2.5 py-1",
 														columnKinds[colIndex] === "number" ? "text-right tabular-nums" : "text-left",
 														isNull ? "italic text-muted-foreground/50" : "text-foreground",
 														truncated && "cursor-pointer hover:bg-muted/60",
+														editMode && onSaveCell && "cursor-text hover:bg-muted/50",
 													)}
 												>
 													{isNull ? "NULL" : truncateCell(raw)}
@@ -310,6 +541,77 @@ export function DatabaseResultGrid({
 								))}
 							</tbody>
 						</table>
+					{canAddRow ? (
+						<div className="shrink-0 border-t border-border/30 px-4 py-2">
+							{addingRow ? (
+								<div className="flex items-center gap-1.5 overflow-x-auto pb-1">
+									{result.columns.map((column) => (
+										<input
+											key={column}
+											value={rowDraft[column] ?? ""}
+											placeholder={column}
+											title={column}
+											aria-label={column}
+											onChange={(event) => setRowDraft((draft) => ({ ...draft, [column]: event.target.value }))}
+											onKeyDown={(event) => {
+												if (event.key === "Enter") confirmAddRow();
+												if (event.key === "Escape") setAddingRow(false);
+											}}
+											className="h-6 w-28 shrink-0 rounded-md border border-border/60 bg-background px-2 text-[11px] text-foreground outline-none focus-visible:border-primary/50"
+										/>
+									))}
+									<Button size="sm" className="h-6 shrink-0 gap-1 px-2 text-[11px]" onClick={confirmAddRow}>
+										<span className="icon-[mdi--check] h-3.5 w-3.5" />
+										{t("databaseEditSave")}
+									</Button>
+									<Button
+										size="sm"
+										variant="ghost"
+										className="h-6 shrink-0 gap-1 px-2 text-[11px] text-muted-foreground"
+										onClick={() => setAddingRow(false)}
+									>
+										<span className="icon-[mdi--close] h-3.5 w-3.5" />
+										{t("databaseEditCancel")}
+									</Button>
+								</div>
+							) : (
+								<div className="flex min-w-0 items-center justify-end gap-2">
+									{editMode ? (
+										<p className="min-w-0 flex-1 truncate text-[11px] text-muted-foreground/70">
+											{t("databaseEditHint", { table: tableName ?? "" })}
+										</p>
+									) : null}
+									<Button
+										size="sm"
+										variant="ghost"
+										className="h-6 shrink-0 gap-1 px-2 text-[11px] text-muted-foreground"
+										onClick={beginAddRow}
+									>
+										<span className="icon-[mdi--plus] h-3.5 w-3.5" />
+										{t("databaseEditAddRow")}
+									</Button>
+								</div>
+							)}
+						</div>
+					) : null}
+					{writeError ? (
+						<div className="shrink-0 border-t border-border/30 px-4 py-2">
+							<DatabaseNotice tone="error" title={t("databaseEditFailed")}>
+								<div className="flex items-start justify-between gap-2">
+									<DatabaseDetail>{writeError}</DatabaseDetail>
+									<button
+										type="button"
+										aria-label={t("databaseEditCancel")}
+										title={t("databaseEditCancel")}
+										onClick={onDismissWriteError}
+										className="shrink-0 rounded p-0.5 text-muted-foreground/60 hover:text-foreground"
+									>
+										<span className="icon-[mdi--close] h-3.5 w-3.5" />
+									</button>
+								</div>
+							</DatabaseNotice>
+						</div>
+					) : null}
 					</div>
 					{(totalPages > 1 || canLoadMore) && (
 						<div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border/30 px-4 py-1.5">

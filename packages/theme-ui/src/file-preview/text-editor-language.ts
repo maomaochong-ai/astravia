@@ -4,6 +4,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { json } from "@codemirror/lang-json";
 import { markdown } from "@codemirror/lang-markdown";
 import { python } from "@codemirror/lang-python";
+import { sql } from "@codemirror/lang-sql";
 import { xml } from "@codemirror/lang-xml";
 import { yaml } from "@codemirror/lang-yaml";
 import type { Extension } from "@codemirror/state";
@@ -174,6 +175,8 @@ export function getTextEditorLanguageExtension(extension: string): Extension {
 			return markdown();
 		case "python":
 			return python();
+		case "sql":
+			return sql();
 		case "yaml":
 			return yaml();
 		default:

@@ -17,7 +17,10 @@ import { summarizeQueryResult } from "../lib/result-summary";
 export interface AnalyzeResultInput {
 	connection: DbConnection;
 	sql: string;
-	result: DbQueryResult;
+	/** 成功时携带结果；失败时为 null（走「解释错误」指令）。 */
+	result: DbQueryResult | null;
+	error?: string | null;
+	errorDetail?: string | null;
 }
 
 /**
@@ -32,17 +35,24 @@ export function useDatabaseAnalyzeResult(): (input: AnalyzeResultInput) => void 
 	const defaultConversationCwd = useAtomValue(defaultConversationCwdAtom);
 
 	return useCallback(
-		({ connection, sql, result }: AnalyzeResultInput) => {
+		({ connection, sql, result, error, errorDetail }: AnalyzeResultInput) => {
 			const openSession = openSessionFnRef.current;
 			const cwd = defaultConversationCwd?.trim() ?? "";
 			if (!cwd || !openSession) return;
-			// B2.9-W3 埋点：结果网格「让 AI 解读此查询」入口点击。
-			recordSettingsUsage({ tab: "database", action: "selected", target: "analyze-result" });
+			// B2.9-W3 埋点：结果网格「让 AI 解读此查询」入口点击；B3.3 失败场景记 analyze-error。
+			recordSettingsUsage({
+				tab: "database",
+				action: "selected",
+				target: result ? "analyze-result" : "analyze-error",
+			});
 
 			// 预填的可编辑开场白：自然问句，用户可改后回车发送（B2.9 W2 重设计同款）。
-			const prefilledText = i18n.t("settings:databaseAnalyzeResult.intent", {
-				connection: connection.name,
-			});
+			const prefilledText = i18n.t(
+				result ? "settings:databaseAnalyzeResult.intent" : "settings:databaseAnalyzeError.intent",
+				{
+					connection: connection.name,
+				},
+			);
 
 			// SQL + 结果摘要是同步数据（已执行完），但 openSession 会切换活动订阅，
 			// 放进队列与其它 assist 任务串行执行，避免竞争。
@@ -50,11 +60,20 @@ export function useDatabaseAnalyzeResult(): (input: AnalyzeResultInput) => void 
 				const open = openSessionFnRef.current;
 				if (!open) return;
 				await open(cwd, undefined, undefined, { navigate: false });
-				const agentInstruction = i18n.t("settings:databaseAnalyzeResult.instruction", {
-					connection: connection.name,
-					sql,
-					summary: summarizeQueryResult(result),
-				});
+				const agentInstruction = i18n.t(
+					result ? "settings:databaseAnalyzeResult.instruction" : "settings:databaseAnalyzeError.instruction",
+					result
+						? {
+								connection: connection.name,
+								sql,
+								summary: summarizeQueryResult(result),
+							}
+						: {
+								connection: connection.name,
+								sql,
+								error: errorDetail || error || "",
+							},
+				);
 				const store = getDefaultStore();
 				const current = store.get(inputValueAtom).trim();
 				// 输入框已有其它草稿时不覆盖；重复点击同结果则幂等（文本相同直接续用）。

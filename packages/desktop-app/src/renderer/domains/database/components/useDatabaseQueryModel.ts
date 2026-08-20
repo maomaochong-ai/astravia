@@ -14,6 +14,7 @@ import {
 	closeQueryTab,
 	createQueryTab,
 	type DatabaseQueryStatus,
+	type OpenTableMeta,
 	patchQueryTab,
 	type QueryTabState,
 	reorderQueryTabs,
@@ -40,6 +41,8 @@ export interface DatabaseQueryModel {
 	readonly canLoadMore: boolean;
 	/** V4-② 当前已加载行数上限（打开表浏览时为 100/200/…；自由 SQL 为 null）。 */
 	readonly loadedLimit: number | null;
+	/** V4-② 当前打开表浏览元信息（B3.2 数据编辑据此定位表/方言）。 */
+	readonly openTableMeta: OpenTableMeta | null;
 	/** V4-② 加载更多进行中（保持现有结果显示，底部按钮转 loading）。 */
 	readonly loadingMore: boolean;
 	readonly actions: {
@@ -65,6 +68,10 @@ export interface DatabaseQueryModel {
 		readonly openTable: (connection: DbConnection, table: string) => Promise<void>;
 		/** V4-② 加载更多：对「打开表」结果用更大的 limit 重取（100 → 200 → 300 …）。 */
 		readonly loadMore: (connection: DbConnection) => Promise<void>;
+		/** B3.2 数据编辑后刷新：用当前打开表元信息（type/table/limit）重取结果，不动标签与历史。 */
+		readonly reloadOpenTable: (connection: DbConnection) => Promise<void>;
+		/** B3.2-R 自由 SQL 结果写后刷新：重跑指定 SQL（不推历史）。 */
+		readonly rerun: (connection: DbConnection, sqlText: string) => Promise<void>;
 		/** V3-③ 清空查询历史（localStorage 一并清除）。 */
 		readonly clearHistory: () => void;
 	};
@@ -94,7 +101,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 	}, []);
 
 	const runSql = useCallback(
-		async (connection: DbConnection, sqlText: string, tabId: string) => {
+		async (connection: DbConnection, sqlText: string, tabId: string, record = true) => {
 			setTabs((prev) => patchQueryTab(prev, tabId, { status: "running", error: null, errorDetail: null }));
 			try {
 				const data = await executeQuery(connection.name, sqlText);
@@ -106,7 +113,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 						status: "success",
 					}),
 				);
-				recordHistory(connection.name, sqlText);
+				if (record) recordHistory(connection.name, sqlText);
 			} catch (caught) {
 				const { message, detail } = formatDatabaseError(t, caught);
 				setTabs((prev) =>
@@ -171,6 +178,14 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 			await runSql(connection, text, activeTabId);
 		},
 		[activeTab.sql, activeTabId, runSql],
+	);
+
+	// B3.2-R 写操作后刷新：自由 SQL 结果重跑当前 SQL（不推历史，避免刷新污染查询历史）。
+	const rerun = useCallback(
+		async (connection: DbConnection, sqlText: string) => {
+			await runSql(connection, sqlText, activeTabId, false);
+		},
+		[activeTabId, runSql],
 	);
 
 	const applyResult = useCallback(
@@ -256,6 +271,17 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 		[activeTab, recordHistory, t],
 	);
 
+	// B3.2 数据编辑后刷新：写操作成功后按当前 openTableMeta 重取（保持 limit 与标签不变，不记历史）。
+	const reloadOpenTable = useCallback(
+		async (connection: DbConnection) => {
+			const tab = activeTab;
+			if (!tab?.openTableMeta) return;
+			const meta = tab.openTableMeta;
+			await runSql(connection, buildOpenTableSql(meta.type, meta.table, meta.limit), tab.id);
+		},
+		[activeTab, runSql],
+	);
+
 	const clearHistory = useCallback(() => {
 		setHistory([]);
 		clearQueryHistory();
@@ -274,6 +300,7 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 		history,
 		canLoadMore: activeTab.openTableMeta !== null && activeTab.status === "success",
 		loadedLimit: activeTab.openTableMeta?.limit ?? null,
+		openTableMeta: activeTab.openTableMeta,
 		loadingMore: activeTab.loadingMore,
 		actions: {
 			addTab,
@@ -284,6 +311,8 @@ export function useDatabaseQueryModel(): DatabaseQueryModel {
 			run,
 			openTable,
 			loadMore,
+			reloadOpenTable,
+			rerun,
 			applyResult,
 			clearHistory,
 		},
