@@ -368,7 +368,7 @@ export function DatabaseExplorerTree({
 										const expanded = searching || explorer.isConnectionExpanded(connection.name);
 										const selected = connection.name === selectedName;
 										return (
-											<div key={connection.id}>
+											<div key={connection.name}>
 												<div
 													className={cn(
 														"group flex cursor-pointer items-center gap-1.5 rounded-lg px-2 py-2",
