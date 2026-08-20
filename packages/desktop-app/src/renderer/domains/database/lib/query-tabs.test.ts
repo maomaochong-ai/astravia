@@ -20,16 +20,16 @@ describe("createQueryTab", () => {
 		expect(tab.error).toBeNull();
 		expect(tab.errorDetail).toBeNull();
 		expect(tab.openTableMeta).toBeNull();
-		expect(tab.loadingMore).toBe(false);
+		expect(tab.loadingPage).toBe(false);
 	});
 
 	test("applies initial overrides (open table flow)", () => {
 		const tab = createQueryTab("t2", "users", {
 			sql: "SELECT * FROM users LIMIT 100",
-			openTableMeta: { type: "postgres", table: "users", limit: 100 },
+			openTableMeta: { type: "postgres", table: "users", pageSize: 100, page: 1 },
 		});
 		expect(tab.sql).toBe("SELECT * FROM users LIMIT 100");
-		expect(tab.openTableMeta).toEqual({ type: "postgres", table: "users", limit: 100 });
+		expect(tab.openTableMeta).toEqual({ type: "postgres", table: "users", pageSize: 100, page: 1 });
 		expect(tab.status).toBe("idle");
 	});
 });

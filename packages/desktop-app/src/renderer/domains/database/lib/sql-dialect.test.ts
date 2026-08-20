@@ -49,6 +49,26 @@ describe("buildOpenTableSql", () => {
 	it("oracle 用 FETCH FIRST", () => {
 		expect(buildOpenTableSql("oracle", "users")).toBe('SELECT * FROM "users" FETCH FIRST 100 ROWS ONLY');
 	});
+	// V6-② 服务端分页：offset > 0 时按方言输出 OFFSET 语法。
+	it("postgres 翻页用 LIMIT…OFFSET", () => {
+		expect(buildOpenTableSql("postgres", "users", 100, 100)).toBe('SELECT * FROM "users" LIMIT 100 OFFSET 100');
+	});
+	it("mysql 翻页反引号 + LIMIT…OFFSET", () => {
+		expect(buildOpenTableSql("mysql", "users", 100, 200)).toBe("SELECT * FROM `users` LIMIT 100 OFFSET 200");
+	});
+	it("sqlite 翻页 LIMIT…OFFSET", () => {
+		expect(buildOpenTableSql("sqlite", "users", 50, 150)).toBe('SELECT * FROM "users" LIMIT 50 OFFSET 150');
+	});
+	it("sqlserver 翻页用 ORDER BY (SELECT NULL) OFFSET…FETCH NEXT", () => {
+		expect(buildOpenTableSql("sqlserver", "users", 100, 100)).toBe(
+			"SELECT * FROM [users] ORDER BY (SELECT NULL) OFFSET 100 ROWS FETCH NEXT 100 ROWS ONLY",
+		);
+	});
+	it("oracle 翻页用 OFFSET…FETCH NEXT", () => {
+		expect(buildOpenTableSql("oracle", "users", 100, 100)).toBe(
+			'SELECT * FROM "users" OFFSET 100 ROWS FETCH NEXT 100 ROWS ONLY',
+		);
+	});
 });
 
 describe("quoteLiteral", () => {

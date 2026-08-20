@@ -536,12 +536,13 @@ export function DatabaseWorkspace({
 								connectionName={query.resultConnectionName}
 								error={query.error}
 								errorDetail={query.errorDetail}
-								canLoadMore={query.canLoadMore}
-								loadedLimit={query.loadedLimit}
-								loadingMore={query.loadingMore}
-								onLoadMore={() => {
-									recordSettingsUsage({ tab: "database", action: "selected", target: "result-load-more" });
-									void query.actions.loadMore(selected);
+								canGoNextPage={query.canGoNextPage}
+								page={query.page}
+								pageSize={query.pageSize}
+								loadingPage={query.loadingPage}
+								onGoToPage={(target) => {
+									recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-goto" });
+									void query.actions.goToPage(selected, target);
 								}}
 								// B3.2-R 数据编辑（讨论定案）：添加行（INSERT）始终可用（无需主键定位）；
 								// 单元格编辑/删行需主键（pkColumns.length > 0），无主键时禁用并由 editDisabledReason 说明；

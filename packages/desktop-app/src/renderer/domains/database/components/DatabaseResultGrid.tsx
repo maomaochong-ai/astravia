@@ -36,12 +36,16 @@ const AUTO_REFRESH_INTERVALS = [5, 10, 30, 60] as const;
 		connectionName: string | null;
 		error: string | null;
 		errorDetail: string | null;
-		/** V4-② 加载更多（仅「打开表」结果可用；自由 SQL 无此能力）。 */
-		canLoadMore?: boolean;
-		/** V4-② 当前已加载行数上限（100/200/…），用于上限提示文案。 */
-		loadedLimit?: number | null;
-		loadingMore?: boolean;
-		onLoadMore?: () => void;
+		/** V6-② 服务端分页：是否可「下一页」（打开表结果满页假设还有更多，对齐 dbx-main）。 */
+		canGoNextPage?: boolean;
+		/** V6-② 服务端分页当前页（1-based；自由 SQL / AI 回填为 null 时用客户端分页）。 */
+		page?: number | null;
+		/** V6-② 服务端分页每页行数（≤ 100，受 dbx-mcp `dbx_execute_query` 上限约束）。 */
+		pageSize?: number | null;
+		/** V6-② 服务端翻页进行中。 */
+		loadingPage?: boolean;
+		/** V6-② 服务端翻页：请求指定页（workspace 转调 useDatabaseQueryModel.goToPage）。 */
+		onGoToPage?: (page: number) => void;
 		/** B2.9-W1 反向：结果工具栏「让 AI 解读此查询」入口（携带当前 SQL + 结果摘要跳转对话）。 */
 		onAnalyzeResult?: () => void;
 		/** B3.2-R 数据编辑：打开表浏览或可编辑自由 SQL（简单单表 SELECT）结果均可开启（Workspace 计算后传入）。 */
@@ -103,10 +107,11 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 		connectionName,
 		error,
 		errorDetail,
-		canLoadMore = false,
-		loadedLimit = null,
-		loadingMore = false,
-		onLoadMore,
+		canGoNextPage = false,
+		page = null,
+		pageSize = null,
+		loadingPage = false,
+		onGoToPage,
 		onAnalyzeResult,
 		editable = false,
 		canAddRow = false,
@@ -151,32 +156,10 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 		if (!canAddRow) setAddingRow(false);
 	}, [canAddRow, editable]);
 
-	// 分页：作用于已加载结果集（客户端分页），新查询开始时回到第 1 页。
-	const [page, setPage] = useState(1);
-	const [pageSize, setPageSize] = useState(100);
-
-	// V6-① 修复：加载更多成功后自动跳到新加载数据的起点页（新数据从旧 limit 的下一条开始），
-	// 否则用户停留在第 1 页看不到新增行，误以为「加载更多」无反应。
-	// 加载中（loadingMore=true）不推进基线 —— loadMore 现在成功后 limit 才增长，
-	// 因此 finally 置 loadingMore=false 时触发跳页，基线再更新到新 limit。
-	const prevLoadedLimitRef = useRef<number | null>(null);
-	useEffect(() => {
-		if (loadedLimit == null) {
-			prevLoadedLimitRef.current = null;
-			return;
-		}
-		const prev = prevLoadedLimitRef.current;
-		if (prev == null) {
-			prevLoadedLimitRef.current = loadedLimit;
-			return;
-		}
-		if (loadingMore) return; // 结果尚未替换，保持基线
-		if (loadedLimit > prev) {
-			const startPage = Math.floor(prev / pageSize) + 1;
-			setPage((current) => (current < startPage ? startPage : current));
-		}
-		prevLoadedLimitRef.current = loadedLimit;
-	}, [loadedLimit, loadingMore, pageSize]);
+	// 客户端分页（自由 SQL / AI 回填结果用）：作用于已加载结果集，新查询开始时回到第 1 页。
+	// V6-② 打开表浏览改用服务端分页（page/pageSize props 由 workspace 注入），此处仅兜底自由 SQL。
+	const [clientPage, setClientPage] = useState(1);
+	const [clientPageSize, setClientPageSize] = useState(100);
 
 	const columnKinds = useMemo<readonly ResultColumnKind[]>(() => {
 		if (!result) return [];
@@ -188,15 +171,22 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 		return sortRows(result.rows, result.columns, sort.column, sort.direction, columnKinds);
 	}, [result, sort, columnKinds]);
 
-	// 新查询开始（status → running）时回到第 1 页；「加载更多」不触发（status 保持 success）。
+	// 新查询开始（status → running）时回到第 1 页；服务端翻页不触发（status 保持 success）。
 	useEffect(() => {
-		if (status === "running") setPage(1);
+		if (status === "running") setClientPage(1);
 	}, [status]);
 
+	// V6-② 服务端分页（打开表浏览）：page/pageSize/onGoToPage 由 workspace 注入时为服务端模式，
+	// 结果网格只渲染当前页数据（每页 ≤ 100 行），翻页由 goToPage 重查；否则退回客户端分页（自由 SQL）。
+	const serverPaged = page != null && pageSize != null && onGoToPage != null;
+
+	// 服务端分页模式下用 props 注入的 page/pageSize；客户端分页用本地 state。
+	const effectivePage = serverPaged ? (page ?? 1) : clientPage;
+	const effectivePageSize = serverPaged ? (pageSize ?? 100) : clientPageSize;
 	const totalRows = sortedRows.length;
-	const totalPages = pageCount(totalRows, pageSize);
-	const safePage = clampPage(page, totalRows, pageSize);
-	const visibleRows = pageSlice(sortedRows, safePage, pageSize);
+	const totalPages = pageCount(totalRows, effectivePageSize);
+	const safePage = clampPage(effectivePage, totalRows, effectivePageSize);
+	const visibleRows = pageSlice(sortedRows, safePage, effectivePageSize);
 
 	const exportCsv = () => {
 		if (!result) return;
@@ -474,7 +464,7 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 									<tr key={rowIndex} className="group">
 										<td className="border-b border-border/25 px-2 py-1 text-right text-[10.5px] text-muted-foreground/60">
 											<span className="inline-flex items-center gap-1">
-												{(safePage - 1) * pageSize + rowIndex + 1}
+												{(safePage - 1) * effectivePageSize + rowIndex + 1}
 												{editMode && onDeleteRow ? (
 													<button
 														type="button"
@@ -613,16 +603,20 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 						</div>
 					) : null}
 					</div>
-					{(totalPages > 1 || canLoadMore) && (
+					{(totalPages > 1 || canGoNextPage) && (
 						<div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-1 border-t border-border/30 px-4 py-1.5">
 							<div className="flex min-w-0 items-center gap-2">
-								{totalPages > 1 ? (
+								{serverPaged ? (
+									<span className="shrink-0 text-[11px] tabular-nums text-muted-foreground/70">
+										{t("databasePageInfo", { page: page ?? 1, pageSize: pageSize ?? 100 })}
+									</span>
+								) : totalPages > 1 ? (
 									<>
 										<select
-											value={pageSize}
+											value={clientPageSize}
 											onChange={(event) => {
-												setPageSize(Number(event.target.value));
-												setPage(1);
+												setClientPageSize(Number(event.target.value));
+												setClientPage(1);
 												recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-size" });
 											}}
 											aria-label={t("databasePageSize")}
@@ -640,26 +634,41 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 										</span>
 									</>
 								) : null}
-								{canLoadMore && loadedLimit != null ? (
-									<p className="truncate text-[11px] text-muted-foreground/70">
-										{t("databaseResultLimitLoaded", { count: loadedLimit })}
-									</p>
-								) : null}
 							</div>
 							<div className="flex shrink-0 items-center gap-1">
-								{canLoadMore && onLoadMore ? (
-									<Button
-										variant="ghost"
-										size="sm"
-										className="h-6 gap-1 px-2 text-[11px] text-muted-foreground"
-										onClick={onLoadMore}
-										disabled={loadingMore}
-									>
-										{loadingMore ? <Spin size="sm" /> : <span className="icon-[mdi--chevron-down] h-3.5 w-3.5" />}
-										{loadingMore ? t("databaseLoadingMore") : t("databaseLoadMore")}
-									</Button>
-								) : null}
-								{totalPages > 1 ? (
+								{serverPaged ? (
+									<>
+										<Button
+											variant="ghost"
+											size="sm"
+											className="h-6 w-6 px-0 text-[11px] text-muted-foreground"
+											aria-label={t("databasePaginationPrev")}
+											title={t("databasePaginationPrev")}
+											disabled={loadingPage || (page ?? 1) <= 1}
+											onClick={() => {
+												onGoToPage((page ?? 1) - 1);
+												recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-prev" });
+											}}
+										>
+											<span className="icon-[mdi--chevron-left] h-3.5 w-3.5" />
+										</Button>
+										{loadingPage ? <Spin size="sm" /> : null}
+										<Button
+											variant="ghost"
+											size="sm"
+											className="h-6 w-6 px-0 text-[11px] text-muted-foreground"
+											aria-label={t("databasePaginationNext")}
+											title={t("databasePaginationNext")}
+											disabled={loadingPage || !canGoNextPage}
+											onClick={() => {
+												onGoToPage((page ?? 1) + 1);
+												recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-next" });
+											}}
+										>
+											<span className="icon-[mdi--chevron-right] h-3.5 w-3.5" />
+										</Button>
+									</>
+								) : totalPages > 1 ? (
 									<>
 										<Button
 											variant="ghost"
@@ -669,7 +678,7 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 											title={t("databasePaginationPrev")}
 											disabled={safePage <= 1}
 											onClick={() => {
-												setPage(safePage - 1);
+												setClientPage(safePage - 1);
 												recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-prev" });
 											}}
 										>
@@ -683,7 +692,7 @@ function downloadTextFile(filename: string, content: string, mime: string): void
 											title={t("databasePaginationNext")}
 											disabled={safePage >= totalPages}
 											onClick={() => {
-												setPage(safePage + 1);
+												setClientPage(safePage + 1);
 												recordSettingsUsage({ tab: "database", action: "selected", target: "result-page-next" });
 											}}
 										>

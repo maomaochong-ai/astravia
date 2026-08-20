@@ -29,9 +29,21 @@ export function quoteIdentifier(dbType: string, name: string): string {
 	}
 }
 
-/** 生成「打开表」浏览 SQL（只读 SELECT，带行数上限；方言适配 LIMIT / TOP / FETCH FIRST）。 */
-export function buildOpenTableSql(dbType: string, table: string, limit = 100): string {
+/**
+ * 生成「打开表」浏览 SQL（只读 SELECT，带行数上限；方言适配 LIMIT / TOP / FETCH FIRST）。
+ * V6-② 服务端分页：offset > 0 时改用各方言的 OFFSET 语法（LIMIT…OFFSET / OFFSET…FETCH NEXT）。
+ * 注意：dbx-mcp `dbx_execute_query` 最多返回 100 行，因此页大小应 ≤ 100。
+ */
+export function buildOpenTableSql(dbType: string, table: string, limit = 100, offset = 0): string {
 	const quoted = quoteIdentifier(dbType, table);
+	if (offset > 0) {
+		// SQL Server 2012+ 的 OFFSET/FETCH 要求 ORDER BY；用常量表达式保持与无排序一致。
+		if (TOP_TYPES.has(dbType))
+			return `SELECT * FROM ${quoted} ORDER BY (SELECT NULL) OFFSET ${offset} ROWS FETCH NEXT ${limit} ROWS ONLY`;
+		if (FETCH_FIRST_TYPES.has(dbType))
+			return `SELECT * FROM ${quoted} OFFSET ${offset} ROWS FETCH NEXT ${limit} ROWS ONLY`;
+		return `SELECT * FROM ${quoted} LIMIT ${limit} OFFSET ${offset}`;
+	}
 	if (TOP_TYPES.has(dbType)) return `SELECT TOP ${limit} * FROM ${quoted}`;
 	if (FETCH_FIRST_TYPES.has(dbType)) return `SELECT * FROM ${quoted} FETCH FIRST ${limit} ROWS ONLY`;
 	return `SELECT * FROM ${quoted} LIMIT ${limit}`;
