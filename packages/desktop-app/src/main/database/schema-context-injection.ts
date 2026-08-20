@@ -62,6 +62,7 @@ export interface SchemaContextRenderOptions {
 /** 组装可注入的 schema 提示词块（纯函数）。无条目时返回空串。 */
 export function renderSchemaContextBlock(entries: SchemaContextEntry[], opts?: SchemaContextRenderOptions): string {
 	if (entries.length === 0) return "";
+	const exampleTable = entries.find((entry) => entry.tableName)?.tableName ?? firstTableName(entries[0]?.schema ?? "");
 	const executeToolAvailable = opts?.executeToolAvailable !== false;
 	const body = entries
 		.map((entry) => {
@@ -76,12 +77,35 @@ export function renderSchemaContextBlock(entries: SchemaContextEntry[], opts?: S
 	const executionLine = executeToolAvailable
 		? "执行查询请调用 dbx MCP 的 dbx_execute_query 工具，connection_name 必须使用上方列出的连接名；只允许只读 SELECT 查询。"
 		: "注意：数据库 AI 访问未开启（工作台「数据库」页的「AI 访问」开关关闭），dbx MCP 工具不可用，无法执行查询；不要调用 dbx_* 工具。如需执行 SQL，请告知用户先在工作台开启「AI 访问」。";
+	// B3.3 few-shot：从首个条目解析真实表名，注入只读 SELECT 示例，帮助自然语言转 SQL 生成。
 	return [
 		"## 数据库 Schema 上下文（AI 数据库感知已开启）",
 		"以下是已启用连接的数据库表结构。编写 SQL 时直接依据这些结构，不要臆造列名或表名。",
 		executionLine,
 		body,
+		...(exampleTable
+			? [`## 参考 SQL 示例（只读 SELECT，表名与语法可直接参考）\n${buildSqlExamples(exampleTable)}`]
+			: []),
 	].join("\n\n");
+}
+
+/** 从 schema 文本解析第一个表名（匹配 `name (` 行；B3.3 few-shot 示例用）。 */
+export function firstTableName(schema: string): string | undefined {
+	const m = schema.match(/^\s*([A-Za-z_][A-Za-z0-9_$]*)\s*\(/m);
+	return m ? m[1] : undefined;
+}
+
+/** 生成基于真实表名的只读 SELECT few-shot 示例（B3.3 自然语言转 SQL 增强）。 */
+export function buildSqlExamples(tableName: string): string {
+	const quoted = `"${tableName.replace(/"/g, '""')}"`;
+	return [
+		"-- 示例 1：浏览数据（前 100 行）",
+		`SELECT * FROM ${quoted} LIMIT 100;`,
+		"-- 示例 2：按条件过滤（请把 example_column 替换为真实列名）",
+		`SELECT * FROM ${quoted} WHERE "example_column" = 'value' LIMIT 100;`,
+		"-- 示例 3：统计行数",
+		`SELECT COUNT(*) AS total FROM ${quoted};`,
+	].join("\n");
 }
 
 /** 进程级缓存：连接级 key = connectionName，表级 key = tableCacheKey(...)。 */

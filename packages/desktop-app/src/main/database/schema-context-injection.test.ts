@@ -1,7 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
 	buildDatabaseSchemaPrompt,
+	buildSqlExamples,
 	clearSchemaContextCache,
+	firstTableName,
 	formatTableSchema,
 	renderSchemaContextBlock,
 	SCHEMA_CONTEXT_CHAR_LIMIT_PER_CONNECTION,
@@ -313,5 +315,48 @@ describe("buildDatabaseSchemaPrompt", () => {
 		});
 		expect(prompt).toContain("连接「a」");
 		expect(prompt).toContain("连接「b」");
+	});
+});
+
+describe("firstTableName", () => {
+	it("从 schema 文本解析首个表名", () => {
+		expect(firstTableName("users (\n  id INTEGER\n)")).toBe("users");
+		expect(firstTableName("users (id INTEGER PK, name TEXT)\ndepartments (id INTEGER)")).toBe("users");
+	});
+	it("无表名时返回 undefined", () => {
+		expect(firstTableName("（schema 为空）")).toBeUndefined();
+		expect(firstTableName("")).toBeUndefined();
+	});
+});
+
+describe("buildSqlExamples", () => {
+	it("生成基于真实表名的只读 SELECT 示例", () => {
+		const examples = buildSqlExamples("users");
+		expect(examples).toContain('SELECT * FROM "users" LIMIT 100;');
+		expect(examples).toContain('SELECT COUNT(*) AS total FROM "users";');
+	});
+	it("表名内嵌引号被转义", () => {
+		expect(buildSqlExamples('we"ird')).toContain('FROM "we""ird"');
+	});
+});
+
+describe("renderSchemaContextBlock few-shot", () => {
+	it("表级条目注入参考示例节", () => {
+		const prompt = renderSchemaContextBlock([
+			{ connectionName: "a", tableName: "users", schema: "users (\n  id INTEGER\n)" },
+		]);
+		expect(prompt).toContain("## 参考 SQL 示例");
+		expect(prompt).toContain('SELECT * FROM "users" LIMIT 100;');
+	});
+	it("连接级条目从 schema 文本解析表名注入示例", () => {
+		const prompt = renderSchemaContextBlock([
+			{ connectionName: "a", schema: "users (id INTEGER)\ndepartments (id INTEGER)" },
+		]);
+		expect(prompt).toContain("## 参考 SQL 示例");
+		expect(prompt).toContain('SELECT * FROM "users" LIMIT 100;');
+	});
+	it("无可用表名时不注入示例节", () => {
+		const prompt = renderSchemaContextBlock([{ connectionName: "a", schema: "（schema 摘要不可用）" }]);
+		expect(prompt).not.toContain("## 参考 SQL 示例");
 	});
 });

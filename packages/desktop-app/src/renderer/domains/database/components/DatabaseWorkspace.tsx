@@ -2,13 +2,13 @@ import type { JSX, ReactNode } from "react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Button, cn, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@astravia/ui";
 import { ResizeHandle } from "@astravia/theme-ui";
-import { useAtomValue } from "jotai";
+import { useAtomValue, useSetAtom } from "jotai";
 import { motion } from "motion/react";
 import { useTranslation } from "react-i18next";
 import { i18n } from "@shared/i18n";
 import { TabBar } from "@shared/components/ui/tab-bar";
 import { useNarrowScreen } from "@shared/hooks/useNarrowScreen";
-import { activityPanelWidthAtom } from "@shared/store/atoms";
+import { activityPanelWidthAtom, confirmDialogAtom } from "@shared/store/atoms";
 import type { DatabaseTabTarget } from "@shared/store/atoms";
 import { DatabaseConnectionDetailsWorkbench } from "./DatabaseConnectionDetailsWorkbench";
 import { DatabaseConnectionForm } from "./DatabaseConnectionForm";
@@ -24,7 +24,10 @@ import { DatabaseTypeBadge } from "./DatabaseTypeBadge";
 import { DatabaseWorkspaceHeader } from "./DatabaseWorkspaceHeader";
 import { SettingsAiAssist } from "../../settings/ai-assist";
 import { recordSettingsUsage } from "../../settings/components/recordSettingsUsage";
-import { getSchemaContext } from "../lib/database-api";
+import { describeTable, executeQuery, getSchemaContext } from "../lib/database-api";
+import { formatDatabaseError } from "../lib/database-error-labels";
+import { buildDeleteSql, buildInsertSql, buildRowWhere, buildUpdateSql } from "../lib/sql-dialect";
+import { analyzeEditableQuery, type EditableQueryAnalysis } from "../lib/sql-editability";
 import { resolveDatabaseLayout } from "./database-layout";
 import { useDatabaseAnalyzeResult } from "./useDatabaseAnalyzeResult";
 import { useDatabaseAnalyzeTable } from "./useDatabaseAnalyzeTable";
@@ -75,8 +78,138 @@ export function DatabaseWorkspace({
 	// 闭包内捕获 const 局部变量可保留 TS 收窄（直接读 query.result / 对象属性会丢失收窄）。
 	const lastResult = query.result;
 	const lastResultSql = query.resultSql;
+	// B3.2 数据编辑：结果列名（无主键时退化为整行等值匹配定位）。const 局部变量保留 TS 收窄。
+	const lastResultColumns = query.result?.columns ?? [];
+	// B3.2-R 自由 SQL 可编辑性：仅简单单表 SELECT 结果可回写（对齐 dbx sql_editability）。
+	const editability = useMemo<EditableQueryAnalysis>(
+		() => (lastResultSql ? analyzeEditableQuery(lastResultSql) : { editable: false, reason: "not-select" }),
+		[lastResultSql],
+	);
 	const explorer = useDatabaseExplorerModel();
 	const selected = model.selected;
+	const setConfirm = useSetAtom(confirmDialogAtom);
+	// B3.2 数据编辑：当前打开表的主键列（行级定位）；无主键则禁用编辑（安全默认）。
+	const openTableMeta = query.openTableMeta;
+	// B3.2-R 编辑目标：打开表 → openTableMeta；自由 SQL → 可编辑性分析通过的单表来源（方言类型用连接类型）。
+	const editTarget = useMemo(
+		() => openTableMeta ?? (editability.editable && selected ? { type: selected.type, table: editability.info.table } : null),
+		[editability, openTableMeta, selected],
+	);
+	const [pkColumns, setPkColumns] = useState<string[]>([]);
+	// B3.2-R 表结构读取状态：loading（describeTable 在飞）/ ready / failed（读取失败需暴露原因，不静默）。
+	const [pkState, setPkState] = useState<"loading" | "ready" | "failed">("loading");
+	const [writeError, setWriteError] = useState<string | null>(null);
+
+	// 主键加载：编辑目标（打开表或可编辑自由 SQL 的来源表）结果就绪时读取表结构，供单元格编辑/删除行定位 WHERE。
+	useEffect(() => {
+		if (!selected || !editTarget || query.status !== "success") {
+			setPkColumns([]);
+			setPkState("loading");
+			return;
+		}
+		let cancelled = false;
+		setPkState("loading");
+		void describeTable(selected.name, editTarget.table)
+			.then((columns) => {
+				if (!cancelled) {
+					setPkColumns(columns.filter((column) => column.isPrimaryKey).map((column) => column.name));
+					setPkState("ready");
+				}
+			})
+			.catch(() => {
+				if (!cancelled) {
+					setPkColumns([]);
+					setPkState("failed");
+				}
+			});
+		return () => {
+			cancelled = true;
+		};
+	}, [editTarget, query.status, selected]);
+
+	// B3.2 写操作执行：确认后执行写 SQL（main 侧仍有 prod 写保护兜底）→ 成功刷新（打开表 reloadOpenTable / 自由 SQL rerun 不推历史）；失败在网格底部展示。
+	const runWrite = useCallback(
+		async (sql: string) => {
+			if (!selected) return;
+			try {
+				await executeQuery(selected.name, sql);
+				setWriteError(null);
+				if (query.openTableMeta) {
+					await query.actions.reloadOpenTable(selected);
+				} else if (query.resultSql) {
+					await query.actions.rerun(selected, query.resultSql);
+				}
+			} catch (caught) {
+				const { message, detail } = formatDatabaseError(t, caught);
+				setWriteError(detail || message);
+			}
+		},
+		[query.actions, query.openTableMeta, query.resultSql, selected, t],
+	);
+
+	const handleSaveCell = useCallback(
+		({ row, column, value }: { row: Record<string, string>; column: string; value: string }) => {
+			if (!selected || !editTarget) return;
+			const where = buildRowWhere(row, pkColumns, lastResultColumns);
+			const hasPk = pkColumns.some((pk) => pk in row);
+			const sql = buildUpdateSql(editTarget.type, editTarget.table, [{ column, value }], where);
+			setConfirm({
+				title: t("databaseEditConfirm"),
+				message:
+					t("databaseEditConfirmMessage", { sql }) +
+					(hasPk ? "" : `\n\n${t("databaseEditNoPkWarning")}`),
+				confirmLabel: t("databaseEditSave"),
+				onConfirm: () => {
+					recordSettingsUsage({ tab: "database", action: "changed", target: "data-edit-cell" });
+					void runWrite(sql);
+				},
+			});
+		},
+		[lastResultColumns, editTarget, pkColumns, runWrite, selected, setConfirm, t],
+	);
+
+	const handleAddRow = useCallback(
+		({ values }: { values: Record<string, string> }) => {
+			if (!selected || !editTarget) return;
+			const sql = buildInsertSql(
+				editTarget.type,
+				editTarget.table,
+				Object.keys(values).map((column) => ({ column, value: values[column] })),
+			);
+			setConfirm({
+				title: t("databaseEditConfirmAddRow"),
+				message: t("databaseEditConfirmMessage", { sql }),
+				confirmLabel: t("databaseEditSave"),
+				onConfirm: () => {
+					recordSettingsUsage({ tab: "database", action: "changed", target: "data-edit-add-row" });
+					void runWrite(sql);
+				},
+			});
+		},
+		[editTarget, runWrite, selected, setConfirm, t],
+	);
+
+	const handleDeleteRow = useCallback(
+		({ row }: { row: Record<string, string> }) => {
+			if (!selected || !editTarget) return;
+			const where = buildRowWhere(row, pkColumns, lastResultColumns);
+			const hasPk = pkColumns.some((pk) => pk in row);
+			const sql = buildDeleteSql(editTarget.type, editTarget.table, where);
+			setConfirm({
+				title: t("databaseEditConfirmDeleteRow"),
+				message:
+					t("databaseEditConfirmMessage", { sql }) +
+					(hasPk ? "" : `\n\n${t("databaseEditNoPkWarning")}`),
+				confirmLabel: t("databaseEditDeleteRow"),
+				variant: "danger",
+				onConfirm: () => {
+					recordSettingsUsage({ tab: "database", action: "changed", target: "data-edit-delete-row" });
+					void runWrite(sql);
+				},
+			});
+		},
+		[lastResultColumns, editTarget, pkColumns, runWrite, selected, setConfirm, t],
+	);
 
 	// B2.6-W 反馈 3：工作台「问数」入口 —— 复用 SettingsAiAssist 弹层形态，提交时把
 	// 当前连接的 schema 摘要注入 agent instruction（模型可见、用户气泡不可见）。
@@ -410,13 +543,52 @@ export function DatabaseWorkspace({
 									recordSettingsUsage({ tab: "database", action: "selected", target: "result-load-more" });
 									void query.actions.loadMore(selected);
 								}}
+								// B3.2-R 数据编辑（讨论定案）：添加行（INSERT）始终可用（无需主键定位）；
+								// 单元格编辑/删行需主键（pkColumns.length > 0），无主键时禁用并由 editDisabledReason 说明；
+								// describeTable 失败也需暴露原因（pkState=failed）；按钮常显，自由 SQL 不可编辑查询显示只读徽章。
+								editable={editTarget !== null && query.status === "success" && pkState === "ready" && pkColumns.length > 0}
+								canAddRow={editTarget !== null && query.status === "success"}
+								editDisabledReason={
+									query.status !== "success"
+										? t("databaseEditDisabledQueryFailed")
+										: pkState === "failed"
+											? t("databaseEditDisabledDescribeFailed")
+											: !editTarget && !editability.editable
+												? t(`databaseEditReadOnlyReason.${editability.reason}`)
+												: editTarget && pkState === "ready" && pkColumns.length === 0
+													? t("databaseEditDisabledNoPk")
+													: null
+								}
+								readOnlyReason={
+									!query.openTableMeta && query.status === "success" && query.result && !editability.editable
+										? editability.reason
+										: null
+								}
+								showKeylessWarning={
+									editTarget !== null && query.status === "success" && pkState === "ready" && pkColumns.length > 0 && !pkColumns.some((pk) => lastResultColumns.includes(pk))
+								}
+								onRefresh={() => {
+									recordSettingsUsage({ tab: "database", action: "selected", target: "result-refresh" });
+									if (query.openTableMeta) void query.actions.reloadOpenTable(selected);
+									else if (query.resultSql) void query.actions.rerun(selected, query.resultSql);
+								}}
+								tableName={query.openTableMeta?.table ?? null}
+								writeError={writeError}
+								onDismissWriteError={() => setWriteError(null)}
+								onSaveCell={handleSaveCell}
+								onAddRow={handleAddRow}
+								onDeleteRow={handleDeleteRow}
 								onAnalyzeResult={
-									lastResult && lastResultSql
-										? () => analyzeResult({
-												connection: selected,
-												sql: lastResultSql,
-												result: lastResult,
-										  })
+									// B3.3 失败解读：SQL 存在且（有结果或有错误）时均可让 AI 分析（成功解读 / 解释错误）。
+									lastResultSql && (lastResult || query.error)
+										? () =>
+												analyzeResult({
+													connection: selected,
+													sql: lastResultSql,
+													result: lastResult,
+													error: query.error,
+													errorDetail: query.errorDetail,
+												})
 										: undefined
 								}
 							/>
