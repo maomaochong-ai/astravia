@@ -1,0 +1,178 @@
+# dbx-mcp (Astravia build) —— 多平台矩阵版（交付文件）
+#
+# 交付说明：本文件是 fork 仓库 sikongyue/dbx 的
+# `.github/workflows/dbx-mcp-astravia.yml` 的完整替换版（覆盖既有 Windows-only 版）。
+# 推送到 fork main 后，workflow_dispatch 手动触发一次即可构建 Windows + macOS 全部
+# 产物并发布到同一 Release（tag dbx-mcp-astravia-v0.4.61）。
+#
+# 与旧版差异：
+#   1. build job 拆成 win32-x64 / darwin-arm64 / darwin-x64 矩阵；
+#   2. 各平台只上传 build artifact，统一由 publish job（单一写入者）发布 Release，
+#      避免多 job 并发 update_release 同一 tag 的竞态；
+#   3. macOS runner 无需额外系统依赖（上游 mcp-release.yml 先例：仅 Linux 需
+#      libfontconfig1-dev、Windows 需 NASM+Perl，macOS 直接 clang 构建）。
+#
+# 资产命名（与既有 Release 一致，update_release 原地覆盖）：
+#   - win32-x64:    dbx-mcp-<ver>-astravia-win-x64.exe（保留 .exe，与
+#                    fetch-dbx-mcp.mjs 的 forkAsset 完全一致，fetch 脚本 win32
+#                    分支无需改动）
+#   - darwin-arm64: dbx-mcp-<ver>-astravia-darwin-arm64（无扩展名）
+#   - darwin-x64:   dbx-mcp-<ver>-astravia-darwin-x64（无扩展名）
+# 供 packages/desktop-app/scripts/fetch-dbx-mcp.mjs 切换接入：darwin 平台把
+# PLATFORMS[<platform>].forkAsset 设为对应资产名、更新 sha256 后即可走 fork 直链
+# （当前 darwin 走官方 npm 平台包过渡源）。
+
+name: dbx-mcp (Astravia build)
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: 上游 dbx 仓库的构建 ref（tag 或分支），默认锁定 packages-v0.4.61
+        required: false
+        default: packages-v0.4.61
+  push:
+    branches: [main]
+    paths: ['.github/workflows/dbx-mcp-astravia.yml']
+
+env:
+  CARGO_TERM_COLOR: always
+  RUSTFLAGS: -C debuginfo=line-tables-only
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: windows-latest
+            target: x86_64-pc-windows-msvc
+            platform: win32-x64
+            binary: dbx-mcp.exe
+            asset: win-x64.exe
+          - runner: macos-15
+            target: aarch64-apple-darwin
+            platform: darwin-arm64
+            binary: dbx-mcp
+            asset: darwin-arm64
+          - runner: macos-15-intel
+            target: x86_64-apple-darwin
+            platform: darwin-x64
+            binary: dbx-mcp
+            asset: darwin-x64
+    steps:
+      - name: Checkout fork
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Fetch pinned upstream ref
+        shell: bash
+        run: |
+          ref="${{ inputs.ref }}"
+          if [ -z "$ref" ]; then ref='packages-v0.4.61'; fi
+          git remote add upstream https://github.com/t8y2/dbx.git
+          git fetch --depth=1 upstream "$ref"
+          git checkout --detach FETCH_HEAD
+          echo "BUILD_REF=$ref" >> "$GITHUB_ENV"
+
+      - name: Install Rust toolchain (aligned with upstream ci.yml)
+        uses: dtolnay/rust-toolchain@1.97.1
+        with:
+          targets: ${{ matrix.target }}
+          components: rustfmt, clippy
+
+      - name: Rust cache
+        uses: swatinem/rust-cache@v2
+        with:
+          workspaces: '. -> target'
+          # 两个 macOS runner 的 OS 缓存键相同，必须按 target 隔离，否则
+          # arm64/x64 的缓存互相污染（上游 mcp-release.yml 同款 shared-key）。
+          shared-key: dbx-mcp-${{ matrix.target }}
+
+      - name: 'Install NASM + Perl (native deps: aws-lc-sys, vendored OpenSSL/SQLCipher)'
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          choco install nasm strawberryperl -y --no-progress
+          $env:Path = [System.Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [System.Environment]::GetEnvironmentVariable('Path', 'User')
+          nasm -v
+          perl -v | Select-Object -First 2
+
+      - name: Build dbx-mcp (release)
+        shell: bash
+        run: cargo build -p dbx-mcp --release --locked --target "${{ matrix.target }}"
+
+      - name: Extract version from crate
+        shell: bash
+        run: |
+          ver="$(sed -n 's/^version = "\([^"]*\)"/\1/p' crates/dbx-mcp/Cargo.toml | head -n1)"
+          echo "DBX_MCP_VERSION=$ver" >> "$GITHUB_ENV"
+
+      - name: Package artifact with Astravia tag
+        shell: bash
+        run: |
+          mkdir -p dist
+          name="dbx-mcp-${DBX_MCP_VERSION}-astravia-${{ matrix.asset }}"
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" "dist/$name"
+          if [[ "${{ runner.os }}" != "Windows" ]]; then
+            chmod +x "dist/$name"
+          fi
+          if [[ "${{ runner.os }}" == "Windows" ]]; then
+            # certutil 输出大写 hex，转小写以匹配 fetch 脚本的 digest("hex")。
+            hash="$(certutil -hashfile "dist/$name" SHA256 | sed -n '2p' | tr -d ' ' | tr 'A-F' 'a-f')"
+          else
+            hash="$(shasum -a 256 "dist/$name" | awk '{print $1}')"
+          fi
+          printf '%s  %s\n' "$hash" "$name" > "dist/$name.sha256"
+          echo "ARTIFACT_NAME=$name" >> "$GITHUB_ENV"
+          echo "ARTIFACT_SHA256=$hash" >> "$GITHUB_ENV"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbx-mcp-${{ env.DBX_MCP_VERSION }}-astravia-${{ matrix.platform }}
+          path: dist/
+          if-no-files-found: error
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all platform artifacts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: dbx-mcp-*
+          path: dist
+          merge-multiple: true
+
+      - name: Resolve version from artifacts
+        shell: bash
+        run: |
+          ver="$(ls dist | sed -n 's/^dbx-mcp-\([0-9][0-9.]*\)-astravia-.*/\1/p' | head -n1)"
+          if [ -z "$ver" ]; then
+            echo "::error::cannot resolve dbx-mcp version from artifacts"
+            exit 1
+          fi
+          echo "DBX_MCP_VERSION=$ver" >> "$GITHUB_ENV"
+
+      - name: Publish GitHub Release (Astravia build)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: dbx-mcp-astravia-v${{ env.DBX_MCP_VERSION }}
+          update_release: true
+          name: dbx-mcp ${{ env.DBX_MCP_VERSION }} (Astravia build)
+          body: |
+            Astravia 自有构建的 dbx-mcp 二进制。
+
+            - 上游 ref: `${{ inputs.ref }}`
+            - 版本: `${{ env.DBX_MCP_VERSION }}`
+            - 平台: Windows x64 / macOS arm64 / macOS x64
+            - 产物与 SHA256 见下方 assets。
+
+            构建于 fork 仓库 sikongyue/dbx 的 Astravia CI（.github/workflows/dbx-mcp-astravia.yml，多平台矩阵）。
+          files: dist/*
