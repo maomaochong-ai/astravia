@@ -17,14 +17,31 @@ export const DBX_MCP_COMMAND_PLACEHOLDER = "{{dbxMcpBin}}";
  * process.resourcesPath 解析；未打包走 process.cwd()/resources（dev 下
  * app.getAppPath() 指向 dist/main，不可靠，见 im-host/binary-resolver.ts 注释）。
  *
- * B1 仅 Windows x64（见 docs/dbx-main-integration-tasks.md）；macOS/Linux 产物
- * 在 B2 自建构建后接入。
+ * 平台：win32-x64 / darwin-arm64 / darwin-x64（linux-x64 预留，见
+ * docs/dbx-main-integration-tasks.md）；macOS 二进制来源为官方 npm 平台包
+ * （fork CI 产出 darwin 资产后切换，见 scripts/fetch-dbx-mcp.mjs）。
  */
+function dbxMcpPlatformDir(): string {
+	switch (`${process.platform}-${process.arch}`) {
+		case "win32-x64":
+			return "win32-x64";
+		case "darwin-arm64":
+			return "darwin-arm64";
+		case "darwin-x64":
+			return "darwin-x64";
+		case "linux-x64":
+			return "linux-x64";
+		default:
+			throw new Error(`dbx-mcp is not supported on platform ${process.platform}-${process.arch}`);
+	}
+}
+
 export function resolveDbxMcpBinaryPath(): string {
-	const platformDir = "win32-x64";
+	const platformDir = dbxMcpPlatformDir();
+	const binaryName = process.platform === "win32" ? "dbx-mcp.exe" : "dbx-mcp";
 	const expected = app.isPackaged
-		? join(process.resourcesPath, "dbx-mcp", platformDir, "dbx-mcp.exe")
-		: join(process.cwd(), "resources", "dbx-mcp", platformDir, "dbx-mcp.exe");
+		? join(process.resourcesPath, "dbx-mcp", platformDir, binaryName)
+		: join(process.cwd(), "resources", "dbx-mcp", platformDir, binaryName);
 	if (!existsSync(expected)) {
 		throw new Error(
 			`dbx-mcp binary not found at ${expected}. Run \`bun run prepare:dbx-mcp\` in packages/desktop-app first.`,
