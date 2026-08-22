@@ -148,7 +148,6 @@
 		"zod": "^4.4.3"
 	},
 	"devDependencies": {
-		"app-builder-bin": "5.0.0-alpha.12",
 		"@aws-sdk/client-s3": "^3.1097.0",
 		"@aws-sdk/lib-storage": "^3.1097.0",
 		"@iconify-json/flat-color-icons": "^1.2.3",
@@ -172,6 +171,7 @@
 		"@wdio/mocha-framework": "^9.30.0",
 		"@wdio/native-utils": "2.5.0",
 		"@wdio/spec-reporter": "^9.29.1",
+		"app-builder-bin": "5.0.0-alpha.12",
 		"concurrently": "^9.2.1",
 		"cross-env": "^10.1.0",
 		"electron": "^34.2.0",
