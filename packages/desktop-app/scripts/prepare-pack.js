@@ -550,14 +550,22 @@ if (existsSync(runtimeCoreSandboxDir)) {
 // dbx-mcp engine binary (extraResources) —— P7 数据库集成
 // =============================================================================
 //
-// dbx-mcp.exe（scripts/fetch-dbx-mcp.mjs 下载，版本锁定，不入库）随包分发到
+// dbx-mcp（scripts/fetch-dbx-mcp.mjs 下载，版本锁定，不入库）随包分发到
 // Resources/dbx-mcp/<platform>/，main 进程经 resolveDbxMcpBinaryPath() 解析
-// （process.resourcesPath/dbx-mcp/win32-x64/dbx-mcp.exe）。
+// （process.resourcesPath/dbx-mcp/<platform>/dbx-mcp[.exe]）。只拷当前构建目标
+// 平台的子目录（平台目录名与 ASTRAVIA_VENDOR_PLATFORM 一致，见上方 vendor）。
 const stagedDbxMcpDir = join(buildStageDir, "dbx-mcp");
 const dbxMcpSourceDir = join(projectRoot, "resources", "dbx-mcp");
-if (existsSync(dbxMcpSourceDir)) {
-	cpSync(dbxMcpSourceDir, stagedDbxMcpDir, { recursive: true });
-	console.log("[prepare-pack] dbx-mcp engine staged:", stagedDbxMcpDir);
+const dbxMcpPlatform =
+	process.env.ASTRAVIA_VENDOR_PLATFORM || `${process.platform}-${process.arch}`;
+const dbxMcpPlatformSourceDir = join(dbxMcpSourceDir, dbxMcpPlatform);
+if (existsSync(dbxMcpPlatformSourceDir)) {
+	mkdirSync(stagedDbxMcpDir, { recursive: true });
+	cpSync(dbxMcpPlatformSourceDir, join(stagedDbxMcpDir, dbxMcpPlatform), { recursive: true });
+	console.log(
+		"[prepare-pack] dbx-mcp engine staged:",
+		join(stagedDbxMcpDir, dbxMcpPlatform),
+	);
 }
 
 // =============================================================================
