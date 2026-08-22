@@ -49,6 +49,14 @@ function archive(options?: {
 				configVersion: 2,
 				license: "MIT",
 				source: { path: "abilities/skills/demo-skill" },
+				detail: options?.withPresentation
+					? {
+							i18n: {
+								zh: { name: "演示技能", description: "演示能力简介" },
+								en: { name: "Demo Skill", description },
+							},
+						}
+					: undefined,
 			},
 		],
 	};
@@ -68,12 +76,25 @@ function archive(options?: {
 					slug: "demo-skill",
 					version: packageVersion,
 					icon: "icon.svg",
+					detail: {
+						format: "blocks",
+						path: "detail.json",
+						i18n: { zh: { path: "detail.zh.json" } },
+					},
 				}),
 			),
 		);
 		zip.addFile(
 			"astravia-abilities-main/abilities/skills/demo-skill/icon.svg",
 			Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>'),
+		);
+		zip.addFile(
+			"astravia-abilities-main/abilities/skills/demo-skill/detail.json",
+			Buffer.from(JSON.stringify({ schemaVersion: 1, blocks: [{ type: "markdown", content: "# Demo" }] })),
+		);
+		zip.addFile(
+			"astravia-abilities-main/abilities/skills/demo-skill/detail.zh.json",
+			Buffer.from(JSON.stringify({ schemaVersion: 1, blocks: [{ type: "markdown", content: "# 中文详情" }] })),
 		);
 	}
 	return zip.toBuffer();
@@ -229,6 +250,26 @@ describe("OpenMarketplaceService", () => {
 
 		expect(icon).toContain("/snapshots/2026.07.1/abilities/skills/demo-skill/icon.svg?v=2026.07.1");
 		expect(icon).not.toContain("/sync-");
+	});
+
+	it("keeps manifest locale name/description when the presentation only carries blocks", async () => {
+		const rootDir = await temporaryRoot();
+		const service = new OpenMarketplaceService({
+			appVersion: APP_VERSION,
+			rootDir,
+			fetchArchive: async () => response(archive({ withPresentation: true })),
+		});
+
+		const snapshot = await service.refresh();
+		const ability = snapshot.abilities[0];
+
+		// 深合并：presentation 的 zh 块（blocks）不得覆盖 manifest 的中文名/简介。
+		expect(ability?.detail.i18n?.zh).toMatchObject({
+			name: "演示技能",
+			description: "演示能力简介",
+		});
+		expect(ability?.detail.i18n?.zh?.blocks?.[0]).toMatchObject({ type: "markdown", content: "# 中文详情" });
+		expect(ability?.detail.i18n?.en?.name).toBe("Demo Skill");
 	});
 
 	it("does not reuse state after the configured source identity changes", async () => {

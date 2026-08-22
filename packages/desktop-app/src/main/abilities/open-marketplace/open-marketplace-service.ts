@@ -6,6 +6,7 @@ import AdmZip from "adm-zip";
 import type {
 	GitHubMarketplaceOrigin,
 	OpenMarketplaceAbility,
+	OpenMarketplaceDetailLocale,
 	OpenMarketplaceSnapshot,
 } from "../../../preload/api-types/abilities.js";
 import { getApplicationCacheService } from "../../cache/application-cache-service.js";
@@ -25,6 +26,21 @@ const MAX_MANIFEST_BYTES = 2 * 1024 * 1024;
 const MAX_UNCOMPRESSED_BYTES = 100 * 1024 * 1024;
 const MAX_ARCHIVE_ENTRIES = 10_000;
 const DOWNLOAD_TIMEOUT_MS = 15_000;
+
+/**
+ * 合并 manifest 与 presentation 的逐语言详情块：manifest 里的 `zh.name` / `zh.description`
+ * 与 presentation 里的 `zh.blocks` / `zh.content` 同属一个 locale，必须逐字段叠加；
+ * 整键浅合并会让后写入的块把先写入的字段（如中文名）整个覆盖掉。
+ */
+function mergeDetailI18n(
+	base: Record<string, OpenMarketplaceDetailLocale> | undefined,
+	overlay: Record<string, OpenMarketplaceDetailLocale> | undefined,
+): Record<string, OpenMarketplaceDetailLocale> {
+	const keys = new Set([...Object.keys(base ?? {}), ...Object.keys(overlay ?? {})]);
+	return Object.fromEntries(
+		[...keys].map((locale) => [locale, { ...(base?.[locale] ?? {}), ...(overlay?.[locale] ?? {}) }]),
+	);
+}
 
 type FetchArchive = (url: string, init?: RequestInit) => Promise<Response>;
 type InstallAbility = (
@@ -258,6 +274,11 @@ export class OpenMarketplaceService {
 	}
 
 	async install(type: "skill" | "plugin", slug: string): Promise<void> {
+		// 后台同步可能在 install 之前刚把旧快照切走、新快照尚未就绪；先等它落定，
+		// 避免用户在快照替换窗口点击「添加」时误报「快照不可用」。
+		if (this.backgroundUpdate) {
+			await this.backgroundUpdate.catch(() => undefined);
+		}
 		const active = await this.readActiveMarketplace();
 		if (!active) throw new Error("No validated open marketplace snapshot is available");
 		const ability = active.manifest.abilities.find((entry) => entry.type === type && entry.slug === slug);
@@ -349,10 +370,7 @@ export class OpenMarketplaceService {
 					...ability.detail,
 					...presentation.detail,
 					icon: presentation.icon ?? ability.detail.icon,
-					i18n: {
-						...(ability.detail.i18n ?? {}),
-						...(presentation.detail.i18n ?? {}),
-					},
+					i18n: mergeDetailI18n(ability.detail.i18n, presentation.detail.i18n),
 				});
 			}
 		}
